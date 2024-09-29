@@ -1,0 +1,484 @@
+{% extends 'base.html' %}
+{% block title %} Africana {% endblock title %}
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}
+	{% include 'incs/topnav.html' %}
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-4">
+					<div class="card card-transparent card-block card-stretch card-height border-none">
+						<div class="card-body p-0 mt-lg-2 mt-0">
+							<h3 class="mb-3" id="greet">Hi {{current_user.username}},</h3>
+							<p class="mb-0 mr-4 text-warning">
+								Your Platform gives you views of key performance, business process &
+								Statistics.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8">
+					<div class="row">
+						<div class="col-lg-3 col-md-3">
+							<div class="card card-block card-stretch card-height">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-4 card-total-sale">
+										<div class="icon iq-icon-box-2 bg-info-light">
+											<img src="{{url_for('static', filename='images/product/1.png')}}" class="img-fluid" alt="image">
+										</div>
+										<div>
+											<p class="mb-2">Total Sales</p>
+											<h6 id="format-amt">{{ts}}</h6>
+										</div>
+									</div>
+									<div class="iq-progress-bar mt-2">
+										<span class="bg-muted iq-progress progress-1" data-percent="100%">
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-3">
+							<div class="card card-block card-stretch card-height">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-4 card-total-sale">
+										<div class="icon iq-icon-box-2 bg-danger-light">
+											<img src="{{url_for('static', filename='images/product/2.png')}}" class="img-fluid" alt="image">
+										</div>
+										<div>
+											<p class="mb-2">Bar & Beer</p>
+											<h4>{%for b in b_count %} {{b['count']}} {%endfor%}</h4>
+										</div>
+									</div>
+									<div class="iq-progress-bar mt-2">
+										<span class="bg-danger iq-progress progress-1" data-percent="{{b_percent}}">	</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-3">
+							<div class="card card-block card-stretch card-height">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-4 card-total-sale">
+										<div class="icon iq-icon-box-2 bg-danger-light">
+											<img src="{{url_for('static', filename='images/product/2.png')}}" class="img-fluid" alt="image">
+										</div>
+										<div>
+											<p class="mb-2">Kitchen</p>
+											<h4>{%for k in k_count %} {{k['count']}} {%endfor%}</h4>
+										</div>
+									</div>
+									<div class="iq-progress-bar mt-2">
+										<span class="bg-danger iq-progress progress-1"
+											data-percent="{{k_percent}}">
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-3">
+							<div class="card card-block card-stretch card-height">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-4 card-total-sale">
+										<div class="icon iq-icon-box-2 bg-success-light">
+											<img src="{{url_for('static', filename='images/product/3.png')}}" class="img-fluid" alt="image">
+										</div>
+										<div>
+											<p class="mb-2">Cocktail</p>
+											<h4>{%for c in c_count %} {{ c['count']}} {%endfor%}</h4>
+										</div>
+									</div>
+									<div class="iq-progress-bar mt-2">
+										<span class="bg-success iq-progress progress-1"
+											data-percent="{{c_percent}}">
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-lg-4">
+					<div class="card card-block card-stretch card-height-helf">
+						<div class="card-body">
+							<div class="d-flex align-items-top justify-content-between">
+								<div class="">
+									<p class="mb-0">Income</p>
+									<h5 id="format-amt">{{income}} K</h5>
+								</div>
+								{#<div class="card-header-toolbar d-flex align-items-center">
+									<div class="dropdown">
+										<span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton003"
+											data-toggle="dropdown">
+											This Month<i class="ri-arrow-down-s-line ml-1"></i>
+										</span>
+										<div class="dropdown-menu dropdown-menu-right shadow-none"
+											aria-labelledby="dropdownMenuButton003">
+											<a class="dropdown-item" href="#">Year</a>
+											<a class="dropdown-item" href="#">Month</a>
+											<a class="dropdown-item" href="#">Week</a>
+										</div>
+									</div>
+								</div> #}
+							</div>
+							<div id="monthly_income" class="layout-chart-1"></div>
+						</div>
+					</div>
+					<div class="card card-block card-stretch card-height-helf">
+						<div class="card-body">
+							<div class="d-flex align-items-top justify-content-between">
+								<div class="">
+									<p class="mb-0">Expenses</p>
+									<h5 id="format-amt">{{xp}}</h5>
+								</div>
+								{#<div class="card-header-toolbar d-flex align-items-center">
+									<div class="dropdown">
+										<span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton004"
+											data-toggle="dropdown">
+											This Month<i class="ri-arrow-down-s-line ml-1"></i>
+										</span>
+										<div class="dropdown-menu dropdown-menu-right shadow-none"
+											aria-labelledby="dropdownMenuButton004">
+											<a class="dropdown-item" href="#">Year</a>
+											<a class="dropdown-item" href="#">Month</a>
+											<a class="dropdown-item" href="#">Week</a>
+										</div>
+									</div>
+								</div> #}
+							</div>
+							<div id="monthly_expenses" class="layout-chart-2"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8">
+					<div class="card card-block card-stretch card-height">
+						<div class="card-header d-flex justify-content-between">
+							<div class="header-title">
+								<h4 class="card-title">Sales Statistics</h4>
+							</div>
+							{#<div class="card-header-toolbar d-flex align-items-center">
+								<div class="dropdown">
+									<span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton005"
+										data-toggle="dropdown">
+										This Month<i class="ri-arrow-down-s-line ml-1"></i>
+									</span>
+									<div class="dropdown-menu dropdown-menu-right shadow-none"
+										aria-labelledby="dropdownMenuButton005">
+										<a class="dropdown-item" href="#">Year</a>
+										<a class="dropdown-item" href="#">Month</a>
+										<a class="dropdown-item" href="#">Week</a>
+									</div>
+								</div>
+							</div>#}
+						</div>
+						<div class="card-body pb-2">
+							<div class="d-flex flex-wrap align-items-center mt-2">
+
+								<div class="d-flex align-items-center progress-order-left">
+									<div class="progress progress-round m-0 orange conversation-bar"
+										data-percent="{{c_percent}}">
+										<span class="progress-left">
+											<span class="progress-bar"></span>
+										</span>
+										<span class="progress-right">
+											<span class="progress-bar"></span>
+										</span>
+										<div class="progress-value text-secondary">{{b_percent}}</div>
+									</div>
+									<div class="progress-value ml-3 pr-5 border-right">
+										<h5 id="format-amt">{%for b in b_count %} {{b['sales'] or 0}} {%endfor%}</h5>
+										<p class="mb-0">Bar Sales</p>
+									</div>
+								</div>
+
+								<div class="d-flex align-items-center  ml-5 progress-order-left">
+									<div class="progress progress-round m-0 success conversation-bar"
+										data-percent="{{c_percent}}">
+										<span class="progress-left">
+											<span class="progress-bar"></span>
+										</span>
+										<span class="progress-right">
+											<span class="progress-bar"></span>
+										</span>
+										<div class="progress-value text-success">{{c_percent}}</div>
+									</div>
+									<div class="progress-value ml-3 pr-5 border-right">
+										<h5 id="format-amt">{%for c in c_count %} {{c['sales'] or 0}} {%endfor%}</h5>
+										<p class="mb-0">Cocktail Sales</p>
+									</div>
+								</div>
+
+								<div class="d-flex align-items-center ml-5 progress-order-right">
+									<div class="progress progress-round m-0 primary conversation-bar"
+										data-percent="{{k_percent}}">
+										<span class="progress-left">
+											<span class="progress-bar"></span>
+										</span>
+										<span class="progress-right">
+											<span class="progress-bar"></span>
+										</span>
+										<div class="progress-value text-primary">{{k_percent}}</div>
+									</div>
+									<div class="progress-value ml-3">
+										<h5 id="format-amt">{% for k in k_count %} {{k['sales'] or 0}} {%endfor%}</h5>
+										<p class="mb-0">Kitchen Sales</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body pt-0">
+							<div id="month_sales"></div>
+						</div>
+
+						<div class="card-body pt-0">
+							<div id="monthly_sales"></div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="col-lg-8">
+					<div class="card card-block card-stretch card-height">
+						<div class="card-header d-flex align-items-center justify-content-between">
+							<div class="header-title">
+								<h4 class="card-title">Top Products</h4>
+							</div>
+							{#<div class="card-header-toolbar d-flex align-items-center">
+								<div class="dropdown">
+									<span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton006"
+										data-toggle="dropdown">
+										This Month<i class="ri-arrow-down-s-line ml-1"></i>
+									</span>
+									<div class="dropdown-menu dropdown-menu-right shadow-none"
+										aria-labelledby="dropdownMenuButton006">
+										<a class="dropdown-item" href="#">Year</a>
+										<a class="dropdown-item" href="#">Month</a>
+										<a class="dropdown-item" href="#">Week</a>
+									</div>
+								</div>
+							</div>#}
+						</div>
+						<div class="card-body">
+							<ul class="list-unstyled row top-product mb-0">
+
+								{% for s in bestselling %}
+								<li class="col-lg-3">
+									<div class="card card-block card-stretch card-height mb-0">
+										<div class="card-body">
+											<div class="bg-warning-light rounded">
+												<img src="{{url_for('static', filename='images/product/01.png')}}"
+													class="style-img img-fluid m-auto p-3" alt="image">
+											</div>
+											<div class="style-text text-left mt-3">
+												<h5 class="mb-1">{{s.name}}</h5>
+												<p class="mb-0">{{s.t_qty}} Quantity Sold Out</p>
+											</div>
+										</div>
+									</div>
+								</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="card-transparent card-block card-stretch mb-4">
+						<div class="card-header d-flex align-items-center justify-content-between p-0">
+							<div class="header-title">
+								<h4 class="card-title mb-0">Best Item All Time {{bs}}</h4>
+							</div>
+							<div class="card-header-toolbar d-flex align-items-center">
+								<div><a href="#" class="btn btn-primary view-btn font-size-14">View All</a></div>
+							</div>
+						</div>
+					</div>
+					{% for s in topselling %}
+					<div class="card card-block card-stretch card-height-helf">
+						<div class="card-body card-item-right">
+							<div class="d-flex align-items-top">
+								<div class="bg-warning-light rounded">
+									<img src="{{url_for('static', filename='images/product/04.png')}}" class="style-img img-fluid m-auto"
+										alt="image">
+								</div>
+								<div class="style-text text-left">
+									<h5 class="mb-2">{{s.name}}</h5>
+									<p id="format-amt" class="mb-2">Total Sell : {{s.total}}</p>
+									{# <p class="mb-0">Total Earned : $45,89 M</p> #}
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+
+			</div>
+			<!-- Page end  -->
+		</div>
+	</div>
+
+</div>
+<!-- Wrapper End-->
+{% endblock content %}
+{% block page_js %}
+<script>
+	let hours = (new Date).getHours();
+	let greeting = (hours < 12) ? "Good-Morning" : ((hours <= 18 && hours >= 12) ? "Good afternoon" : "Good gvening");
+	$('#greet').append(' ' + greeting)
+
+	const headers = { headers: { 'Content-Type': 'application/json' } }
+	
+	//monthly_income
+	if (jQuery("#monthly_income").length) {
+		fetch("/monthly_income/api", { method: "GET", headers: headers }
+		).then(response => response.json()
+		).then(data => {
+			const x = data.map(function (d) { return d['monthabr'] })
+			const y = data.map(function (d) { return d['income'] })
+			//alert(JSON.stringify(x))
+
+			options = {
+				series: [{
+					name: "Earned",
+					//data: [17, 23, 15, 28, 22, 32]
+					data: y
+				}],
+				colors: ['#FF7E41'],
+				chart: {
+					height: 150,
+					type: 'line',
+					zoom: {
+						enabled: false
+					},
+					dropShadow: {
+						enabled: true,
+						color: '#000',
+						top: 12,
+						left: 1,
+						blur: 2,
+						opacity: 0.2
+					},
+					toolbar: {
+						show: false
+					},
+					sparkline: {
+						enabled: true,
+					}
+				},
+				dataLabels: {
+					enabled: false
+				},
+				stroke: {
+					curve: 'smooth',
+					width: 3
+				},
+				title: {
+					text: '',
+					align: 'left'
+				},
+				grid: {
+					row: {
+						colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+						opacity: 0.5
+					},
+				},
+				xaxis: {
+					//categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+					categories: x,
+				},
+				tooltip: { y: { formatter: (val) => { return "₦" + val } } },
+			};
+
+			var chart = new ApexCharts(document.getElementById("monthly_income"), options);
+
+			chart.render();
+		});
+	}
+	
+	//monthly_expenses
+	if (jQuery("#monthly_expenses").length) {
+		fetch("/monthly_xp/api", { method: "GET", headers: headers }
+		).then(response => response.json()
+		).then(data => {
+			const x = data.map(function (d) { return d['monthabr'] })
+			const y = data.map(function (d) { return d['xps'] })
+			//alert(JSON.stringify(x, y))
+
+			options = {
+				series: [{name: "Spent", data: y }],
+				colors: ['#32BDEA'],
+				chart: {
+					height: 150,
+					type: 'line',
+					zoom: { enabled: false },
+					dropShadow: {
+						enabled: true,
+						color: '#000',
+						top: 12,
+						left: 1,
+						blur: 2,
+						opacity: 0.2
+					},
+					toolbar: {show: false},
+					sparkline: { enabled: true,}
+				},
+				dataLabels: { enabled: false},
+				stroke: { curve: 'smooth', width: 3 },
+				title: { text: '', align: 'left' },
+				grid: {
+					row: {
+						colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+						opacity: 0.5
+					},
+				},
+				xaxis: { categories: x, },
+				tooltip: { y: { formatter: (val) => { return "₦" + val } } },
+			};
+
+			var chart = new ApexCharts(document.getElementById("monthly_expenses"), options);
+			chart.render();
+		});
+	}
+	
+	//monthly_sales
+	if (jQuery("#monthly_sales").length) {
+	fetch("/monthly_sales/api", { method: "GET", headers: headers }
+	).then(response => response.json()
+	).then(data => {
+		const x = data.map(function (d) { return d['monthabr'] })
+		const y = data.map(function (d) { return d['sales'] })
+
+		var options = {
+			chart: { type: 'bar', height: 300 },
+
+			colors: ['#FF7E41'],
+			//colors: ['#32BDEA', '#FF7E41'],
+			plotOptions: {
+				bar: { horizontal: false, columnWidth: '10%', barHeight: '100%', endingShape: 'rounded' },
+			},
+
+			dataLabels: { enabled: false },
+
+			stroke: { show: true, width: 3, colors: ['transparent'] },
+
+			series: [
+				{ name: 'Sales', data: y }, ],
+
+			yaxis: { show: true, labels: { minWidth: 20, maxWidth: 20 } },
+			xaxis: { categories: x, show: false, labels: { minWidth: 0, maxWidth: 0 } },
+
+			fill: { opacity: 1 },
+			tooltip: { y: { formatter: (val) => { return "₦" + val } } },
+
+		}
+
+		var chart = new ApexCharts(document.getElementById("monthly_sales"), options);
+
+		chart.render();
+	});
+	}
+
+</script>
+{% endblock page_js %}

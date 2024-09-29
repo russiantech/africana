@@ -1,0 +1,241 @@
+
+
+<script src="{{url_for('static', filename='js/backend-bundle.min.js')}}"></script>
+<!-- Table Treeview JavaScript -->
+<script src="{{url_for('static', filename='js/table-treeview.js')}}"></script>
+<!-- Chart Custom JavaScript -->
+<script src="{{url_for('static', filename='js/customizer.js')}}"></script>
+<!-- Chart Custom JavaScript -->
+<script async src="{{url_for('static', filename='js/chart-custom.js')}}"></script>
+<!-- app JavaScript -->
+<script src="{{url_for('static', filename='js/app.js')}}"></script>
+
+<script src="{{url_for('static', filename='js/dropdownCheckboxes.min.js')}}"></script>
+
+<script>
+    // Set the CSRF token as a global JavaScript variable
+    window.csrfToken = "{{ csrf_token() | safe }}";
+</script>
+
+<script>
+
+    $(document).ready(function() {
+//**************for switching tabs ***************************//
+    switchtab = () => { $('#pills-generate-tab').trigger('click'); }
+    switchtab1 = () => { $('#pills-expenses-tab').trigger('click'); }
+    
+//**************extend jquery to allow short-cut for (put & delete) request like $.delete(url, data) ***************************//
+    //I'm extending jquery so I can make $.delete()/$.put()  request with this short-cut syntax ($.delete() )
+    jQuery.each(["put", "delete"], function (i, method) {
+    jQuery[method] = function (url, data, callback, type) {
+        if (jQuery.isFunction(data)) {
+            type = type || callback;
+            callback = data;
+            data = undefined;
+        }
+        return jQuery.ajax({
+            url: url,
+            type: method,
+            dataType: type,
+            data: data,
+            success: callback
+        });
+    };
+});
+
+
+    $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|POST|DELETE|PUT|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader('X-CSRFToken', window.csrfToken); // set the header with the token
+         //alert(window.csrfToken);
+        }
+    }
+    });
+    
+//**************notifications/api***************************//
+    // notification.js
+    //document.addEventListener('DOMContentLoaded', function() {
+    const badgeCount = document.getElementById('badge-count');
+    const notificationList = document.getElementById('notification-list');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    function updateBadge(count) {
+        badgeCount.textContent = count;
+        badgeCount.style.display = count > 0 ? 'inline' : 'none';
+    }
+    function updateDropdown(notifications) {
+        //notificationList.innerHTML = '';
+
+            if (notifications.length === 0) {
+                notificationList.innerHTML = `
+                    <a href="#" class="iq-sub-card">
+                        <div class="media align-items-center cust-card py-3 border-bottom">
+                            <div class="">
+                                <img class="avatar-50 rounded-small"
+                                    src="{{url_for('static', filename='images/user/01.jpg')}}" alt="01">
+                            </div>
+                            <div class="media-body ml-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h6 class="mb-0">nothing to inform you about for now</h6>
+                                    <small class="text-dark"><b>12 : 47 pm</b></small>
+                                </div>
+                                <small class="mb-0">@hacker says</small>
+                            </div>
+                        </div>
+                    </a>`
+                    // alert(notificationList.innerHTML)
+        }else {
+
+        notifications?.map( (data, x) => {
+			$(notificationList).append(
+			`
+            <a href="#" class="iq-sub-card">
+                        <div class="media align-items-center cust-card py-3 border-bottom">
+                            <div class="">
+                                <img class="avatar-50 rounded-small"
+                                    src="{{url_for('static', filename='images/user/01.jpg')}}" alt="01">
+                            </div>
+                            <div class="media-body ml-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h6 class="mb-0"> `+ data.title + `</h6>
+                                    <small class="text-dark"><b>` + data.created + ` </b></small>
+                                </div>
+                                <small class="mb-0">` + data.message + ` </small>
+                            </div>
+                        </div>
+                    </a>
+			` )
+
+			});
+            
+        }
+    }
+    function fetchNotifications() {
+        fetch('/get_notifications/api')
+            .then(response => response.json())
+            .then(data => {
+                if (data){
+                updateBadge(data.notifications.length);
+                updateDropdown(data.notifications);
+                //console.log(JSON.stringify(data.notifications))
+                //alert(JSON.stringify(data))
+                }else{
+                    console.log('No Data Returned')
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+    }
+
+    fetchNotifications();
+    setInterval(fetchNotifications, 60000); // Fetch notifications every minute (adjust as needed)
+
+//**************format amount & prices ***************************//
+    function formatAmount(amount, currencyCode){
+    return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currencyCode
+    }).format(amount).replace(currencyCode, '₦');
+    }
+    function applyFormattingToElements(elements) {
+    //function applyFormattingToElements(elements) {
+    elements.each( function() {
+    //var originalAmount = parseFloat($(this).text());
+    // Example preprocessing to remove non-numeric characters
+    var originalAmountString = $(this).text().replace(/[^\d.-]/g, '');
+    var originalAmount = parseFloat(originalAmountString);
+    var formattedAmount = formatAmount(originalAmount, 'NGN');
+    $(this).text(formattedAmount);
+    });
+    }
+    //format-price/amount initially
+    applyFormattingToElements($("#format-amt, #total_xpp, #sub_total, #sub_total1, #cost_total, #profit, ._cost, #_price, #_sprice, #_total"));
+
+    //Assuming you're using a pagination library like DataTables, call the function again to apply
+    //to the next part of the paginated items
+    $("#DataTables_Table_0, #DataTables_Table_1").on("draw.dt", function() {
+        //alert('draw.dt event triggered')
+    var newElements = $(this).find("._cost, #_price, #_sprice, #_total");
+    //format-price/amount when you switch to next paginated page
+    applyFormattingToElements(newElements);
+    });
+
+
+    });
+    
+    
+
+    // Set up a global AJAX configuration
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        // Check if the request is of type 'POST', 'PUT', 'PATCH', or 'DELETE'
+        if (
+            settings.type === 'POST' ||
+            settings.type === 'PUT' ||
+            settings.type === 'PATCH' ||
+            settings.type === 'DELETE'
+        ) {
+            // Add the CSRF token to the request headers
+            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            
+            //alert(csrf_token);
+        }
+    }
+});
+
+// Now, whenever you make an AJAX request of type 'POST', 'PUT', 'PATCH', or 'DELETE',
+// the CSRF token will be automatically included in the request headers.
+
+remove = (del_btn, item_id) => {
+    _confirm = confirm('This Category Will Be Deleted, Go Ahead Anyway ?');
+    if (!_confirm) { return; } // Cancel the operation if user does not confirm
+
+    $('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+    // Store the original content of del_btn
+    del_btnhtml = $(del_btn).html();
+
+    // Construct the URL with the CSRF token
+    let url = "{{url_for('endpoint.cate_action')}}?item_id=" + item_id + "&action=del";
+
+    // Create an AJAX request
+    var jqxhr = $.ajax({
+        url: url,
+        type: "DELETE", // Assuming this is a DELETE request, adjust as needed
+        headers: {
+            "X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+        },
+    });
+
+    jqxhr.done((r) => {
+        // Handle success
+        $(del_btn).closest('tr').remove();
+        $(del_btn).html(del_btnhtml); // Reset spinning submit-btn
+
+        if ('undefined' != typeof (r.response)) {
+            $('#response').html((r.response)).addClass(r.flash);
+        } else ($('#response').text(r).addClass('alert-success'));
+
+        if ("undefined" != typeof r.link) {
+            $('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+        }
+        if ("undefined" != typeof r.receipt) {
+            $('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+        }
+    });
+
+    jqxhr.fail((er) => {
+        console.log(JSON.stringify(er));
+        $('#response').text('Oops! Could Not Delete This Item. Request failed. Please Try Again Later').addClass('alert-danger');
+        $(del_btn).html(del_btnhtml);
+    });
+
+    jqxhr.always(() => {
+        //alert("ajax complete");
+        $(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+    });
+}
+
+</script>
+

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Africana</title>
+ {% include 'incs/metas.html' %}
+ 
+{{ moment.include_moment() }}
+</head>
+<body class="">
+    <!-- loader Start -->
+    <div id="loading"><div id="loading-center"></div></div>
+    <!-- loader END -->
+
+    <!-- Wrapper Start -->
+    {% block content %}
+
+    {% endblock content %}
+    <!-- Wrapper End-->
+
+    {% include 'incs/footer.html' %}
+
+    <!-- Backend Bundle JavaScript -->
+    {% include 'incs/bottom_js.html' %}
+    {% block page_js %} {% endblock page_js %}
+</body>
+</html>

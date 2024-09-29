@@ -1,0 +1,661 @@
+{% extends 'base.html' %}
+<title> {% block title %} Product History{% endblock title %}</title>
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}
+	{% include 'incs/topnav.html' %}
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-lg-12">
+					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+						<div>
+							<h4 class="mb-3">{{pname}}</h4>
+							<p class="mb-0 text-warning">When stock quantity changes, the previous initial state is <b>Automatically Backed-Up</b> for refference purposes.</p>
+						</div>
+						<button onclick="switchtab()" class="btn btn-primary generate disabled text-warning"><i class="las la-plus mr-3"></i>(Disabled) Generate Stock History Report</button>
+					</div>
+				</div>
+				<div class="card col-12">
+					<div class="card-body">
+						<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+						  <li class="nav-item">
+							 <a class="nav-link active font-weight-bold" id="pills-bar-tab" data-toggle="pill" href="#pills-bar" role="tab" aria-controls="pills-bar" 
+                             aria-selected="true">Bar History </a>
+						  </li>
+						  <li class="nav-item">
+							 <a class="nav-link font-weight-bold" id="pills-kitchen-tab" data-toggle="pill" href="#pills-kitchen" role="tab" aria-controls="pills-kitchen" 
+                             aria-selected="false">Kitchen History </a>
+						  </li>
+						  <li class="nav-item">
+							 <a class="nav-link font-weight-bold" id="pills-cocktail-tab" data-toggle="pill" href="#pills-cocktail" role="tab" aria-controls="pills-cocktail" 
+                             aria-selected="false">Cocktail History </a>
+						  </li>
+					   </ul>
+
+					   <div class="alert" id="response">...</div>
+
+					   <div class="tab-content" id="pills-tabContent-2">
+						  <div class="tab-pane fade active show" id="pills-bar" role="tabpanel" aria-labelledby="pills-bar-tab">
+							 <p class="text-warning">Product Changes(Bar & Drinks)</p>
+							 <div class="col-lg-12">
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+										<!-- <div class="alert" id="response"></div> -->
+										<h1 class="mt-2">Total Stock Value: 
+											<span id="_total" class="badge badge-success mb-1">{{bar_previous_total}}</span>
+										</h1>
+											<table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+												id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+											    
+												<thead class="bg-white text-uppercase">
+													<tr class="ligth ligth-data" role="row">
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">S/N</th>
+			
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Product: activate to sort column ascending"
+															style="width: 29.90px;">Products</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Code: activate to sort column ascending"
+															style="width: 106.125px;">Opening Stock</th>
+														
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Category: activate to sort column ascending"
+															style="width: 113.859px;">Price</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Stock Value</th>
+															<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Code: activate to sort column ascending"
+															style="width: 106.125px;">Added Stock</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Description</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Date</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Action: activate to sort column ascending"
+															style="width: 182.953px;">Action</th>
+													</tr>
+												</thead>
+												<tbody class="ligth-body">
+													{% for h in history %}
+													{% if h.item.dept == 'b' %} 
+													<tr role="row" class="odd">
+														<td>{{loop.index}}</td>
+														<td>
+															<div class="d-flex align-items-center">
+																<div>
+																	<p id="_item_id" class="mb-0">{{h.item.name}}</p>
+																</div>
+															</div>
+														</td>
+														<td id="_pcs">{{h.in_stock}}</td>
+														<td id="_price">{{h.item.s_price}}</td>
+														<td id="_total">{{h.in_stock * h.item.s_price }}</td>
+														<td id="">{{h.difference}}</td>
+														<td>{{h.desc}}</td>
+														<td>{{h.created}}</td>
+														<td>
+														<button type="button" id="del" 
+														onclick="remove(this, '{{h.item.id}}', '{{h.id}}')"
+																class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+																data-placement="top" title="" data-original-title="Delete"><i
+																	class="ri-delete-bin-line mr-0"></i>delete</button>
+														</td>
+													</tr>
+													{% endif %}
+													{% endfor %}
+												</tbody>
+											</table>
+									</div>
+								</div>
+							</div>
+						  </div>
+						  <div class="tab-pane fade" id="pills-kitchen" role="tabpanel" aria-labelledby="pills-kitchen-tab">
+							 <p class="text-warning">Product Changes(Foods & Spices)</p>
+							 <div class="col-lg-12">
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+										<!-- <div class="alert" id="response"></div> -->
+										<h1 class="mt-2">Total Stock Value: 
+											<span id="_total" class="badge badge-success mb-1">{{kitchen_previous_total|int}}</span>
+										</h1>
+											<table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+												id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_0_info">
+												
+												<thead class="bg-white text-uppercase">
+													<tr class="ligth ligth-data" role="row">
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">S/N</th>
+			
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Product: activate to sort column ascending"
+															style="width: 29.90px;">Products</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Code: activate to sort column ascending"
+															style="width: 106.125px;">Opening Stock</th>
+														
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Category: activate to sort column ascending"
+															style="width: 113.859px;">Price</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Stock Value</th>
+															<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Code: activate to sort column ascending"
+															style="width: 106.125px;">Added Stock</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Description</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Date Generated</th>
+															<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Action: activate to sort column ascending"
+															style="width: 182.953px;">Action</th>
+													</tr>
+												</thead>
+			
+												<tbody class="ligth-body">
+													{% for h in history %}
+													{% if h.item.dept == 'k' %} 
+													<tr role="row" class="odd">
+														<td>{{loop.index}}</td>
+														<td>
+															<div class="d-flex align-items-center">
+																<div>
+																	<p id="_item_id" class="mb-0">{{h.item.name}}</p>
+																</div>
+															</div>
+														</td>
+														<td id="_pcs">{{h.in_stock}}</td>
+														<td id="_price">{{h.item.s_price}}</td>
+														<td id="_total">{{h.in_stock * h.item.s_price }}</td>
+														<td id="">{{h.difference}}</td>
+														<td>{{h.desc}}</td>
+														<td>{{h.created}}</td>
+														<td>
+															<button type="button" id="del" 
+															onclick="remove(this, '{{h.item.id}}', '{{h.id}}')"
+																	class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+																	data-placement="top" title="" data-original-title="Delete"><i
+																		class="ri-delete-bin-line mr-0"></i>delete</button>
+														</td>
+													</tr>
+													{% endif %}
+													{% endfor %}
+												</tbody>
+											</table>
+									</div>
+								</div>
+							</div>
+						  </div>
+
+						  <div class="tab-pane fade" id="pills-cocktail" role="tabpanel" aria-labelledby="pills-cocktail-tab">
+							 <p class="text-warning">Product Changes(Cocktails)</p>
+							 <div class="col-lg-12">
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+										<h1 class="mt-2">Total Stock Value: 
+											<span id="_total" class="badge badge-success mb-1">{{cocktail_previous_total|int}}</span>
+										</h1>
+											<table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+												id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_0_info">
+
+												<thead class="bg-white text-uppercase">
+													<tr class="ligth ligth-data" role="row">
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">S/N</th>
+			
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Product: activate to sort column ascending"
+															style="width: 29.90px;">Products</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Code: activate to sort column ascending"
+															style="width: 106.125px;">Opening Stock</th>
+														
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Category: activate to sort column ascending"
+															style="width: 113.859px;">Price</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Stock Value</th>
+															<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Code: activate to sort column ascending"
+															style="width: 106.125px;">Added Stock</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Description</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Price: activate to sort column ascending"
+															style="width: 96.2812px;">Date Generated</th>
+														<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+															rowspan="1" colspan="1"
+															aria-label="Action: activate to sort column ascending"
+															style="width: 182.953px;">Action</th>
+													</tr>
+												</thead>
+			
+												<tbody class="ligth-body">
+													{% for h in history %}
+                                                    
+													{% if h.item.dept == 'c' %}  
+													<tr role="row" class="odd">
+														<td>{{loop.index}}</td>
+														<td>
+															<div class="d-flex align-items-center">
+																<div>
+																	<p id="_item_id" class="mb-0">{{h.item.name}}</p>
+																</div>
+															</div>
+														</td>
+														<td id="_pcs">{{h.in_stock}}</td>
+														<td id="_price">{{h.item.s_price}}</td>
+														<td id="_total">{{h.in_stock * h.item.s_price }}</td>
+														<td id="">{{h.difference}}</td>
+														<td>{{h.desc}}</td>
+														<td>{{h.created}}</td>
+														<td>
+															<button type="button" id="del" 
+															onclick="remove(this, '{{h.item.id}}', '{{h.id}}')"
+																	class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+																	data-placement="top" title="" data-original-title="Delete"><i
+																		class="ri-delete-bin-line mr-0"></i>delete</button>
+														</td>
+													</tr>
+													{% endif %}
+													{% endfor %}
+												</tbody>
+											</table>
+									</div>
+								</div>
+							</div>
+						  </div>
+
+						  <div class="tab-pane fade" id="pills-generate" role="tabpanel" aria-labelledby="pills-generate-tab">
+							 <p>Kindly Enter The Date Range You Want To Generate Report For Below:-</p>
+                             <!-- -->
+                             <div class="alert" id="response"></div>
+							<form id="sales_range" method="post">
+								{{ form.hidden_tag() }}
+                             <div class="row">
+                                <!--Grid column-->
+                                <div class="col-md-4 mb-4">
+                            
+                                  <div class="md-form">
+                                    {% if form.start.errors %}
+                                    <div class="invalid-feedback"> {% for error in form.start.errors %}{{ error }} ! {% endfor %}</div>
+                                    {% else %}
+                                    {{ form.start(class="form-control",  required=True,) }}
+                                    {% endif %}
+                                    <label for="startingDate">Starting From</label>
+                                  </div>
+                            
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                  <div class="md-form">
+                                    <!--The "to" Date Picker -->
+                                    {% if form.end.errors %}
+                                    <div class="invalid-feedback"> {% for error in form.end.errors %}{{ error }} ! {% endfor %}</div>
+                                    {% else %}
+                                    {{ form.end(class="form-control",  required=True,) }}
+                                    {% endif %}
+                                    <label for="endingDate">Ending at</label>
+                                  </div>
+                                </div>
+                                <div class="col-md-2 mb-4">
+                                  <div class="md-form">
+                                    <!--The "to" Date Picker -->
+                                    {{ form.dept(class="form-control") }}
+                                    {% if form.dept.errors %}
+                                    <div class="invalid-feedback"> {% for error in form.dept.errors %}{{ error }} ! {% endfor %}</div>
+                                 
+                                    {% endif %}
+                                    <label for="endingDate">Ending at</label>
+                                  </div>
+                                </div>
+
+                                <div class="col-md-2 mb-4">
+                                  <div class="md-form">
+                                    {% if form.generate.errors %}
+                                    <div class="invalid-feedback"> {% for error in form.generate.errors %}{{ error }} ! {% endfor %}</div>
+                                    {% else %}
+                                    {{ form.generate(class="btn btn-primary", id="rangeform") }}
+                                    {% endif %}
+                                  </div>
+                            
+                                </div>
+                              </div>
+                              </form>
+                              <!--Grid row-->
+							  <div class="make-blur" id="reportcard">
+							  <div class="card card-block card-stretch card-height print rounded col-12">
+								<div class="card-header d-flex justify-content-between bg-primary header-invoice">
+									  <div class="iq-header-title">
+										 <h5 class="card-title mb-0">Report No:<div id="report_id">#00000</div> </h5>
+									  </div>
+									  <div class="invoice-btn">
+										 <button type="button" class="btn btn-primary-dark mr-2">
+											<i class="las la-print"></i> Print Print</button>
+										 <button type="button" id="download_pdf" onclick="mkpdf()" class="btn btn-primary-dark">
+											<i class="las la-file-download"></i>Download</button>
+									  </div>
+								</div>
+								<div class="card-body">
+									  <div class="row">
+										 <div class="col-sm-12">                                  
+											<img src="{{url_for('static', filename='images/logo.png')}}" class="logo-invoice img-fluid mb-3">
+										 </div>
+									  </div>
+									  <div class="row">
+										 <div class="col-sm-12">
+											<h5 class="mb-3">Bar & Beer Sales Report</h5> <span><div id="report_date_range">(start-date -- end-date )</div></span>
+											<div class="table-responsive-sm">
+												  <table class="table">
+													 <thead>
+														<tr>
+															<th class="text-center" scope="col">#</th>
+															<th scope="col">Sales Date</th>
+															<th scope="col">Cocktail Name</th>
+															<th class="text-center" scope="col">Selling Price(Pcs)</th>
+															<th class="text-center" scope="col">Pcs/Qty Sold</th>
+															<th class="text-center" scope="col">Total Sales</th>
+														</tr>
+													 </thead>
+
+													 <tbody id="initial-tbody">
+														<tr id="initial-tr">
+															<th class="text-center" scope="row">1</th>
+															<td><h6 class="mb-0">Sample-Sales-Date</h6></td>
+															<td class="text-left">Sample-Item-Name</td>
+															<td class="text-left">Sample-Selling-Price</td>
+															<td class="text-center">Sample-Item-Qty</td>
+															<td class="text-center"><b>Sample-Total-Sales</b></td>
+														</tr>
+
+													 </tbody>
+												  </table>
+											</div>
+										 </div>                              
+									  </div>
+									  <div class="row">
+										 <div class="col-sm-12">
+											<b class="text-danger">Notes:</b>
+											<p class="mb-0 text-warning">Hey, your profit is calculated based on expenses within this period (I'm techa, ur system robot) </p>
+										 </div>
+									  </div>
+									  <div class="row mt-4 mb-3">
+										 <div class="offset-lg-8 col-lg-4">
+											<div class="or-detail rounded">
+												  <div class="p-3">
+													 <h5 class="mb-3">Report Details</h5>
+													 <div class="mb-2">
+														<h6>Expenses/Cost</h6>
+														<p id="cost_total">$0000.0</p>
+													 </div>
+													 <div class="mb-2">
+														<h6>Profit</h6>
+														<!-- <p>$4597.50</p> -->
+														<button id="profit" type="button" class="badge border-0 bg-success mr-2" data-toggle="tooltip" data-placement="top" 
+														title="" data-original-title="Calculated from total sales Minus(-) Expenses/cost of food-items">
+														<i class="ri-pencil-line mr-0"></i> </button>
+
+													 </div>
+												  </div>
+												  <div class="ttl-amt py-2 px-3 d-flex justify-content-between align-items-center">
+													 <h6>Total</h6>
+													 <h3 id="sub_total"  class="text-primary font-weight-700">$0000.0</h3>
+												  </div>
+											</div>
+										 </div>
+									  </div>                            
+								</div>
+							 </div>
+
+							</div>
+
+                            </div>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+
+			</div>
+			<!-- Page end  -->
+		</div>
+		<!-- Modal Edit -->
+		{% include 'incs/modal.html' %}
+	</div>
+{% endblock content %}
+
+{% block page_js %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
+<script src="{{url_for('static', filename='js/html2pdf.bundle.min.js')}}"></script>
+<script>
+
+$(document).ready( () => {
+
+const url = "{{url_for('endpoint.sales_action')}}";
+
+$('form').submit((e) => {
+        
+	e.preventDefault()
+
+	if( ( $('form #start').val() || $('form #end').val() ) == ""){
+		$('#response').html('Kindly Specify The Date Range You Want To Generate Bar/Beer Report For').addClass('alert-warning');
+		$('#start').focus()
+		$('#start, #end').addClass('border-warning');
+		return;
+		}
+
+	$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+	generate_btn = $('#submit').html()
+	//alert('submitted')
+	var jqxhr = $.post(url, $('form').serialize());
+
+	jqxhr.done((r, textStatus , xhr) => {
+		$('#submit').html(generate_btn); //reset spinning submit-btn
+		if ('object' == typeof (r) ) {
+
+			//console.log(JSON.stringify(r))
+            var contentType = xhr.getResponseHeader('Content-Type');
+                if (contentType.indexOf('application/json') !== -1) {
+                    console.log('Response is a JSON response:', r);
+                } else {
+                    console.log('Response is not a JSON response:', r);
+                }
+
+			r[1]?.map( (data, x) => {
+			$('#report_date_range').text(data.report_date_range)
+			$('#sub_total, #sub_total1').text(data.total_sales) 
+			$('#cost_total').text(data.total_expenses) 
+			$('#profit').text(data.profit)
+			$('#report_id').text(data.report_id)
+			$('#initial-tr').remove()
+			$('.make-blur').removeClass('make-blur')
+			});
+
+			r[0]?.map( (data, x) => {
+			$('#initial-tbody').append(
+			`
+				<tr>
+					<th class="text-center" scope="row">${x}</th>
+					<td><h6 class="mb-0">${data.created}</h6></td>
+					<td class="text-left">${data.name}</td>
+					<td id="format-amt" class="text-center">${data.s_price}</td>
+					<td class="text-center">${data.qty}</td>
+					<td id="format-amt" class="text-center"><b>${data.total}</b></td>
+				</tr>
+			` )
+
+			});
+			
+					//format-prices/amounts in 1 seconds
+		setTimeout(function() {
+        var newElements = $(this).find("._cost, #_price, #_sprice, #_total");
+        //format-price/amount when you switch to next paginated page
+		function formatAmount(amount, currencyCode){ return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: currencyCode }).format(amount).replace(currencyCode, '₦');
+        }
+        function applyFormattingToElements(elements) {
+        elements.each( function() {
+        //var originalAmount = parseFloat($(this).text());
+        // Example preprocessing to remove non-numeric characters
+        var originalAmountString = $(this).text().replace(/[^\d.-]/g, '');
+        var originalAmount = parseFloat(originalAmountString);
+        var formattedAmount = formatAmount(originalAmount, 'NGN');
+        $(this).text(formattedAmount);
+        });
+        }
+        //format-prices/amounts in 1 seconds
+        applyFormattingToElements($("#format-amt, #sub_total, #sub_total1, #cost_total, #profit, ._cost, #_price, #_sprice, #_total"));
+        }, 1000);
+
+		if(!r['flash']){
+		return $('#response').html('Your Report Is Ready, You can download if you want to').addClass('alert-success');}
+
+		}
+
+		if ('undefined' != typeof (r.response)){
+			$('#response').html((r.response)).addClass(r.flash);
+		}else ( $('#response').text(r).addClass('alert-warning') )
+
+		if ("undefined" != typeof r.link){
+			$('#response').append(' - - <br> <a href=' + r.link + '> Continue Here </a>');
+			//$('form').hide();
+		}
+		if("undefined" != typeof r.receipt){
+			$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+			//$('form').hide();
+		}
+		//$('#response').html(JSON.stringify(r))
+		console.log('response->(' + r.response + 'flash-message (' + r.flash );
+	});
+
+	jqxhr.fail((er) => { //JSON.stringify(err)
+		$('#response').text('oops!!!, Could Not Generate This Report At The Moment. Pls Try Again'+JSON.stringify(er), er ).addClass('alert-danger')
+		$('#submit').html(generate_btn); //reset spinning submit-btn
+	});
+
+	jqxhr.always(() => {
+		//alert("ajax complete");
+		$('#submit').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+	});
+
+	});
+
+
+remove = (del_btn, item_id, history_id) => {
+
+if (!confirm('Sure you wanna remove this back-up ?')) { return } //true/false
+
+$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting product history');
+
+del_btnhtml = $(del_btn).html()
+
+let url = "{{url_for('endpoint.history_action')}}?item_id="+ item_id +"&history_id="+history_id + "&action=del"
+
+console.log(url)
+
+//var jqxhr = $.delete(url);
+var jqxhr = $.ajax({
+	url: url,
+	type: "DELETE", // Assuming this is a DELETE request, adjust as needed
+	headers: {
+		"X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+	},
+});
+
+$(del_btnhtml).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+jqxhr.done((r) => {
+
+	$(del_btn).closest('tr').remove()
+
+	$(del_btn).html(del_btnhtml); //reset spinning submit-btn
+	if ('undefined' != typeof (r.response)) {
+		$('#response').html((r.response)).addClass(r.flash);
+	} else ($('#response').text(r).addClass('alert-success'))
+
+	if ("undefined" != typeof r.link){
+		$('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+	}
+	if ("undefined" != typeof r.receipt) {
+		$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+	}
+
+});
+
+jqxhr.fail((er) => { 
+	console.log(JSON.stringify(er));
+	//$('#response').html($.trim( JSON.stringify(er)) );
+	$('#response').text('oops!!!, Deletion failed for this record', er).addClass('alert-danger')
+	$(del_btn).html(del_btnhtml);
+});
+
+jqxhr.always(() => {
+	//alert("ajax complete");
+	$(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+});
+
+}
+
+});
+
+mkpdf = () => {
+	$('#download_pdf').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+	html2pdf()
+		.set({
+		//margin: 2,
+		filename: "kitchen.pdf",
+		image: { type: "jpeg", quality: 0.9 },
+		enableLinks : true,
+		jsPDF: { format: "A4", orientation: "landscape"},
+		//margin: [4, 30, 10, 10],
+		margin: [4, 10, 0, 10],
+			autoPaging: 'text',
+			/* x: 0,
+			y: 0, */
+		})
+		.from(document.getElementById("reportcard"))
+		.save();
+		//$(this).remove('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		$('#download_pdf').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		//alert('now')
+};
+
+</script>
+{% endblock page_js %}

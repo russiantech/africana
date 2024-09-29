@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% block title %} Kitchen Items {% endblock title %}
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}   
+	{% include 'incs/topnav.html' %}
+
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+						<div>
+							<h4 class="mb-3">Welcome To Africana Kitchen </h4>
+							<p class="mb-0 text-danger">Note: All calculations done per pieces added/sold.(Unit Currency is Naira)</p>
+						</div>
+						<button class="btn btn-primary add-list"><i class="las la-plus mr-3"></i>Add New</button>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="table-responsive rounded mb-3">
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+							<div class="alert" id="response"></div>
+							<form id="addnewfoodform" action="" method="post">
+							<table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+								id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+								<thead class="bg-white text-uppercase">
+									<tr class="ligth ligth-data" role="row">
+                                        
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Price: activate to sort column ascending"
+											style="width: 96.2812px;">##</th>
+
+										<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Product: activate to sort column ascending"
+											style="width: 292.219px;">Varieties</th>	
+										<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Code: activate to sort column ascending"
+											style="width: 106.125px;">Categories</th>
+										<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Category: activate to sort column ascending"
+											style="width: 113.859px;">In-Stock</th>
+										<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Price: activate to sort column ascending"
+											style="width: 96.2812px;">Cost Price</th>
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Brand Name: activate to sort column ascending"
+											style="width: 147.312px;">Selling Price</th>
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Price: activate to sort column ascending"
+											style="width: 96.2812px;">Date Added</th>
+										<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+											rowspan="1" colspan="1"
+											aria-label="Action: activate to sort column ascending"
+											style="width: 182.953px;">Action</th>
+									</tr>
+								</thead>
+
+								<tbody class="ligth-body">
+
+									<tr role="row" class="odd">
+                                        <td>22</td>
+										<td>
+											<div class="d-flex align-items-center">
+												<img src="{{url_for('static', filename='images/table/product/01.jpg')}}"
+													class="img-fluid rounded avatar-50 mr-3" alt="image">
+												<div>
+													<p class="mb-0">Beef</p>
+												</div>
+											</div>
+										</td>
+										<td>kitchen</td>
+										<td>4</td>
+										<td>N200</td>
+										<td>N2,000</td>
+										<td>N2800</td>
+										<td>
+											<div class="d-flex align-items-center list-action">
+												<a class="badge bg-success mr-2" data-toggle="tooltip"
+													data-placement="top" title="" data-original-title="Edit"
+													href="#"><i class="ri-pencil-line mr-0"></i></a>
+												<a class="badge bg-warning mr-2" data-toggle="tooltip"
+													data-placement="top" title="" data-original-title="Delete"
+													href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+											</div>
+										</td>
+									</tr>
+									<tr role="row" class="odd">
+                                        <td>11</td>
+										<td>
+											<div class="d-flex align-items-center">
+												<img src="{{url_for('static', filename='images/table/product/03.jpg')}}"
+													class="img-fluid rounded avatar-50 mr-3" alt="image">
+												<div>
+													<p class="mb-0">Beef</p>
+												</div>
+											</div>
+										</td>
+										<td>kitchen</td>
+										<td>4</td>
+										<td>N200</td>
+										<td>N2,000</td>
+										<td>N2800</td>
+										<td>
+											<div class="d-flex align-items-center list-action">
+												<a class="badge bg-success mr-2" data-toggle="tooltip"
+													data-placement="top" title="" data-original-title="Edit"
+													href="#"><i class="ri-pencil-line mr-0"></i></a>
+												<a class="badge bg-warning mr-2" data-toggle="tooltip"
+													data-placement="top" title="" data-original-title="Delete"
+													href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+											</div>
+										</td>
+									</tr>
+
+
+								</tbody>
+							</table>
+						</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Page end  -->
+		</div>
+		<!-- Modal Edit -->
+		{% include 'incs/modal.html' %}
+	</div>
+</div>
+{% endblock content %}
+{% block page_js %} 
+<script>
+
+    var newrow = 
+    `
+    <tr role="row" class="even"> 
+        <td class="id"><input type='text' value="##" disabled name="id" class='disabled form-control' placeholder='Price'/></td>
+        <td class="varieties">
+        <div class="d-flex align-items-center">
+        <img src="{{url_for('static', filename='images/table/product/02.jpg')}}"
+        class="img-fluid rounded avatar-50 mr-3" alt="image">
+        <div>
+        <p class="mb-0">
+        <input type='text' name="varieties" class='form-control' placeholder='varieties'/></p>
+        </div>
+        </div>
+        </td>
+        <td class="cate"><input type='text' name="cate"  class='form-control' placeholder='Category'/></td>
+        <td class="newstock"><input type='number'  name="instock" class='form-control' placeholder='In stock'/></td>
+        <td class="costprice"><input type='number'  name="costprice" class='form-control' placeholder='Cost price'/></td>
+        <td class="sellingprice"><input type='number'  name="sellingprice" class='form-control' placeholder='Selling price'/></td>
+        <td class="created"><input type='date' name="created" class='form-control'/></td>
+        <td class="list_action">
+        <div class="d-flex align-items-center list-action">
+        <button type="submit" id="save" class="badge badge-info mr-2 border-0" data-toggle="tooltip"
+        data-placement="top" title="Save it" data-original-title="Save"><i class="las la-plus mr-0"></i>
+        </button>  
+        <button type="button" id="cancel" class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+        data-placement="top" title="Cancel" data-original-title="Delete"><i class="ri-delete-bin-line mr-0"></i></button>
+        </div>
+        </td>  
+    </tr> ` ;
+
+    var edit_action_btn = `<button type="button" id="edit" class="border-0 badge bg-success mr-2" data-toggle="tooltip"
+                                data-placement="top" title="" data-original-title="Edit">
+                                <i class="ri-pencil-line mr-0"></i></button>
+        `
+
+    $(document).ready( () => {
+
+        $(".add-list").click( () => {$("tbody").prepend(newrow); }); // appending dynamic string to table tbody
+        
+        $('tbody').on('click', '#cancel', () => { $('tbody #cancel').parent().parent().parent().remove() });
+
+        const url = '/kitchen';
+        $('#addnewfoodform').submit( (e) => {
+            e.preventDefault()
+            $('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+            var jqxhr = $.post( url, $('form').serialize() );
+            //alert('response ready')
+            $('#response').text('Success!!!, New Variety Added').addClass('alert-success')
+            jqxhr.done( (r) => {
+            //alert("ajax success");
+            $('#response').text(r).addClass('alert-danger');
+            frondend_save(); //appends-new-row-added()
+            });
+            jqxhr.fail(() => {
+                $('#response').text('oops!!!, Could Not Add This Variety. Pls Try Again').addClass('alert-danger')
+            });
+            jqxhr.always(() => {
+            //alert("ajax complete");
+            });
+
+        });
+
+        frondend_save = () => {
+            //insted-of rerender, simply replace the input elements with corresponding val()
+            variety = $('td').find('input[name=varieties]').val()
+            $('td').find('input[name=varieties]').replaceWith(variety)
+            opening = $('td').find('input[name=opening]').val()
+            $('td').find('input[name=opening]').replaceWith(opening)
+            newstock = $('td').find('input[name=newstock]').val()
+            $('td').find('input[name=newstock]').replaceWith(newstock)
+            qty = $('td').find('input[name=qty]').val()
+            $('td').find('input[name=qty]').replaceWith(qty)
+            totalstock = $('td').find('input[name=totalstock]').val()
+            $('td').find('input[name=totalstock]').replaceWith(totalstock)
+            price = $('td').find('input[name=price]').val()
+            $('td').find('input[name=price]').replaceWith(price)
+            totalsold = $('td').find('input[name=totalsold]').val()
+            $('td').find('input[name=totalsold]').replaceWith(totalsold)
+            closingstock = $('td').find('input[name=closingstock]').val()
+            $('td').find('input[name=closingstock]').replaceWith(closingstock)
+            stockamount = $('td').find('input[name=stockamount]').val()
+            $('td').find('input[name=stockamount]').replaceWith(stockamount)
+
+            $('td').find('#save').replaceWith(edit_action_btn)
+        }
+
+
+        $('tbody').on('click', '#edit', () => { 
+            const varieties = $('tr').find("td.varieties p").text();
+            const opening = $('tr').find('td.opening').text();
+            const newstock = $('tr').find("td.newstock").text();
+            const qty = $('tr').find("td.qty").text();
+            const totalstock = $('tr').find("td.totalstock").text();
+            const price = $('tr').find("td.price").text();
+            const totalsold = $('tr').find("td.totalsold").text();
+            const closingstock = $('tr').find("td.closingstock").text();
+            const stockamount = $('tr').find("td.stockamount").text();
+            
+            console.log( 'varieties-> '+varieties+' opening->'+opening +' newstock-> '+ newstock+' price-> '+ price+' qty-> '+
+                qty +' totalsold-> '+ totalsold +' totalstock-> '+ totalstock +' closingstock-> '+ closingstock+' stockamount-> '+stockamount); 
+
+            $('tbody #edit').parent().parent().parent().replaceWith(newrow);
+            $('form').append("<input type='hidden' name='editable_id' class='form-control'/>")
+            $('td').find('input[name=varieties]').val(varieties)
+            $('td').find('input[name=opening]').val(opening)
+            $('td').find('input[name=newstock]').val(newstock)
+            $('td').find('input[name=qty]').val(qty)
+            $('td').find('input[name=totalstock]').val(totalstock)
+            $('td').find('input[name=price]').val(price)
+            $('td').find('input[name=totalsold]').val(totalsold)
+            $('td').find('input[name=closingstock]').val(closingstock)
+            $('td').find('input[name=stockamount]').val(stockamount)
+            
+        });
+
+    });
+
+</script>
+{% endblock page_js %}
+

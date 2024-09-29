@@ -1,0 +1,1270 @@
+{% extends 'base.html' %}
+{% block title %} Basket . Salesnet. {% endblock title %}
+{% block page_css %} <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" /> {% endblock page_css %}
+
+{% block content %}
+
+{% include 'account/breadcrumb.html' %}
+<section class="ec-page-content section-space-p">
+    <div class="container">
+        <div class="row">
+            <div class="ec-cart-leftside col-lg-7 col-md-12 ">
+                <!-- cart content Start -->
+                <div class="ec-cart-content">
+                    <div class="ec-cart-inner">
+                        <div class="row">
+                            <form action="#">
+                                <div class="table-content cart-table-content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Price</th>
+                                                <th style="text-align: center;">Quantity</th>
+                                                <th>Total</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td data-label="Product" class="ec-cart-pro-name"><a
+                                                        href="product-left-sidebar.html">
+                                                        <img class="ec-cart-pro-img mr-4"
+                                                            src="{{url_for('static', filename='images/product-image/1.jpg')}}"
+                                                            alt="">Stylish
+                                                        Baby Shoes</a></td>
+                                                <td data-label="Price" class="ec-cart-pro-price"><span
+                                                        class="amount">$56.00</span></td>
+                                                <td data-label="Quantity" class="ec-cart-pro-qty"
+                                                    style="text-align: center;">
+                                                    <div class="cart-qty-plus-minus">
+                                                        <input class="cart-plus-minus" type="text" name="cartqtybutton"
+                                                            value="1">
+                                                        <div class="ec_cart_qtybtn">
+                                                            <div class="inc ec_qtybtn">+</div>
+                                                            <div class="dec ec_qtybtn">-</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Total" class="ec-cart-pro-subtotal">$56.00</td>
+                                                <td data-label="Remove" class="ec-cart-pro-remove">
+                                                    <a href="#"><i class="ecicon eci-trash-o"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td data-label="Product" class="ec-cart-pro-name"><a
+                                                        href="product-left-sidebar.html">
+                                                        <img class="ec-cart-pro-img mr-4"
+                                                            src="{{url_for('static', filename='images/product-image/2.jpg')}}"
+                                                            alt="">Unisex
+                                                        Fully Solid Hoodie</a></td>
+                                                <td data-label="Price" class="ec-cart-pro-price"><span
+                                                        class="amount">$75.00</span></td>
+                                                <td data-label="Quantity" class="ec-cart-pro-qty"
+                                                    style="text-align: center;">
+                                                    <div class="cart-qty-plus-minus">
+                                                        <input class="cart-plus-minus" type="text" name="cartqtybutton" value="1">
+                                                        <div class="ec_cart_qtybtn">
+                                                            <div class="inc ec_qtybtn">+</div>
+                                                            <div class="dec ec_qtybtn">-</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Total" class="ec-cart-pro-subtotal">$75.00</td>
+                                                <td data-label="Remove" class="ec-cart-pro-remove">
+                                                    <a href="#"><i class="ecicon eci-trash-o"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td data-label="Product" class="ec-cart-pro-name"><a
+                                                        href="product-left-sidebar.html"><img
+                                                            class="ec-cart-pro-img mr-4"
+                                                            src="{{url_for('static', filename='images/product-image/3.jpg')}}"
+                                                            alt="">Beautiful T-shirt For Women</a></td>
+                                                <td data-label="Price" class="ec-cart-pro-price"><span
+                                                        class="amount">$48.00</span></td>
+                                                <td data-label="Quantity" class="ec-cart-pro-qty"
+                                                    style="text-align: center;">
+                                                    <div class="cart-qty-plus-minus">
+                                                        <input class="cart-plus-minus" type="text" name="cartqtybutton"
+                                                            value="1">
+                                                        <div class="ec_cart_qtybtn">
+                                                            <div class="inc ec_qtybtn">+</div>
+                                                            <div class="dec ec_qtybtn">-</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Total" class="ec-cart-pro-subtotal">$48.00</td>
+                                                <td data-label="Remove" class="ec-cart-pro-remove">
+                                                    <a href="#"><i class="ecicon eci-trash-o"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td data-label="Product" class="ec-cart-pro-name"><a
+                                                        href="product-left-sidebar.html"><img
+                                                            class="ec-cart-pro-img mr-4"
+                                                            src="{{url_for('static', filename='images/product-image/4.jpg')}}"
+                                                            alt="">Wool
+                                                        Hat For Men</a></td>
+                                                <td data-label="Price" class="ec-cart-pro-price"><span
+                                                        class="amount">$95.00</span></td>
+                                                <td data-label="Quantity" class="ec-cart-pro-qty"
+                                                    style="text-align: center;">
+                                                    <div class="cart-qty-plus-minus">
+                                                        <input class="cart-plus-minus" type="text" name="cartqtybutton"
+                                                            value="1">
+                                                        <div class="ec_cart_qtybtn">
+                                                            <div class="inc ec_qtybtn">+</div>
+                                                            <div class="dec ec_qtybtn">-</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Total" class="ec-cart-pro-subtotal">$95.00</td>
+                                                <td data-label="Remove" class="ec-cart-pro-remove">
+                                                    <a href="#"><i class="ecicon eci-trash-o"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="ec-cart-update-bottom">
+                                            <a href="/"><i class="ecicon eci-back"></i> Continue Shopping</a>
+                                            <button class="btn ec-cart-summary-total text-danger font-weight-bold">$80.00</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="row">
+                                <div class="ec-cart-rightside col-lg-12 col-md-12">
+                                    <div class="ec-sidebar-wrap">
+                                        <div class="ec-sidebar-block">
+                                            <div class="ec-sb-title">
+                                                <h3 class="ec-sidebar-title">Checkout Summary
+                                                    <div class="ec-sidebar-res"><i class="ecicon eci-angle-down"></i>
+                                                    </div>
+                                                </h3>
+                                            </div>
+
+
+                                            <div class="ec-sb-block-content ec-sidebar-dropdown">
+                                                <div class="ec-cart-summary-bottom">
+                                                    <div class="ec-cart-summary">
+                                                        <div>
+                                                            <span class="text-left">Sub-Total</span>
+                                                            <span class="text-right">$80.00</span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-left">Delivery Charges</span>
+                                                            <span class="text-right">$80.00</span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-left">Tax</span>
+                                                            <span class="text-right">20%</span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-left">Coupan Discount</span>
+                                                            <span class="text-right"><a class="ec-cart-coupan">Apply
+                                                                    Coupan</a></span>
+                                                        </div>
+                                                        <div class="ec-cart-coupan-content">
+                                                            <form class="ec-cart-coupan-form" name="ec-cart-coupan-form"
+                                                                method="post" action="#">
+                                                                <input class="ec-coupan" type="text" required=""
+                                                                    placeholder="Enter Your Coupan Code"
+                                                                    name="ec-coupan" value="">
+                                                                <button class="ec-coupan-btn button btn-primary"
+                                                                    type="submit" name="subscribe"
+                                                                    value="">Apply</button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="ec-cart-summary-total">
+                                                            <span class="text-left">Total Amount</span>
+                                                            <span class="text-right">$80.00</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--cart content End -->
+            </div>
+            <!-- Sidebar Area Start -->
+
+
+            <div class="ec-cart-rightside col-lg-5 col-md-12">
+                <div class="ec-sidebar-wrap g-3">
+                    <!-- Sidebar Summary Block -->
+                    <div class="ec-sidebar-block">
+                        <div class="ec-sb-block-content ec-sidebar-dropdown">
+                            <h4 class="ec-ship-title">Billing Details</h4>
+
+                            <div class="ec-cart-form">
+                                <p>Enter your destination to get a shipping estimate</p>
+                                <form action="#" method="post">
+                                    <!------------------------->
+                                    <div class="row g-3">
+
+                                        <div class="col-sm-6">
+                                            <label for="email" class="form-label">Valid email address</label>
+                                            {# {{ form.email.label}} #}
+                                            {% if form.email.errors %}
+                                            {{ form.email(for="email", class="form-control") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.email.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.email(class="form-control", id="email", placeholder="you@sales.com")
+                                            }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <label for="phone" class="form-label">Active phone number</label>
+                                            {% if form.phone.errors %}
+                                            {{ form.phone(for="phone", class="form-control") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.phone.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.phone(class="form-control", id="phone", placeholder="+234812345678")
+                                            }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="name" class="form-label">Name</label>
+                                            {% if form.name.errors %}
+                                            {{ form.name(for="name", class="form-control") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.name.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.name(class="form-control", id="name", placeholder="Chris James") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-8">
+                                            <label for="adrs" class="form-label">Address</label>
+                                            {% if form.adrs.errors %}
+                                            {{ form.adrs(for="adrs", class="form-control") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.adrs.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.adrs(class="form-control", id="adrs", placeholder="12, White-jay Street,ologufe b/stop") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="zipcode" class="form-label">Zipcode</label>
+                                            {% if form.zipcode.errors %}
+                                            {{ form.zipcode(for="zipcode", class="form-control") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.zipcode.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.zipcode(class="form-control", id="zipcode", placeholder="10115") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <label for="country" class="form-label">Country</label>
+                                            {% if form.country.errors %}
+                                            {{ form.country(for="country", class="form-control") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.country.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.country(class="form-control ", id="country") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="state" class="form-label">State</label>
+                                            {% if form.state.errors %}
+                                            {{ form.state(for="state", class="form-control") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.state.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.state(class="form-control", id="state") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="pment_option" class="form-label">Pay Option</label>
+                                            {% if form.pment_option.errors %}
+                                            {{ form.adrs(for="pment_option", class="form-label ") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.pment_option.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.pment_option(class="form-control", id="pment_option") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="order_amt" class="form-label">.</label>
+                                            {% if form.order_amt.errors %}
+                                            {{ form.order_amt(for="order_amt", class="form-label ") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.order_amt.errors %}
+                                                {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                            {% else %}
+                                            {{ form.order_amt(class="form-control", id="order_amt") }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-2">
+                                            <div class="form-check">
+                                                {{ form.tnc(class="form-check-input", checked=True, id="tnc") }}
+                                                <label class="form-check-label" for="tnc">Terms & Condition</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-20">
+                                            {{ form.submit(class="btn border-rounded btn-secondary form-control text-white") }}
+                                        </div>
+
+                                    </div>
+
+                                    <!------------------------->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sidebar Summary Block -->
+                </div>
+            </div>
+
+
+        </div><!--row-->
+    </div>
+</section>
+
+<section class="section ec-trend-product section-space-p">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 section-title-block">
+                <div class="section-title">
+                    <h2 class="ec-title">Trending Item</h2>
+                    <p class="sub-title">Check out our trending products.</p>
+                </div>
+                <div class="section-btn">
+                    <span class="ec-section-btn"><a class="btn-secondary"
+                            href="">View All</a></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ec-trend-slider slick-initialized slick-slider"><button class="slick-prev slick-arrow"
+                    aria-label="Previous" type="button" style="">Previous</button>
+                <div class="slick-list draggable">
+                    <div class="slick-track"
+                        style="opacity: 1; width: 6246px; transform: translate3d(-694px, 0px, 0px);">
+                        <div class="slick-slide slick-cloned" data-slick-index="-2" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/22_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/22_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="stock">Out of stock</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Modern table
+                                                    for living room</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$450</span>
+                                                <span class="new-price">$400</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="-1" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/28_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/28_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="stock">Out of stock</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Wooden bed
+                                                    with mattress</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$5500</span>
+                                                <span class="new-price">$5100</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="" class="image" tabindex="0">
+                                                    <img class="main-image" src="/static/images/product-image/27_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/27_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="0"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="0"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="0"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="0"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="0">Woolen fabric
+                                                    single sofa</a></h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$1900</span>
+                                                <span class="new-price">$1550</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-active" data-slick-index="1" aria-hidden="false"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="0">
+                                                    <img class="main-image" src="/static/images/product-image/20_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/20_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="sale">Top Seller</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="0"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="0"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="0"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="0"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="0">Modern LED
+                                                    night lamp</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$230</span>
+                                                <span class="new-price">$180</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/25_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/25_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="percentage">-35%</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Modern tabel
+                                                    for living room</a></h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$530</span>
+                                                <span class="new-price">$399</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide" data-slick-index="3" aria-hidden="true" tabindex="-1"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/26_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/26_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="percentage">-25%</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Single wooden
+                                                    sofa</a></h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$450</span>
+                                                <span class="new-price">$400</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide" data-slick-index="4" aria-hidden="true" tabindex="-1"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/20_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/20_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">LED Night lamp
+                                                    showpiece</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$120</span>
+                                                <span class="new-price">$80</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide" data-slick-index="5" aria-hidden="true" tabindex="-1"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/21_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/21_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="sale">Top Seller</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Revolving
+                                                    chair for office</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$999</span>
+                                                <span class="new-price">$799</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide" data-slick-index="6" aria-hidden="true" tabindex="-1"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/22_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/22_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="stock">Out of stock</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Modern table
+                                                    for living room</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$450</span>
+                                                <span class="new-price">$400</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide" data-slick-index="7" aria-hidden="true" tabindex="-1"
+                            style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/28_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/28_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="stock">Out of stock</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Wooden bed
+                                                    with mattress</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$5500</span>
+                                                <span class="new-price">$5100</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="8" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="" class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/27_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/27_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Woolen fabric
+                                                    single sofa</a></h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$1900</span>
+                                                <span class="new-price">$1550</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="9" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/20_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/20_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="sale">Top Seller</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Modern LED
+                                                    night lamp</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$230</span>
+                                                <span class="new-price">$180</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="10" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/25_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/25_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="percentage">-35%</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Modern tabel
+                                                    for living room</a></h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$530</span>
+                                                <span class="new-price">$399</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="11" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/26_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/26_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="percentage">-25%</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Single wooden
+                                                    sofa</a></h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$450</span>
+                                                <span class="new-price">$400</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="12" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/20_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/20_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">LED Night lamp
+                                                    showpiece</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$120</span>
+                                                <span class="new-price">$80</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="13" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/21_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/21_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="sale">Top Seller</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Revolving
+                                                    chair for office</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$999</span>
+                                                <span class="new-price">$799</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="14" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/22_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/22_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="stock">Out of stock</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Modern table
+                                                    for living room</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$450</span>
+                                                <span class="new-price">$400</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slick-slide slick-cloned" data-slick-index="15" id="" aria-hidden="true"
+                            tabindex="-1" style="width: 347px;">
+                            <div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ec-product-content"
+                                    style="width: 100%; display: inline-block;">
+                                    <div class="ec-product-inner">
+                                        <div class="ec-pro-image-outer">
+                                            <div class="ec-pro-image">
+                                                <a href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    class="image" tabindex="-1">
+                                                    <img class="main-image" src="/static/images/product-image/28_1.jpg"
+                                                        alt="Product">
+                                                    <img class="hover-image" src="/static/images/product-image/28_2.jpg"
+                                                        alt="Product">
+                                                </a>
+                                                <span class="flags">
+                                                    <span class="stock">Out of stock</span>
+                                                </span>
+                                                <div class="ec-pro-actions">
+                                                    <button title="Add To Cart" class=" add-to-cart" tabindex="-1"><i
+                                                            class="fi-rr-shopping-basket"></i></button>
+                                                    <a href="projects/ekka/ekka-v34/ekka-html/compare.html"
+                                                        class="ec-btn-group compare" title="Compare" tabindex="-1"><i
+                                                            class="fi fi-rr-arrows-repeat"></i></a>
+                                                    <a href="#" class="ec-btn-group quickview"
+                                                        data-link-action="quickview" title="Quick view"
+                                                        data-bs-toggle="modal" data-bs-target="#ec_quickview_modal"
+                                                        tabindex="-1"><i class="fi-rr-eye"></i></a>
+                                                    <a class="ec-btn-group wishlist" title="Wishlist" tabindex="-1"><i
+                                                            class="fi-rr-heart"></i></a>
+                                                </div>
+                                                <div class="ec-pro-loader"></div>
+                                            </div>
+                                        </div>
+                                        <div class="ec-pro-content">
+                                            <h5 class="ec-pro-title"><a
+                                                    href="projects/ekka/ekka-v34/ekka-html/product-left-sidebar.html"
+                                                    tabindex="-1">Wooden bed
+                                                    with mattress</a>
+                                            </h5>
+                                            <span class="ec-price">
+                                                <span class="old-price">$5500</span>
+                                                <span class="new-price">$5100</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><button class="slick-next slick-arrow" aria-label="Next" type="button" style="">Next</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block page_js %}
+<script src="{{url_for('static', filename='js/vendor/jquery.magnific-popup.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/jquery.sticky-sidebar.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/nouislider.js')}}"></script>
+<!-- Google translate Js -->
+<script src="{{url_for('static', filename='js/vendor/google-translate.js')}}"></script>
+{% endblock page_js %}

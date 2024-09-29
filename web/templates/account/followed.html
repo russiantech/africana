@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %} Followed . Salesnet.{% endblock title %}
+{% block page_css %} <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" /> {% endblock page_css %}
+{% block content %}
+
+{% include 'account/breadcrumb.html' %}
+
+<section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar Area Start -->
+            {% include 'account/sidebar.html' %}
+            <div class="ec-shop-rightside col-lg-9 col-md-12">
+                <div class="ec-vendor-dashboard-card">
+                    <div class="ec-vendor-card-header">
+                        <h5>Your Follow list</h5>
+                    </div>
+                    <div class="ec-vendor-card-body">
+                        <div class="ec-vendor-card-table">
+                            <table class="table ec-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Vendor</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Level</th>
+                                        <th scope="col">Country</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><img class="prod-img" src="{{url_for('static', filename='images/vendor/1.jpg')}}" alt="product image"></td>
+                                        <td><span>Oreva Fashion</span></td>
+                                        <td><span>584</span></td>
+                                        <td><span>10</span></td>
+                                        <td><span>India</span></td>
+                                        <td><span class="tbl-btn"><a class="btn btn-lg btn-primary" href="#">Unfollow</a></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="prod-img" src="{{url_for('static', filename='images/vendor/2.jpg')}}" alt="product image"></td>
+                                        <td><span>Astron Mart</span></td>
+                                        <td><span>958</span></td>
+                                        <td><span>10</span></td>
+                                        <td><span>Indonesia</span></td>
+                                        <td><span class="tbl-btn"><a class="btn btn-lg btn-primary" href="#">Unfollow</a></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="prod-img" src="{{url_for('static', filename='images/vendor/3.jpg')}}" alt="product image"></td>
+                                        <td><span>Modern Mart</span></td>
+                                        <td><span>56</span></td>
+                                        <td><span>10</span></td>
+                                        <td><span>Turkey</span></td>
+                                        <td><span class="tbl-btn"><a class="btn btn-lg btn-primary" href="#">Unfollow</a></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="prod-img" src="{{url_for('static', filename='images/vendor/4.jpg')}}" alt="product image"></td>
+                                        <td><span>Kings Creation</span></td>
+                                        <td><span>587</span></td>
+                                        <td><span>10</span></td>
+                                        <td><span>Morocco</span></td>
+                                        <td><span class="tbl-btn"><a class="btn btn-lg btn-primary" href="#">Unfollow</a></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="prod-img" src="{{url_for('static', filename='images/vendor/5.jpg')}}" alt="product image"></td>
+                                        <td><span>Amazon Kart</span></td>
+                                        <td><span>687</span></td>
+                                        <td><span>9</span></td>
+                                        <td><span>USA</span></td>
+                                        <td><span class="tbl-btn"><a class="btn btn-lg btn-primary" href="#">Unfollow</a></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="prod-img" src="{{url_for('static', filename='images/vendor/2.jpg')}}" alt="product image"></td>
+                                        <td><span>Crazy Fabric </span></td>
+                                        <td><span>784</span></td>
+                                        <td><span>9</span></td>
+                                        <td><span>Spain</span></td>
+                                        <td><span class="tbl-btn"><a class="btn btn-lg btn-primary" href="#">Unfollow</a></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img class="prod-img" src="{{url_for('static', filename='images/vendor/3.jpg')}}" alt="product image"></td>
+                                        <td><span>Marvelus</span></td>
+                                        <td><span>587</span></td>
+                                        <td><span>9</span></td>
+                                        <td><span>Brazil</span></td>
+                                        <td><span class="tbl-btn"><a class="btn btn-lg btn-primary" href="#">Unfollow</a></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>>
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block page_js %}     
+<script src="{{url_for('static', filename='js/vendor/jquery.magnific-popup.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/jquery.sticky-sidebar.js')}}"></script>
+<script src="{{url_for('static', filename='js/plugins/nouislider.js')}}"></script>
+<!-- Google translate Js -->
+<script src="{{url_for('static', filename='js/vendor/google-translate.js')}}"></script>
+
+<script src="{{url_for('static', filename='js/vendor/index.js')}}"></script>
+<!-- <script src="{{url_for('static', filename='js/main.js')}}"></script> -->
+
+{% endblock page_js %}

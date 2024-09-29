@@ -1,0 +1,725 @@
+{% extends 'base.html' %}
+<title> {% block title %} Apportioned Products{% endblock title %}</title>
+<style>
+    /* example of setting the width for multiselect */
+    #product-series-select {
+        width: 200px;
+    }
+
+.dropdown-menu-custom {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 10rem;
+    padding: .5rem 0;
+    margin: .125rem 0 0;
+    font-size: 1rem;
+    color: #676E8A;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 10px;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.175)
+}
+</style>
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}
+	{% include 'incs/topnav.html' %}
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+						<div>
+							<h4 class="mb-3">{{pname}}</h4>
+							<p class="mb-0 text-warning">Keep track of products that can be apportioned<b>...</b>.</p>
+						</div>
+						<button id="create-apportioned-product" class="btn btn-primary"><i class="las la-plus mr-3"></i>New Apportioning</button>
+					</div>
+				</div>
+				<div class="card col-12">
+					<div class="card-body">
+						<ul class="nav nav-pills" id="pills-tab" role="tablist">
+						  <li class="nav-item">
+							 <a class="nav-link active font-weight-bold" id="pills-bar-tab" data-toggle="pill" href="#pills-bar" role="tab" aria-controls="pills-bar" 
+                             aria-selected="true">Apportioning </a>
+						  </li>
+						  <li class="nav-item">
+							 <a class="nav-link font-weight-bold" id="pills-kitchen-tab" data-toggle="pill" href="#pills-kitchen" role="tab" aria-controls="pills-kitchen" 
+                             aria-selected="false">Keep Track(Changes) </a>
+						  </li>
+					   </ul>
+
+					   <div class="tab-content" id="pills-tabContent-2">
+						  <div class="tab-pane fade active show" id="pills-bar" role="tabpanel" aria-labelledby="pills-bar-tab">
+							 <p class="text-warning">
+                                Record apportioned products here. Update/edit a mistake with the green button. Delete a record with the red button.
+                             </p>
+							 <div class="col-lg-12">
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                                         <div class="alert" id="response_div">....</div>
+                                         <form method="POST" id="apportion-form" action="{{url_for('apportion.apportion_')}}">
+                                         <table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+                                                 id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                                 
+                                                 <thead class="bg-white text-uppercase">
+                                                     <tr class="ligth ligth-data" role="row">
+                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                             rowspan="1" colspan="1"
+                                                             aria-label="Price: activate to sort column ascending"
+                                                             style="width: 96.2812px;">S/N</th>
+                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                             rowspan="1" colspan="1"
+                                                             aria-label="Product: activate to sort column ascending"
+                                                             style="width: 29.90px;">Department</th>
+                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                             rowspan="1" colspan="1"
+                                                             aria-label="Product: activate to sort column ascending"
+                                                             style="width: 29.90px;">Product Title</th>
+                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                             rowspan="1" colspan="1"
+                                                             aria-label="Product: activate to sort column ascending"
+                                                             style="width: 29.90px;">Product series</th>
+                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                             rowspan="1" colspan="1"
+                                                             aria-label="Code: activate to sort column ascending"
+                                                             style="width: 106.125px;">quantity</th>
+                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                             rowspan="1" colspan="1"
+                                                             aria-label="Price: activate to sort column ascending"
+                                                             style="width: 96.2812px;">Date</th>
+                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                             rowspan="1" colspan="1"
+                                                             aria-label="Action: activate to sort column ascending"
+                                                             style="width: 182.953px;">Action</th>
+                                                     </tr>
+                                                 </thead>
+
+                                                 <tbody class="ligth-body">
+                                                 
+                                                     <tr role="row" id="create-input-row" class="odd d-none">
+                                                         <td class="sorting_1">...</td>
+                                                         <td id="items_dept_td">
+                                                             <select class="form-control" required id="items_dept"  name="items_dept">
+                                                                 <option value="">select</option>
+                                                                 <option value="k">Kitchen</option>
+                                                                 <option value="b">Bar</option>
+                                                                 <option value="c">Cocktails</option>
+                                                             </select>
+                                                         </td>
+ 
+                                                         <td>
+                                                             <input class="form-control text-muted"  type="text" placeholder="product title" 
+                                                             name="items_title" id="items_title" />
+                                                         </td>
+                                                         <td id="items_series_td">
+                                                             <div class="dropdown" style="position: relative; z-index: 1000 !important;">
+                                                                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                                 data-toggle="dropdown" aria-expanded="false">
+                                                                 allocate products
+                                                                 </button>
+                                                                 <ul id="dropdown-menu" class="dropdown-menu z-index-5" 
+                                                                 aria-labelledby="dropdownMenuButton">
+                                                                     <li>
+                                                                         <a class="dropdown-item" href="#">
+                                                                             <div class="form-check">
+                                                                                 <input class="form-check-input" disabled type="checkbox"/>
+                                                                                 <label class="form-check-label" for="items_series">Kindly Select</label>
+                                                                             </div>
+                                                                         </a>
+                                                                     </li>
+                                                                     <!-- <li><hr class="dropdown-divider" /></li> -->
+                                                                     <li>
+                                                                         <a class="dropdown-item" href="#">
+                                                                             <div class="form-check">
+                                                                                 <input class="form-check-input" disabled type="checkbox"  />
+                                                                                 <label class="form-check-label" for="items_series">A Department You</label>
+                                                                             </div>
+                                                                         </a>
+                                                                     </li>
+                                                                     <li>
+                                                                         <a class="dropdown-item" href="#">
+                                                                             <div class="form-check">
+                                                                                 <input class="form-check-input" disabled type="checkbox"  />
+                                                                                 <label class="form-check-label" for="items_series">Want to Allocate to first.</label>
+                                                                             </div>
+                                                                         </a>
+                                                                     </li>
+                                                                 </ul>
+                                                             </div>
+ 
+                                                         </td>
+                                                         <td> 
+                                                             <input type="text" id="items_qty" name="items_qty" value="0" placeholder="Quantity Set" class="form-control text-muted"/>
+                                                         </td>
+                                                         <td>...</td>
+                                                         <td>
+                                                             <div class="d-flex align-items-center list-action">
+                                                                 <button type="submit" id="submit" class="badge badge-info mr-2 border-0" data-toggle="tooltip" 
+                                                                 data-placement="top" title="Save it" data-original-title="Save"><i class="las la-plus mr-0"></i>
+                                                                 </button>                                                                
+                                                                 <button id="cancel" type="button" class="badge bg-warning mr-2 border-0" data-toggle="tooltip" 
+                                                                 data-placement="top" 
+                                                                 title="" data-original-title="Cancel">
+                                                                 <i class="ri-close-line"></i></button>
+                                                             </div>
+                                                         </td>
+                                                     </tr>
+ 
+                                                     {% for apportion in apportioned %}
+                                                     <tr role="row" class="odd">
+                                                         <td class="sorting_1">{{loop.index}}</td>
+                                                         <td id="items_dept">
+                                                             {% if apportion.items_dept == 'k' %}
+                                                             Kitchen
+                                                             {% elif apportion.items_dept == 'b' %}
+                                                             Bar
+                                                             {% elif apportion.items_dept == 'c' %}
+                                                             Cocktails
+                                                             {% else %}
+                                                             Other
+                                                             {% endif %}
+                                                         </td>
+ 
+                                                         <td id="items_title">{{apportion.items_title}}</td>
+                                                         
+                                                         <td id="items_series_td">
+                                                             <div class="btn-group">
+                                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" 
+                                                                 aria-haspopup="true" aria-expanded="false">
+                                                                 {{apportion.items_title}}-Series
+                                                                 </button>
+                                                                 <div class="dropdown-menu">
+                                                                 {% for item in apportion.items %}
+                                                                 <a class="dropdown-item" id="items_series" href="{{item.id}}">{{item.name}}</a>
+                                                                 {% endfor %}
+                                                                 </div>
+                                                             </div>
+                                                         </td>
+                                                         
+ 
+                                                         <td id="items_qty"> {{apportion.items_qty}} </td>
+                                                         <td>{{apportion.created}}</td>
+                                                         <td>
+                                                         <div class="d-flex align-items-center list-action">
+                                                         <button onclick="editable(this)" data-id="{{apportion.id}}" data-dept="{{apportion.dept}}" 
+                                                         type="button" class="badge border-0 bg-success mr-2"
+                                                         data-toggle="tooltip" data-placement="top" title="edit" data-original-title="edit">
+                                                         <i class="ri-pencil-line mr-0"></i></button>
+                                                         <button type="button" id="del" onclick="remove(this, '{{apportion.id}}')"
+                                                         class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+                                                         data-placement="top" title="" data-original-title="Delete"><i class="ri-delete-bin-line mr-0"></i></button>
+ 
+                                                             </div>
+                                                         </td>
+                                                     </tr>
+                                                     {% endfor %}
+                                                     </tbody>
+                                         </table>
+                                     </form>
+                                     </div>
+                                 </div>
+                             </div>
+                           </div>
+ 
+                           <div class="tab-pane fade" id="pills-kitchen" role="tabpanel" aria-labelledby="pills-kitchen-tab">
+                              <p class="text-warning">
+                                When you take from apportioned products/quantity, it will be recorded here to keep track of stock apportioned stock changes.</p>
+                              <div class="col-lg-12">
+                                 <div class="table-responsive rounded mb-3">
+                                    
+                                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                                        <div class="alert" id="response_div2">....</div>
+
+                                         <table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+                                         id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                         
+                                         <thead class="bg-white text-uppercase">
+                                             <tr class="ligth ligth-data" role="row">
+                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                     rowspan="1" colspan="1"
+                                                     aria-label="Price: activate to sort column ascending"
+                                                     style="width: 96.2812px;">S/N</th>
+                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                     rowspan="1" colspan="1"
+                                                     aria-label="Product: activate to sort column ascending"
+                                                     style="width: 29.90px;">Products</th>
+                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                     rowspan="1" colspan="1"
+                                                     aria-label="Code: activate to sort column ascending"
+                                                     style="width: 106.125px;">Opening Stock</th>
+                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                     rowspan="1" colspan="1"
+                                                     aria-label="Code: activate to sort column ascending"
+                                                     style="width: 106.125px;">Stock changes</th>
+                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                     rowspan="1" colspan="1"
+                                                     aria-label="Code: activate to sort column ascending"
+                                                     style="width: 106.125px;">Descriptions</th>
+                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                     rowspan="1" colspan="1"
+                                                     aria-label="Price: activate to sort column ascending"
+                                                     style="width: 96.2812px;">Date</th>
+                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                     rowspan="1" colspan="1"
+                                                     aria-label="Action: activate to sort column ascending"
+                                                     style="width: 182.953px;">Action</th>
+                                             </tr>
+                                         </thead>
+
+                                         <tbody class="ligth-body">
+                                             {% for apportioned_item, history in apportion_history %}
+                                             <tr role="row" class="odd">
+                                                 <td class="sorting_1">{{loop.index}}</td>
+                                                 <td id="items_title_h">{{apportioned_item.items_title}}</td>
+                                                 <td id="items_qty_h"> {{history.in_stock}} </td>
+                                                 <td id="items_difference_h"> {{history.difference}} </td>
+                                                 <td id="items_desc_h"> {{history.desc}}</td>
+                                                 <td>{{history.created}}</td>
+                                                 <td>
+                                                 <div class="d-flex align-items-center list-action">
+                                                 <button type="button" id="del" onclick="remove_apportoned_history(this, '{{apportioned_item.id}}', '{{history.id}}')"
+                                                 class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+                                                 data-placement="top" title="" data-original-title="Delete"><i class="ri-delete-bin-line mr-0"></i> delete</button>
+
+                                                     </div>
+                                                 </td>
+                                             </tr>
+                                             {% endfor %}
+                                             </tbody>
+                                 </table>
+
+                                     </div>
+                                 </div>
+                             </div>
+                           </div>
+
+ 
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+ 
+             </div>
+             <!-- Page end  -->
+         </div>
+         <!-- Modal Edit -->
+         {% include 'incs/modal.html' %}
+     </div>
+ {% endblock content %}
+ 
+ {% block page_js %}
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
+ <script src="{{url_for('static', filename='js/html2pdf.bundle.min.js')}}"></script>
+ <script>
+ 
+ $(document).ready( () => {
+
+    const baseUrl = `${window.location.protocol}//${window.location.host}`;
+    //const baseUrl = `${window.location.protocol}//${window.location.host}/api/get_product_series`;
+
+    function removeChars(s) {
+     const charsToRemove = ['[', ']', '{', '}', '\''];
+     let result = s;
+     for (let i = 0; i < charsToRemove.length; i++) {
+         const char = charsToRemove[i];
+         while (result.includes(char)) {
+             result = result.replace(char, '');
+         }
+         }
+         return result;
+     }
+     
+    $('#create-apportioned-product').click(()=>{
+ 
+         $('#create-input-row').removeClass('d-none'); //mk input row visible for new products to be apportioned.
+         
+         $('#cancel').on('click', function () {
+             //alert('cancel btn clicked');
+             $('#create-input-row').addClass('d-none'); //just hide it to cancel
+         });
+ 
+        var apportion_form = $('#apportion-form');
+
+         // Get the current action URL
+        var currentActionUrl = apportion_form.attr('action');
+
+        $(apportion_form).submit(function (e) {
+         e.preventDefault();
+         var response_div = $(document).find('#response_div');
+         const formData = new FormData(this);
+         var submit_btn = $(this).find('#submit');
+         var submit_btn_html = $(submit_btn).html();
+         const url = baseUrl + currentActionUrl;
+
+
+         $(response_div, submit_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> ...processing').addClass('disabled').addClass('primary');
+         $.ajax({
+             url: url,
+             type: 'POST',
+             data: formData,
+             contentType: false,
+             processData: false,
+             headers: {
+                     "X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+                 },
+             /* beforeSend: function (xhr) {
+                 // Include the CSRF token in the request headers
+                 xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}");
+                 }, */
+ 
+             success: function (response){
+ 
+                 $(response_div).removeClass('disabled'); //reset response_div
+                 $(submit_btn).removeClass('disabled').html(submit_btn_html); //reset submit-btn
+ 
+                 //if (response && (response.message || response.error_message || response.data)){
+                 if (response && (response.response || response.link)){
+                     console.log(JSON.stringify(response.link));
+                     //var response_message = response.success ? (response.message || response.error_message) : response.data || response.error_message;
+                     var response_message = response.response;
+                     //var response_link = response.success ? response.link : null;
+                     var response_link =  response.link ? response.link : '#';
+                     var response_alert = response.alert;
+                 
+                     //response_message = response_message.replace(/\{[^[]*\[/g, '').replace(/] [^\]]*\}/g, '');
+                     response_message = removeChars(response_message);
+                     
+                     console.log('response_message', response_message);
+                     console.log('response_link', response_link);
+                     console.log('response_alert', response_alert);
+ 
+                     if (response){
+                         $(response_div).addClass('alert-success');
+                     }else{
+                         $(response_div).addClass('alert-danger');
+                     }
+ 
+                     $(response_div).html(response_message);
+                     
+                     if(response_link !== null){
+ 
+                         $(response_div).append(' <br> <a href=' +response_link + ' \
+                         class="bg-transparent p-0 m-0 rounded" data-bs-dismiss="modal" data-bs-toggle="modal"> -> continue here </a>');
+                     }
+                     //$('form').hide();
+                 }
+ 
+                 if ('undefined' === typeof (response)){
+ 
+                     $(response_div).text(response).addClass('alert-danger');
+ 
+                 } 
+ 
+                 console.log('response->(' + JSON.stringify(response) + ')');
+             },
+             
+             error: function (xhr, status, er) {
+                 $(response_div).text('request-failed'+JSON.stringify(er)).addClass('alert-danger')
+                 $(submit_btn).removeClass('disabled').html(submit_btn_html); //reset spinning submit-btn
+                 },
+ 
+             always: function (dt) {
+                 console.log("ajax complete with"+ JSON.stringify(dt));
+                 $(submit_btn).addClass('disabled').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> ...processing');
+                 },
+ 
+             complete: function (){
+                 // Reset the submit button after the request is complete
+                 $(submit_btn).removeClass('disabled').html(submit_btn_html);
+                 //setTimeout(function () { $(response_div).hide(); }, 60000);// Alternatively, you can use response_div.remove() to completely remove it from the DOM
+             }, 
+         });
+ 
+         });
+ 
+         });
+     
+    remove = (del_btn, item_id) => {
+ 
+     var response_div = $(document).find('#response_div');
+     $(response_div).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+     const path = `/api/apportion/${item_id}/delete`;
+     const url = baseUrl + path;
+     var jqxhr = $.ajax({
+         url: url,
+         type: "DELETE", // Assuming this is a DELETE request, adjust as needed
+         headers: {
+             "X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+         },
+     });
+ 
+     jqxhr.done( (r) => {
+ 
+         $(del_btn).closest('tr').remove();
+
+         $(del_btn).html(del_btn); //reset spinning submit-btn
+ 
+         if ('undefined' != typeof (r.response)) {
+             $(response_div).html((r.response)).addClass(r.alert);
+         }else{
+             $(response_div).text(r).addClass('alert-success');
+         }
+         if ("undefined" != typeof r.link) {
+             $(response_div).append(' > <br> <a href=' + r.link + '> click to continue </a>');
+         }
+         console.log('response->(' + r.response + 'flash-message (' + r.alert); 
+     });
+ 
+     jqxhr.fail((er) => {
+         $(response_div).text('request-failed'+JSON.stringify(er)).addClass('alert-danger')
+         $(del_btn).html(del_btn);
+     });
+ 
+     jqxhr.always(() => {
+         $(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+     });
+ 
+     }
+
+
+    remove_apportoned_history = (del_btn, item_id, history_id) => {
+        var response_div = $(document).find('#response_div2');
+        if (!confirm('Sure you wanna remove this back-up ?')) { return } //true/false
+
+        $(response_div).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting product history');
+
+        del_btnhtml = $(del_btn).html()
+
+        let url = "{{url_for('endpoint.history_action')}}?item_id="+ item_id +"&history_id="+history_id + "&action=del"
+
+        console.log(url)
+
+        //var jqxhr = $.delete(url);
+        var jqxhr = $.ajax({
+            url: url,
+            type: "DELETE",
+            headers: {
+                "X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+            },
+        });
+
+        $(del_btnhtml).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+        jqxhr.done((r) => {
+
+            $(del_btn).closest('tr').remove()
+
+            $(del_btn).html(del_btnhtml); //reset spinning submit-btn
+            if ('undefined' != typeof (r.response)) {
+                $(response_div).html((r.response)).addClass(r.flash);
+            } else ($(response_div).text(r).addClass('alert-success'))
+
+            if ("undefined" != typeof r.link){
+                $(response_div).append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+            }
+
+        });
+        jqxhr.fail((er) => { 
+            console.log(JSON.stringify(er));
+            //$(response_div).html($.trim( JSON.stringify(er)) );
+            $(response_div).text('deletion-request failed->'+JSON.stringify(er)).addClass('alert-danger')
+            $(del_btn).html(del_btnhtml);
+        });
+
+        jqxhr.always(() => {
+            //alert("ajax complete");
+            $(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+        });
+
+        }
+
+  function submitForm(form, url, method) {
+    form.submit(function (e) {
+        e.preventDefault();
+        var response_div = $(document).find('#response_div');
+        const formData = new FormData(this);
+        var submit_btn = $(this).find('#submit');
+        var submit_btn_html = $(submit_btn).html();
+
+        $(response_div, submit_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> ...processing').addClass('disabled').addClass('primary');
+
+        $.ajax({
+            url: url,
+            type: method,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+            },
+            success: function (response) {
+                $(response_div).removeClass('disabled');
+                $(submit_btn).removeClass('disabled').html(submit_btn_html);
+
+                if (response && (response.response || response.link)) {
+                    var response_message = response.response;
+                    var response_link = response.link ? response.link : '#';
+                    var response_alert = response.alert;
+
+                    response_message = removeChars(response_message);
+
+                    if (response) {
+                        $(response_div).addClass('alert-success');
+                    } else {
+                        $(response_div).addClass('alert-danger');
+                    }
+
+                    $(response_div).html(response_message);
+
+                    if (response_link !== null) {
+                        $(response_div).append(' <br> <a href=' + response_link + ' class="bg-transparent p-0 m-0 rounded" data-bs-dismiss="modal" data-bs-toggle="modal"> -> continue here </a>');
+                    }
+                }
+
+                if ('undefined' === typeof (response)) {
+                    $(response_div).text(response).addClass('alert-danger');
+                }
+
+                console.log('response->(' + JSON.stringify(response) + ')');
+            },
+
+            error: function (xhr, status, er) {
+                $(response_div).text('request-failed' + JSON.stringify(er)).addClass('alert-danger');
+                $(submit_btn).removeClass('disabled').html(submit_btn_html);
+            },
+
+            always: function (dt) {
+                console.log("ajax complete with" + JSON.stringify(dt));
+                $(submit_btn).addClass('disabled').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> ...processing');
+            },
+
+            complete: function () {
+                $(submit_btn).removeClass('disabled').html(submit_btn_html);
+                // setTimeout(function () { $(response_div).hide(); }, 60000);
+            },
+        });
+    });
+}
+
+  editable = (item_btn) => {
+    // Clone the row and remove the initial one
+    var cloned_row = $('#create-input-row').clone();
+    $('#create-input-row').remove();
+    let tr = $(item_btn).closest('tr');
+
+    // Update input values
+    $(cloned_row).find('#items_title').val($(tr).find("#items_title").text());
+    $(cloned_row).find('#items_qty').val(parseInt($(tr).find("#items_qty").text()));
+
+    // Fetch selected product IDs from the original row
+    let selectedProductIDs = [];
+    $(tr).find('#items_series_td .form-check-input').each(function () {
+        if ($(this).prop('checked')) {
+            selectedProductIDs.push($(this).val());
+        }
+    });
+
+    // Clear previous checkboxes and append new checkboxes
+    $(cloned_row).find('#dropdown-menu').empty();
+    const dept = $(tr).find("#items_dept").text();
+
+    // Make an AJAX request to fetch all products under the same department
+    $(cloned_row).find('#items_dept_td select').on('change', function () {
+        const get_series_url = `${window.location.protocol}//${window.location.host}/api/get_product_series`;
+        $('tr').find('#dropdown-menu').empty(); // Each time dept changes, empty/clear dropdown for new products
+        $.ajax({
+            url: get_series_url,
+            data: { dept: $(this).val() },
+            method: 'GET',
+            success: function (data) {
+                $.each(data, function (index, item) {
+                    $('tr').find('#dropdown-menu').append(`
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <div class="form-check">
+                                    <input class="form-check-input" value="${item.id}" id="items_series" name="items_series" type="checkbox"/>
+                                    <label class="form-check-label" for="item_series">${item.name}"</label>
+                                </div>
+                            </a>
+                        </li>
+                    `);
+                });
+            }
+        });
+    });
+
+    // Update the department dropdown
+    let selectedDeptText = $(tr).find("#items_dept").text().trim(); // Remove extra/white spaces
+    let matchFound = false;
+    $(cloned_row).find('#items_dept_td select option').each(function () {
+        if ($(this).text() === selectedDeptText) {
+            matchFound = true;
+            $(this).prop("selected", true);
+            return false; // Exit the loop since a match is found
+        }
+    });
+    if (!matchFound) {
+        // If no match is found, select the default option here.
+        $(cloned_row).find('#items_dept_td select option:first').prop("selected", true);
+    }
+
+    // Replace the row
+    $(tr).replaceWith(cloned_row.removeClass('d-none'));
+    
+    // Get the item ID for the update URL
+    const item_id = $(item_btn).attr('data-id');
+    const createUrl = `/api/apportion`;
+    const updateUrl = `/api/apportion/${item_id}/update`;
+
+    const isUpdate = true; // This can be passed as a parameter to the function if needed
+    // Set the form action URL and method using the function
+    const apportion_form = $('#apportion-form');
+    const actionUrl = isUpdate ? updateUrl : createUrl;
+    const method = isUpdate ? 'PUT' : 'POST';
+
+    // Submit the form using the function
+    submitForm(apportion_form, actionUrl, method);
+    
+    console.log(actionUrl);
+    console.log(apportion_form.attr('method'));
+    //console.log(apportion_form.html());
+
+}
+
+    $(function () { 
+        // Add an event listener to the #item_dept dropdown
+        $('#items_dept').on('change', function(){
+            //const get_series_url = 'http://' + document.domain + ':' + location.port + '/api/get_product_series'; //works on localhost/insecure
+            const get_series_url = `${window.location.protocol}//${window.location.host}/api/get_product_series`;
+            $('tr').find('#dropdown-menu').empty(); //each time dept changes, empty/clear dropdown for new products
+            $.ajax({
+                url: get_series_url, // Example URL
+                data: { dept: $(this).val() },
+                method: 'GET',
+                success: function (data) {
+                    $.each(data, function (index, item) {
+                    $('tr').find('#dropdown-menu').append(
+                    `<li>
+                        <a class="dropdown-item" href="">
+                            <div class="form-check">
+                                <input class="form-check-input" value="${item.id}" id="items_series" name="items_series" type="checkbox"/>
+                                <label class="form-check-label" for="item_series">${item.name}</label>
+                            </div>
+                        </a>
+                    </li>`);
+
+                });
+
+                }
+            });
+        });
+    });
+
+
+ });
+ 
+ </script>
+ {% endblock page_js %}
