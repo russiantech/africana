@@ -2,7 +2,7 @@
 <title> {% block title %} Apportioned Products{% endblock title %}</title>
 <style>
     /* example of setting the width for multiselect */
-    #product-series-select {
+/*     #product-series-select {
         width: 200px;
     }
 
@@ -25,9 +25,25 @@
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: 10px;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.175)
+} */
+
+.bootstrap-select .dropdown-menu {
+    position: absolute;
+    will-change: transform;
+    z-index: 1050;
 }
+
 </style>
 {% block content %}
+
+<style>
+    .table{
+        border: 1px solid #dcdfe8;
+    border-radius: 10px;
+    overflow: auto;
+    color: #110a57;
+    }
+</style>
 <div class="wrapper">
 	{% include 'incs/sidenav.html' %}
 	{% include 'incs/topnav.html' %}
@@ -84,7 +100,7 @@
                                                              aria-label="Product: activate to sort column ascending"
                                                              style="width: 29.90px;">Product Title</th>
                                                          <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                             rowspan="1" colspan="1"
+                                                             rowspan="1" colspan="1" 
                                                              aria-label="Product: activate to sort column ascending"
                                                              style="width: 29.90px;">Product series</th>
                                                          <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -625,7 +641,6 @@
     // Clear previous checkboxes and append new checkboxes
     $(cloned_row).find('#dropdown-menu').empty();
     const dept = $(tr).find("#items_dept").text();
-
     // Make an AJAX request to fetch all products under the same department
     $(cloned_row).find('#items_dept_td select').on('change', function () {
         const get_series_url = `${window.location.protocol}//${window.location.host}/api/get_product_series`;
@@ -718,8 +733,7 @@
         });
     });
 
-
  });
- 
+
  </script>
  {% endblock page_js %}

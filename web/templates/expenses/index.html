@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-<title> {% block title %}Expenses . Africana Kitchen {% endblock title %}</title>
+<title> {% block title %} expenses . Africana {% endblock title %}</title>
 {% block content %}
 <div class="wrapper">
 	{% include 'incs/sidenav.html' %}
@@ -11,8 +11,10 @@
 				<div class="col-lg-12">
 					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
 						<div>
-							<h4 class="mb-3">{{pname, current_user.permit()}}</h4>
-							<p class="mb-0 text-info">Hey, Africana, your profit will be calculated based on your expenses when generating sales report</p>
+							<h4 class="mb-3">{{pname}}</h4>
+							<p class="mb-0 text-warning">
+                                Hey, Africana, your profit will be calculated based on your expenses when generating sales report
+                            </p>
 						</div>
                     <div>
 						<button onclick="switchtab()" class="btn btn-primary generate"><i class="las la-plus mr-2"></i>Expense Report</button>

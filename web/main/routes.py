@@ -4,14 +4,13 @@ from flask_login import current_user, login_required
 from sqlalchemy import and_
 from  sqlalchemy.sql.expression import func
 from web.utils.db_session_management import db_session_management
-#from web.utils.calc_percent import cal_percent
 from web.main.forms import (
     CateForm, ExpensesForm, StockForm, SalesForm, RangeForm, kitchen_cate_choice, cocktail_cate_choice, expense_choice
 )
 from web.models import (
-    User, Expenses, Item, ApportionedItems, StockHistory, Cate, Sales
+    User, Expenses, Items, Apportion, StockHistory, Category, Sales
 )
-from web import calc_percent, db, Brand
+from web import calc_percent, db
 
 from calendar import month_abbr
 
@@ -19,6 +18,10 @@ from web.utils.decorators import role_required
 import traceback
 
 main = Blueprint('main', __name__)
+
+@main.route("/test-reports")
+def test_reports():
+    return render_template('test_report.html')
 
 @main.route("/welcome")
 @db_session_management
@@ -39,58 +42,58 @@ def welcome():
 def index():
 
     month_short = month_abbr[1:]
-    cate = Cate.query.filter_by(deleted=False).order_by(Cate.id).all()
-    cate = [{'id': c.id, 'parent': c.parent, 'name': c.name, 'lev': c.lev} for c in cate]
+    categories = Category.query.filter_by(deleted=False).order_by(Category.id).all()
+    categories = [{'id': category.id, 'parent': category.parent, 'name': category.name, 'lev': category.lev} for category in categories]
 
     # Calculate total sales for each department using item.s_price
     kq = db.session.query(
         func.count(Sales.id).label('count'),
-        func.sum(Sales.qty * Item.s_price).label('sales')
-    ).join(Item, Item.id == Sales.item_id).filter(
+        func.sum(Sales.qty * Items.s_price).label('sales')
+    ).join(Items, Items.id == Sales.item_id).filter(
         Sales.dept == 'k', Sales.deleted == False
     ).all()
 
     cq = db.session.query(
         func.count(Sales.id).label('count'),
-        func.sum(Sales.qty * Item.s_price).label('sales')
-    ).join(Item, Item.id == Sales.item_id).filter(
+        func.sum(Sales.qty * Items.s_price).label('sales')
+    ).join(Items, Items.id == Sales.item_id).filter(
         Sales.dept == 'c', Sales.deleted == False
     ).all()
 
     bq = db.session.query(
         func.count(Sales.id).label('count'),
-        func.sum(Sales.qty * Item.s_price).label('sales')
-    ).join(Item, Item.id == Sales.item_id).filter(
+        func.sum(Sales.qty * Items.s_price).label('sales')
+    ).join(Items, Items.id == Sales.item_id).filter(
         Sales.dept == 'b', Sales.deleted == False
     ).all()
 
     xp = db.session.query(func.sum(Expenses.cost).label('xps')).filter(Expenses.deleted == False).all()
     
     # Calculate total sales across all departments using item.s_price
-    ts = db.session.query(func.sum(Sales.qty * Item.s_price).label("mysum")).join(Item, Item.id == Sales.item_id).filter(
+    ts = db.session.query(func.sum(Sales.qty * Items.s_price).label("mysum")).join(Items, Items.id == Sales.item_id).filter(
         Sales.deleted == False
     ).all()
 
-    bestselling = db.session.query(Item.name, func.sum(Sales.qty).label('t_qty')).join(Sales, Item.id == Sales.item_id).filter(
+    bestselling = db.session.query(Items.name, func.sum(Sales.qty).label('t_qty')).join(Sales, Items.id == Sales.item_id).filter(
         Sales.deleted == False
-    ).group_by(Item.id).order_by(func.sum(Sales.qty).desc()).limit(10).all()
+    ).group_by(Items.id).order_by(func.sum(Sales.qty).desc()).limit(10).all()
 
-    topselling = db.session.query(Item.name, func.sum(Sales.qty * Item.s_price).label('total')).join(
-        Sales, Item.id == Sales.item_id
-    ).filter(Sales.deleted == False).group_by(Item.id).order_by(func.sum(Sales.qty * Item.s_price).desc()).limit(2)
+    topselling = db.session.query(Items.name, func.sum(Sales.qty * Items.s_price).label('total')).join(
+        Sales, Items.id == Sales.item_id
+    ).filter(Sales.deleted == False).group_by(Items.id).order_by(func.sum(Sales.qty * Items.s_price).desc()).limit(2)
 
     k_count = [{'count': k.count, 'sales': k.sales} for k in kq]
     c_count = [{'count': k.count, 'sales': k.sales} for k in cq]
     b_count = [{'count': k.count, 'sales': k.sales} for k in bq]
 
     for (x, y) in zip(k_count, ts):
-        k_percent = calc_percent.cal_percent(x['sales'], y[0])
+        k_percent = calc_percent(x['sales'], y[0])
 
     for (x, y) in zip(c_count, ts):
-        c_percent = calc_percent.cal_percent(x['sales'], y[0])
+        c_percent = calc_percent(x['sales'], y[0])
 
     for (x, y) in zip(b_count, ts):
-        b_percent = calc_percent.cal_percent(x['sales'], y[0])
+        b_percent = calc_percent(x['sales'], y[0])
 
     for (sl, xp) in zip(ts, xp):
         ts = sl[0]
@@ -104,7 +107,8 @@ def index():
         'c_percent': c_percent or 0,
         'b_percent': b_percent or 0,
         'bestselling': bestselling, 'topselling': topselling,
-        'cate': cate, 'months': month_short}
+        'cate': categories, 
+        'months': month_short}
 
     return stream_template('index.html', **context)
 
@@ -115,8 +119,8 @@ def index():
 def kitchen():
 
     form =  StockForm()
-    items = Item.query.filter(Item.deleted == 0, Item.dept=='k').order_by( Item.created.desc() ).limit(70)
-    categories = Cate.query.filter(Cate.deleted == 0, Cate.dept=='k').order_by( Cate.created.desc() ).limit(70)
+    items = Items.query.filter(Items.deleted == 0, Items.dept=='k').order_by( Items.created.desc() ).limit(70)
+    categories = Category.query.filter(Category.deleted == 0, Category.dept=='k').order_by( Category.created.desc() ).limit(70)
     form.cate.choices = [ (cate.id, cate.name) for cate in categories]
     total_stock_value = sum(x.in_stock * x.s_price for x in items if x.dept == 'k')
     context = {
@@ -127,37 +131,7 @@ def kitchen():
     'total_stock_value': total_stock_value,
     }
     context['form'].dept.data = 'k'
-    return stream_template('kitchen/index.html', **context)
- 
-@main.route("/kitchen-sales")
-@login_required
-@role_required('manager', 'admin', 'kitchen')
-@db_session_management
-def kitchen_sales():
-
-    context = {
-    'form' : SalesForm(),
-    'pname' : 'Kitchen Sales',
-    'items' : Item.query.filter(Item.deleted == 0, Item.dept=='k').order_by( Item.created.desc() ).limit(70),
-    'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='k').order_by(Sales.created.desc()).limit(80),
-    }
-    context['form'].dept.data ='k'
-    
-    return stream_template('sales/kitchen.html', **context)
-
-@main.route("/kitchen-report")
-@login_required
-@role_required('manager', 'admin', 'kitchen')
-@db_session_management
-def kitchen_report():
-    context = {
-    'form' : RangeForm(),
-    'pname' : 'Kitchen Sales Report',
-    'cate' : kitchen_cate_choice,
-    'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='k').order_by(Sales.created.desc()).all(),
-    } 
-    context['form'].dept.data = 'k'
-    return render_template('salesreport/kitchen.html', **context)
+    return stream_template('products/kitchen.html', **context)
 
 ########************COCK-TAILS***********************##################
 @main.route("/cocktail")
@@ -165,52 +139,21 @@ def kitchen_report():
 @role_required('manager', 'admin', 'cocktail')
 @db_session_management
 def cocktail():
-    
     form =  StockForm()
-    items = Item.query.filter(Item.deleted == 0, Item.dept=='c').order_by( Item.created.desc() ).limit(70)
-    categories = Cate.query.filter(Cate.deleted == 0, Cate.dept=='c').order_by( Cate.created.desc() ).limit(70)
+    items = Items.query.filter(Items.deleted == 0, Items.dept=='c').order_by( Items.created.desc() ).limit(70)
+    categories = Category.query.filter(Category.deleted == 0, Category.dept=='c').order_by( Category.created.desc() ).limit(70)
     form.cate.choices = [ (cate.id, cate.name) for cate in categories]
     total_stock_value = sum(x.in_stock * x.s_price for x in items if x.dept == 'c')
     context = {
     'form' : form,
-    'pname' : 'Cock Tail Department',
+    'pname' : 'Cock Tails',
     'cate' : [('', 'Select a category')] + form.cate.choices,
     'items' : items,
     'total_stock_value': total_stock_value,
     }
     context['form'].dept.data = 'c'
-    return stream_template('cocktail/index.html', **context)
-    
-@main.route("/cocktail-sales")
-@login_required
-@role_required('manager', 'admin','cocktail')
-@db_session_management
-def cocktail_sales():
-
-    form =  SalesForm()
-    form.dept.data ='c'
-    context = {
-    'form' : form,
-    'pname' : 'Cocktail Sales',
-    'items' : Item.query.filter(Item.deleted == 0, Item.dept=='c').order_by( Item.created.desc() ).limit(800),
-    'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='c').order_by(Sales.created.desc()).limit(1000),
-    }
-    return stream_template('sales/cocktail.html', **context)
-  
-@main.route("/cocktail-report")
-@login_required
-@role_required('manager', 'admin', 'cocktail')
-@db_session_management
-def cocktail_report():
-    context = {
-    'form' : RangeForm(),
-    'pname' : 'Cocktail Sales Report',
-    'cate' : cocktail_cate_choice,
-    'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='c').order_by(Sales.created.desc()).all(),
-    } 
-    context['form'].dept.data = 'c'
-    return render_template('salesreport/cocktail.html', **context)
-    
+    return stream_template('products/cocktail.html', **context)
+        
 #***************************BAR & BEAR ***************************###########
 @main.route("/bar")
 @login_required
@@ -219,49 +162,64 @@ def cocktail_report():
 def bar():
 
     form =  StockForm()
-    items = Item.query.filter(Item.deleted == 0, Item.dept=='b').order_by( Item.created.desc() ).limit(300)
-    categories = Cate.query.filter(Cate.deleted == 0, Cate.dept=='b').order_by( Cate.created.desc() ).limit(800)
+    items = Items.query.filter(Items.deleted == 0, Items.dept=='b').order_by( Items.created.desc() ).limit(300)
+    categories = Category.query.filter(Category.deleted == 0, Category.dept=='b').order_by( Category.created.desc() ).limit(800)
     form.cate.choices = [ (cate.id, cate.name) for cate in categories]
     total_stock_value = sum(x.in_stock * x.s_price for x in items if x.dept == 'b')
     context = {
     'form' : form,
-    'pname' : 'Bar & Beer',
+    'pname' : 'Bar & Drinks',
     'cate' : [('', 'Select a category')] + form.cate.choices,
     'items' : items,
     'total_stock_value': total_stock_value,
     }
     context['form'].dept.data = 'b'
-    return stream_template('bar/index.html', **context)
+    return stream_template('products/bar.html', **context)
+
+# ===========================SALES==============
+
+@main.route("/sales")
+@login_required
+@role_required('manager', 'admin',  '*')
+@db_session_management
+def sales():
+    context = { 'pname' : 'Africana Sales' }
+    return stream_template('sales/sales.html', **context)
 
 @main.route("/bar-sales")
 @login_required
 @role_required('manager', 'admin','bar')
 @db_session_management
 def bar_sales():
-    form =  SalesForm()
-    form.dept.data ='b'
     context = {
-    'form' : form,
-    'pname' : 'Bar & Beer Sales',
-    'items' : Item.query.filter(Item.deleted == 0, Item.dept=='b').order_by( Item.created.desc() ).limit(800),
-    'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='b').order_by(Sales.created.desc()).limit(100),
-    }
-    return stream_template('sales/bar.html', **context)
-
-@main.route("/bar-report")
-@login_required
-@role_required('manager', 'admin', 'bar')
-@db_session_management
-def bar_report():
-    context = {
-    'form' : RangeForm(),
-    'pname' : 'Bar & Beer Sales Report',
-    #'cate' : cocktail_cate_choice,
+    'pname' : 'Bar & Sales ',
     'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='b').order_by(Sales.created.desc()).all(),
     } 
-    context['form'].dept.data = 'b'
-    return render_template('salesreport/bar.html', **context)
+    return stream_template('sales/bar.html', **context)
 
+@main.route("/kitchen-sales")
+@login_required
+@role_required('manager', 'admin', 'kitchen')
+@db_session_management
+def kitchen_sales():
+    context = {
+    'pname' : 'Kitchen & Sales',
+    'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='k').order_by(Sales.created.desc()).all(),
+    } 
+    
+    return stream_template('sales/kitchen.html', **context)
+    
+@main.route("/cocktail-sales")
+@login_required
+@role_required('manager', 'admin','cocktail')
+@db_session_management
+def cocktail_sales():
+    context = {
+        'pname' : 'Cocktail & Sales',
+        'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='c').order_by(Sales.created.desc()).all(),
+        } 
+    return stream_template('sales/cocktail.html', **context)
+  
 #*****************STOCK HISTORY***********************###########
 @main.route("/stock-history")
 @login_required
@@ -295,19 +253,29 @@ def apportioned():
     #'get_corresponding_dept' : get_corresponding_dept,
     'form' : RangeForm(),
     'pname' : 'Apportioned Products',
-    'apportioned' : ApportionedItems.query.filter(ApportionedItems.deleted == False).order_by(ApportionedItems.created.desc()).all(),
+    'apportioned' : Apportion.query.filter(Apportion.deleted == False).order_by(Apportion.created.desc()).all(),
     #'apportoned_history' : StockHistory.query.filter(StockHistory.deleted == False, StockHistory.apportioned_id != None).order_by(StockHistory.created.desc()).all(),
-    # Query ApportionedItems and join with StockHistory
-    #'apportion_history':  ApportionedItems.query.outerjoin(StockHistory, ApportionedItems.id == StockHistory.apportioned_item_id).all()
+    # Query Apportion and join with StockHistory
+    #'apportion_history':  Apportion.query.outerjoin(StockHistory, Apportion.id == StockHistory.apportioned_item_id).all()
     #'apportion_history':  ( db.session.query(apportioned, history).filter(apportioned.id == history.apportioned_item_id).all() )
     'apportion_history':  ( 
-        db.session.query(ApportionedItems, StockHistory).filter(
-        ApportionedItems.id == StockHistory.apportioned_item_id, and_(
-            StockHistory.deleted == False, ApportionedItems.deleted == False,)
+        db.session.query(Apportion, StockHistory).filter(
+        Apportion.id == StockHistory.apportioned_item_id, and_(
+            StockHistory.deleted == False, Apportion.deleted == False,)
                 ).order_by(StockHistory.created.desc()).all() )
     
     }
     return render_template('apportioned/index.html', **context)
+
+@main.route("/apportion")
+@login_required
+@role_required('*')
+def apportion():        
+    context={
+        
+    }
+    # return render_template('apportioned/apportion.html', **context)
+    return render_template('apportioned/apportionV.html', **context)
 
 @main.route("/expenses")
 @login_required
@@ -317,7 +285,7 @@ def expenses():
     context = {
     'xpenseform' : ExpensesForm(), #or SalesForm(),
     'rangeform' : RangeForm(), #or SalesForm(),
-    'pname' : 'Expenses',
+    'pname' : 'Expenses . Africana',
     'cate' : expense_choice,
     'sales' : Sales.query.filter(Sales.deleted == 0, Sales.dept=='k').order_by(Sales.created.desc()).all(),
     'xpenses' : Expenses.query.filter(Expenses.deleted == 0).order_by(Expenses.created.desc()).all(),
@@ -328,25 +296,25 @@ def expenses():
 @login_required
 @role_required('*')
 @db_session_management
-def cate():
+def categories():
     form =  CateForm()
-    #categories = Cate.query.filter(Cate.deleted == 0, Cate.dept=='k').order_by( Cate.created.desc() ).limit(70)
-    categories = Cate.query.filter(Cate.deleted == 0).order_by( Cate.created.desc() ).limit(70)
+    #categories = Category.query.filter(Category.deleted == 0, Category.dept=='k').order_by( Category.created.desc() ).limit(70)
+    categories = Category.query.filter(Category.deleted == 0).order_by(Category.created.desc()).limit(70)
 
     form.dept.choices = [ ('', 'choose'), ('k', 'Kitchen'), ('c', 'Cocktail'), ('b', 'Bar')]
 
     context = {
     'form' : form,
-    'pname' : 'Africana Categories',
-    'cate' : categories,
+    'pname' : 'Categories',
+    'categories' : categories,
     }
-    return stream_template('cate/index.html', **context)
+    return stream_template('categories/index.html', **context)
 
-@main.route("/people", methods=['GET', 'POST'])
+@main.route("/users", methods=['GET', 'POST'])
 @login_required
 @role_required('*')
 @db_session_management
-def people():
+def users():
 
     referrer =  request.headers.get('Referer')
     
@@ -376,17 +344,15 @@ def people():
                 'link': f'{referrer}'})
     
     page = request.args.get('page', 1, type=int)  # Get the requested page number
-    per_page = 10  # Number of items per page
-    #users = User.query.order_by(User.id.desc()).paginate(page=page, per_page=per_page)
+    per_page = 20  # Number of items per page
     users = User.query.filter(User.deleted == 0).order_by( User.created.desc()).paginate(page=page, per_page=per_page)
-    g.brand = Brand.query.first()
+    g.brand = {"name": "Africana", "desc":"Cozy environ for natural food and drinks."}
     g.user = User.query.filter(User.deleted == 0, User.username==username).first()
     context = {
-    'pname' : 'People : (Staffs) (Customers) (Suppliers)',
+    'pname' : 'Users : [staffs . customers . suppliers]',
     'users': users
     }
-    #return stream_template('people/index.html', **context)
-    return render_template('people/index.html', **context)
+    return stream_template('users/index.html', **context)
 
 #***************************************************
 

@@ -1,0 +1,513 @@
+{% extends 'base.html' %}
+<title> {% block title %} Bar . Africana {% endblock title %}</title>
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}
+	{% include 'incs/topnav.html' %}
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+						<div>
+							<h4 class="mb-3">
+							    {{pname}} 
+    							 <a tabindex="0" class="btn btn-warning mt-2 mb-0 text-white text-bold" role="button" data-toggle="popover" data-trigger="focus" title="Product Page Qucik Guide" 
+                         data-content=" *Click on the blue button(Register A New Product) at the top right corner of your screen to register a new product to sell.
+    							    *Use the green edit button to update/edit what you've registered if you noticed any mistakes.
+    							    *Use the red delete button to delete/remove a product you no longer need." 
+    							    data-original-title="Dismissible popover">Quick Guide??</a>
+							</h4> 
+							<p class="mb-0 text-warning text-bold"> Where You Can Register Products That Would Be Sold in Bar.</p>
+							    
+						</div>
+						<button class="btn btn-primary add-list"><i class="las la-plus mr-3"></i>New Product</button>
+					</div>
+
+				</div>
+
+				<div class="col-lg-12">
+					<div class="table-responsive rounded mb-3">
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+							<div class="alert" id="response"></div>
+							<form id="new_stock_form" action="" method="post">
+								{{ form.hidden_tag() }}
+								
+								<h1 class="mt-2">Total Stock Value: 
+									<span id="_total" class="badge badge-success mb-1">{{total_stock_value}}</span>
+								</h1>
+								
+								<!-- Your table goes here -->
+
+								<table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+												id="DataTables_Table_1" role="grid" aria-describedby="DataTables_Table_0_info">
+
+									<thead class="bg-white text-uppercase">
+										<tr class="ligth ligth-data" role="row">
+
+											<th class="sorting" style="width: 15%;" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Price: activate to sort column ascending">S/N</th>
+
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1" style="width: 20%;"
+												aria-label="Product: activate to sort column ascending">Products</th>
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Code: activate to sort column ascending"
+												style="width: 106.125px;">Categories</th>
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Category: activate to sort column ascending"
+												style="width: 113.859px;">Quantity</th>
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Brand Name: activate to sort column ascending"
+												style="width: 147.312px;">Selling Price</th> 
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Brand Name: activate to sort column ascending"
+												style="width: 147.312px;">Cost Price</th> 
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Brand Name: activate to sort column ascending"
+												style="width: 147.312px;">Profit</th> 
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Price: activate to sort column ascending"
+												style="width: 96.2812px;">Date Added</th> 
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Action: activate to sort column ascending"
+												style="width: 182.953px;">Action</th>
+										</tr>
+									</thead>
+
+									<tbody class="ligth-body">
+										{% for it in items %}
+										<tr role="row" class="odd">
+											<td>{{loop.index}}</td>
+											<td>
+												<div class="d-flex align-items-center">
+													<img src="{{url_for('static', filename='images/table/product/cocktail.webp')}}"
+														class="img-fluid rounded avatar-50 mr-3" alt="image">
+													<div>
+														<p id="_name" class="mb-0">{{it.name}}</p>
+													</div>
+												</div>
+											</td>
+											<td id="_cate">
+												{% for c in cate %}
+												{% if c[0]|int == it.category_id|int %} {{ c[1] }} {% endif %} 
+												{% endfor %}
+											</td>
+											<!-- <a href=""><span class="badge alert-warning">5 new</span></a> -->
+											<td id="_instock">{{it.in_stock}}</td>
+											<td data-amt="{{it.s_price}}" id="_sprice">{{it.s_price}}</td>
+											<td data-amt="{{it.c_price}}" id="_cprice">{{it.c_price}}</td>
+											<td data-amt="{{it.profit or (it.s_price - it.c_price)|int }}" id="_profit">{{it.profit or (it.s_price - it.c_price)|int }}</td>
+											<td>{{ it.created }}</td> 
+											<td>
+												<div class="d-flex align-items-center list-action">
+													<button onclick="editable(this)" data-id="{{it.id}}" data-dept="{{it.dept}}" data-cate="{{it.category_id}}"
+														type="button" class="badge border-0 bg-success mr-2"
+														data-toggle="tooltip" data-placement="top" title="edit" data-original-title="edit"><i
+															class="ri-pencil-line mr-0"></i>
+														</button>
+													<button type="button" id="del" onclick="remove(this, '{{it.id}}')"
+														class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+														data-placement="top" title="" data-original-title="Delete"><i
+															class="ri-delete-bin-line mr-0"></i></button>
+												</div>
+											</td>
+										</tr>
+										{% endfor %}
+
+									</tbody>
+								</table>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Page end  -->
+		</div>
+		<!-- Modal Edit -->
+		{% include 'incs/modal.html' %}
+	</div>
+</div>
+{% endblock content %}
+{% block page_js %}
+<script>
+$(document).ready(() => {
+
+//I'm extending jquery so I can make $.delete()/$.put()  request with this short-cut syntax ($.delete() )
+jQuery.each(["put", "delete"], function (i, method) {
+	jQuery[method] = function (url, data, callback, type) {
+		if (jQuery.isFunction(data)) {
+			type = type || callback;
+			callback = data;
+			data = undefined;
+		}
+
+		return jQuery.ajax({
+			url: url,
+			type: method,
+			dataType: type,
+			data: data,
+			success: callback
+		});
+	};
+});
+
+var newrow =
+		`
+    <tr role="row" class="even"> 
+		
+       <td class="id">...</td>
+
+        <td class="varieties">
+		
+		{% if form.item_id.errors %}
+		<div class="invalid-feedback"> {% for error in form.item_id.errors %}{{ error }} ! {% endfor %}</div>
+		{% else %}
+		{{ form.item_id(hidden=True, value=0,) }}
+		{% endif %}
+
+        <p class="mb-0">	
+		{% if form.name.errors %}
+		<div class="invalid-feedback"> {% for error in form.name.errors %}{{ error }} ! {% endfor %}</div>
+		{% else %}
+		{{ form.name(class='form-control', placeholder='Stock Name') }}
+		{% endif %}
+		</p>
+        </div>
+        </div>
+        </td>
+
+        <td class="cate">{% if form.cate.errors %}
+		<div class="invalid-feedback"> {% for error in form.cate.errors %}{{ error }} ! {% endfor %}</div>
+		{% else %}
+		{{ form.cate(choices=cate, class='form-control', placeholder='Category') }}
+		{% endif %}</td>
+
+        <td class="in_stock">{% if form.in_stock.errors %}
+		<div class="invalid-feedback"> {% for error in form.in_stock.errors %}{{ error }} ! {% endfor %}</div>
+		{% else %}
+		{{ form.in_stock(class='form-control', placeholder='Quantity') }}
+		{% endif %}
+		</td>
+
+        <td class="s_price">
+		{{ form.s_price(class='form-control', required=True, placeholder='Selling Price') }}
+		{% if form.s_price.errors %}
+		<div class="invalid-feedback"> {% for error in form.s_price.errors %}{{ error }} ! {% endfor %}</div>
+		{% endif %}
+		</td>
+
+        <td class="c_price">
+		{{ form.c_price(class='form-control', required=True, placeholder='Cost Price') }}
+		{% if form.c_price.errors %}
+		<div class="invalid-feedback"> {% for error in form.c_price.errors %}{{ error }} ! {% endfor %}</div>
+		{% endif %}
+		</td>
+
+        <td class="list_action">
+        <div class="d-flex align-items-center list-action">
+		<button type="submit" id="save" class="badge badge-info mr-2 border-0" data-toggle="tooltip"
+        data-placement="top" title="Save it" data-original-title="Save"><i class="las la-plus mr-0"></i>
+        </button> 
+        <button type="button" id="cancel" class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+        data-placement="top" title="Cancel" data-original-title="Delete"><i class="ri-delete-bin-line mr-0"></i></button>
+        </div>
+        </td>  
+
+		<div class="d-flex align-items-center list-action">
+		<td>
+		{{ form.dept(readonly=True, class='disabled form-control',  value='b') }}
+		{% if form.dept.errors %}
+		<div class="invalid-feedback"> {% for error in form.dept.errors %}{{ error }} ! {% endfor %}</div>
+		{% endif %} 
+		</td> 
+		</div>
+
+    </tr>
+			` ;
+
+var edit_action_btn = `<button type="button" id="edit" class="border-0 badge bg-success mr-2" data-toggle="tooltip"
+                                data-placement="top" title="" data-original-title="Edit">
+                                <i class="ri-pencil-line mr-0"></i></button>
+        `
+
+$(".add-list").click(() => { $("tbody").prepend(newrow); }); // appending dynamic string to table tbody
+
+$('tbody').on('click', '#cancel', () => { $('tbody #cancel').parent().parent().parent().remove() });
+
+/*
+const url = "{{url_for('endpoint.stock_action')}}";
+$('#new_stock_form').submit((e) => {
+		e.preventDefault()
+
+		$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		save_btn = $('#save').html()
+		//alert($('td').find('#item_id').val())
+		var jqxhr = $.post(url, $('form').serialize());
+
+		jqxhr.done((r) => {
+			//alert("ajax success");
+			//
+			$('#save').html(save_btn); //reset spinning submit-btn
+			frondend_save(); //appends-new-row-added()
+			if ('undefined' != typeof (r.response)) {
+				$('#response').html((r.response)).addClass(r.flash);
+			} else ($('#response').text(r).addClass('alert-success'))
+
+
+			if ("undefined" != typeof r.link) {
+				$('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+				//$('form').hide();
+			}
+			if ("undefined" != typeof r.receipt) {
+				$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+				//$('form').hide();
+			}
+
+			console.log('response->(' + response.response + 'flash-message (' + response.flash);
+
+		});
+
+		jqxhr.fail((er) => { //JSON.stringify(err)
+			//$('#response').text('oops!!!, Could Not Add This Food. Pls Try Again'+JSON.stringify(er), er).addClass('alert-danger')
+			$('#response').text('oops!!!, Could Not Add This Product To Africana List Of Products. Pls Try Again', er).addClass('alert-danger')
+			$('#save').html(save_btn); //reset spinning submit-btn
+		});
+
+		jqxhr.always(() => {
+			//alert("ajax complete");
+			$('#save').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		});
+
+
+	});
+
+
+	frondend_save = () => {
+	//insted-of rerender, simply replace the input elements with corresponding val()
+    variety = $('td').find('input[name=varieties]').val()
+    $('td').find('input[name=varieties]').replaceWith(variety)
+    opening = $('td').find('input[name=opening]').val()
+    $('td').find('input[name=opening]').replaceWith(opening)
+    newstock = $('td').find('input[name=newstock]').val()
+    $('td').find('input[name=newstock]').replaceWith(newstock)
+    qty = $('td').find('input[name=qty]').val()
+    $('td').find('input[name=qty]').replaceWith(qty)
+    totalstock = $('td').find('input[name=totalstock]').val()
+    $('td').find('input[name=totalstock]').replaceWith(totalstock)
+    price = $('td').find('input[name=price]').val()
+    $('td').find('input[name=price]').replaceWith(price)
+    totalsold = $('td').find('input[name=totalsold]').val()
+    $('td').find('input[name=totalsold]').replaceWith(totalsold)
+    closingstock = $('td').find('input[name=closingstock]').val()
+    $('td').find('input[name=closingstock]').replaceWith(closingstock)
+    stockamount = $('td').find('input[name=stockamount]').val()
+    $('td').find('input[name=stockamount]').replaceWith(stockamount)
+
+    $('td').find('#save').replaceWith(edit_action_btn)
+}*/
+const stockUrl = "{{url_for('endpoint.stock_action')}}";
+$('#new_stock_form').submit((e) => {
+    e.preventDefault();
+    $('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+    const saveBtnHtml = $('#save').html();
+
+    // Perform AJAX request
+    $.post(stockUrl, $('#new_stock_form').serialize())
+        .done((response) => {
+            $('#save').html(saveBtnHtml); // Reset submit button
+            handleSuccessfulResponse(response);
+        })
+        .fail((error) => {
+            handleErrorResponse(error);
+            $('#save').html(saveBtnHtml); // Reset submit button
+        })
+        .always(() => {
+            $('#save').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+        });
+});
+
+// Handles the successful AJAX response
+function handleSuccessfulResponse(response) {
+    frontendSave(); // Update UI with new row data
+    const { flash, response: responseMessage, link, receipt } = response;
+
+    if (responseMessage) {
+        $('#response').html(responseMessage).addClass(flash);
+    } else {
+        $('#response').text(response).addClass('alert-success');
+    }
+
+    if (link) {
+        $('#response').append(` -> <br> <a href="${link}"> Continue Here </a>`);
+    }
+
+    if (receipt) {
+        $('#response').append(`<br> <a href="${receipt}"> View Receipt </a>`);
+    }
+}
+
+// Handles the AJAX error response
+function handleErrorResponse(error) {
+    $('#response')
+        .text('Oops! Could not add this product to the list. Please try again.')
+        .addClass('alert-danger');
+    console.error("Error:", error);
+}
+
+// Updates form data with values from the input fields
+function frontendSave() {
+    const updateField = (name) => {
+        const value = $(`td input[name=${name}]`).val();
+        $(`td input[name=${name}]`).replaceWith(value);
+    };
+
+    const fields = [
+        'varieties', 'opening', 'newstock','s_price', 'qty', 'totalstock', 
+        'price', 'totalsold', 'closingstock', 'stockamount'
+    ];
+    
+    fields.forEach(updateField);
+
+    const editActionButton = $('#edit_action_btn').html(); // Assuming edit action button HTML
+    //$('#save').replaceWith(editActionButton);
+}
+
+
+//update -toal when qty(pcs) changes
+update_total = (input_stock) => {
+	
+	return //just-return nothing from here for now bcos, the value only updates once upwardly
+
+	let new_stock = parseInt($(input_stock).val())
+	let in_stock = parseInt($(input_stock).closest('tr').find('td #in_stock').val())
+	
+	if (isNaN(new_stock) | isNaN(in_stock)) { new_stock, in_stock = 0;  }
+	
+    if ( new_stock > 0 && new_stock != "undefinded" ){
+		console.log(new_stock, in_stock)
+
+	$(input_stock).closest('tr').find('td #in_stock').val(new_stock+in_stock)
+
+
+}else{ console.log(typeof(new_stock.length)) }
+	//alert(qty)
+}
+
+editable = (item_btn) => {
+
+	let tr = $(item_btn).closest('tr');
+	//let hmm = $(tr).find('td.varieties').html()
+	let item_id = $(item_btn).attr('data-id')
+	let item_dept = $(item_btn).attr('data-dept')
+	let item_cate = $(item_btn).attr('data-cate')
+	const name = $(tr).find("#_name").text();
+	//const cate = $(tr).find('#_cate').text();
+	const in_stock = $(tr).find("#_instock").text();
+	const c_price = $(tr).find("#_cprice").data("amt");
+
+	//const s_price = $(tr).find("#_sprice").text();
+	const s_price  = $(tr).find('#_sprice').data("amt"); 
+	//alert(c_price)
+	//find-by-id(#_cost), and get the (data-cost) attribute value for better manipulations/calculations 
+
+	
+	//alert(item_dept)
+	$(tr).replaceWith(newrow);
+
+	$('td').find('#item_id').val(item_id)
+	$('td').find('#name').val(name)
+	$('td').find('#in_stock').val(in_stock)
+	$('td').find('#c_price').val(c_price) ////bcos-i-disbled-adding-cost-price-and-moved-everything-to-expenses
+	$('td').find('#s_price').val(s_price)
+	//$('td').find('#cate').val(cate)
+	
+    //for-categori(es)
+	$('td').find('#cate option').each( function() {
+		var optionValue = $(this).val(); var optionText = $(this).text();
+		if ( optionValue == item_cate ) {
+			$('td').find('#cate').val(optionValue)
+		}
+	});
+
+	//for-dept
+	$('td').find('#dept option').each( function() {
+		var optionValue = $(this).val();
+		if ( optionValue == item_dept ) {
+			//console.log($(this).val())
+			$('td').find('#dept').val(optionValue)
+		}
+	});
+
+}
+
+remove = (del_btn, item_id) => {
+
+_confirm = confirm('This Product Will Be Deleted/Removed, Are You U Really Wanna Do This ?')
+
+if (!_confirm) { return } //true/false
+
+$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+//del_btn = $('#del').html()
+del_btnhtml = $(del_btn).html()
+
+let url = "{{url_for('endpoint.stock_action')}}"
+url += "?item_id=" + item_id + "&action=del"
+
+ var jqxhr = $.ajax({
+        url: url,
+        type: "DELETE", // Assuming this is a DELETE request, adjust as needed
+        headers: { 
+            "X-CSRFToken": window.csrfToken, 
+            //alert(window.csrfToken);
+        },
+    });
+
+jqxhr.done((r) => {
+
+	$(del_btn).closest('tr').remove()
+	//console.log($(del_btn).closest("tr").html())
+
+	$(del_btn).html(del_btnhtml); //reset spinning submit-btn
+
+	if ('undefined' != typeof (r.response)) {
+		$('#response').html((r.response)).addClass(r.flash);
+	} else ($('#response').text(r).addClass('alert-success'))
+
+	if ("undefined" != typeof r.link) {
+		$('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+	}
+	if ("undefined" != typeof r.receipt) {
+		$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+	}
+
+	//console.log('response->(' + r.response + 'flash-message (' + r.flash); 
+
+});
+
+jqxhr.fail((er) => {
+	$('#response').text('oops!!!, Could Not Delete This Item, Request failed. Pls Try Again', er).addClass('alert-danger')
+	$(del_btn).html(del_btnhtml);
+});
+
+jqxhr.always(() => {
+	//alert("ajax complete");
+	$(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+});
+
+}
+
+}); 
+
+</script>
+{% endblock page_js %}

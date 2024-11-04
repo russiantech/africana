@@ -1,16 +1,14 @@
 from datetime import datetime
-import traceback
-from flask import abort, g, session, json, jsonify, render_template, url_for, flash, redirect, request, Blueprint
-from flask_mail import Message
+from flask import abort, session, jsonify, render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import or_
 #from utils.time_ago import timeAgo
-from web import db, bcrypt, oauth, mail
-from web.models import Role, User, Brand
+from web import db, bcrypt
+from web.models import Role, User
 
-from web.utils import save_image, email, time_ago, ip_adrs
+from web.utils import email, ip_adrs
 from web.auth.forms import (SignupForm, SigninForm, UpdateMeForm, ForgotForm, ResetForm)
-from web.utils.decorators import admin_or_current_user, role_required
+from web.utils.decorators import admin_or_current_user
 from web.utils.providers import oauth2providers
 
 from web.utils.db_session_management import db_session_management
@@ -250,7 +248,7 @@ def update(usrname):
     context = {
                 'form' : form,
                 'user': usr,
-                'brand': Brand.query.first(),
+                'brand': {'name':'IMS'},
             }
     return render_template('auth/update.html',  **context)
     

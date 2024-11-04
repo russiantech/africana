@@ -25,7 +25,7 @@
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-4 card-total-sale">
 										<div class="icon iq-icon-box-2 bg-info-light">
-											<img src="{{url_for('static', filename='images/product/1.png')}}" class="img-fluid" alt="image">
+											<img src="{{url_for('static', filename='images/icons/sales.jpg')}}" class="img-fluid" alt="image">
 										</div>
 										<div>
 											<p class="mb-2">Total Sales</p>
@@ -44,7 +44,7 @@
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-4 card-total-sale">
 										<div class="icon iq-icon-box-2 bg-danger-light">
-											<img src="{{url_for('static', filename='images/product/2.png')}}" class="img-fluid" alt="image">
+											<img src="{{url_for('static', filename='images/icons/earnings.png')}}" class="img-fluid" alt="image">
 										</div>
 										<div>
 											<p class="mb-2">Bar & Beer</p>
@@ -61,8 +61,8 @@
 							<div class="card card-block card-stretch card-height">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-4 card-total-sale">
-										<div class="icon iq-icon-box-2 bg-danger-light">
-											<img src="{{url_for('static', filename='images/product/2.png')}}" class="img-fluid" alt="image">
+										<div class="icon iq-icon-box-2 bg-info-light">
+											<img src="{{url_for('static', filename='images/icons/earnings.png')}}" class="img-fluid" alt="image">
 										</div>
 										<div>
 											<p class="mb-2">Kitchen</p>
@@ -70,7 +70,7 @@
 										</div>
 									</div>
 									<div class="iq-progress-bar mt-2">
-										<span class="bg-danger iq-progress progress-1"
+										<span class="bg-info iq-progress progress-1"
 											data-percent="{{k_percent}}">
 										</span>
 									</div>
@@ -82,7 +82,7 @@
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-4 card-total-sale">
 										<div class="icon iq-icon-box-2 bg-success-light">
-											<img src="{{url_for('static', filename='images/product/3.png')}}" class="img-fluid" alt="image">
+											<img src="{{url_for('static', filename='images/icons/earnings.png')}}" class="img-fluid" alt="image">
 										</div>
 										<div>
 											<p class="mb-2">Cocktail</p>
@@ -263,13 +263,14 @@
 						</div>
 						<div class="card-body">
 							<ul class="list-unstyled row top-product mb-0">
-
+								
 								{% for s in bestselling %}
+								
 								<li class="col-lg-3">
 									<div class="card card-block card-stretch card-height mb-0">
 										<div class="card-body">
 											<div class="bg-warning-light rounded">
-												<img src="{{url_for('static', filename='images/product/01.png')}}"
+												<img src="{{url_for('static', filename='images/icons/earnings_1.png')}}"
 													class="style-img img-fluid m-auto p-3" alt="image">
 											</div>
 											<div class="style-text text-left mt-3">
@@ -300,7 +301,7 @@
 						<div class="card-body card-item-right">
 							<div class="d-flex align-items-top">
 								<div class="bg-warning-light rounded">
-									<img src="{{url_for('static', filename='images/product/04.png')}}" class="style-img img-fluid m-auto"
+									<img src="{{url_for('static', filename='images/icons/earnings_v0.png')}}" class="style-img img-fluid m-auto"
 										alt="image">
 								</div>
 								<div class="style-text text-left">
@@ -332,7 +333,7 @@
 	
 	//monthly_income
 	if (jQuery("#monthly_income").length) {
-		fetch("/monthly_income/api", { method: "GET", headers: headers }
+		fetch("api/monthly_income/stats", { method: "GET", headers: headers }
 		).then(response => response.json()
 		).then(data => {
 			const x = data.map(function (d) { return d['monthabr'] })
@@ -399,7 +400,7 @@
 	
 	//monthly_expenses
 	if (jQuery("#monthly_expenses").length) {
-		fetch("/monthly_xp/api", { method: "GET", headers: headers }
+		fetch("api/monthly_xp/stats", { method: "GET", headers: headers }
 		).then(response => response.json()
 		).then(data => {
 			const x = data.map(function (d) { return d['monthabr'] })
@@ -444,7 +445,7 @@
 	
 	//monthly_sales
 	if (jQuery("#monthly_sales").length) {
-	fetch("/monthly_sales/api", { method: "GET", headers: headers }
+	fetch("api/monthly_sales/stats", { method: "GET", headers: headers }
 	).then(response => response.json()
 	).then(data => {
 		const x = data.map(function (d) { return d['monthabr'] })

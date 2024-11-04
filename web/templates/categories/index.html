@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+<title> {% block title %} Categories . Africana {% endblock title %}</title>
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}
+	{% include 'incs/topnav.html' %}
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+						<div>
+							<h4 class="mb-3">
+							    Categories Section 
+							<a tabindex="0" class="text-primary float-right" role="button" data-toggle="popover" data-trigger="focus" title="what you can do here!" 
+                         data-content="
+                         -Click on 'Add New Categories' to create for either kitchen, cocktail or bar.
+                         - This will activate a row for you to type new category, save it with the blue plus(+) button.
+                         -Use the red button to delete a category.
+                         - cliick the green edit button if you want to change or edit it.
+                         " 
+    							    data-original-title="Dismissible popover">Quick Guide?</a></h4>
+							<p class="mb-0 text-danger">note:fyi: (k is kitchen categories) (c is cocktail categories) (b is bar categories)</p>
+						</div>
+						<button class="btn btn-primary add-list"><i class="las la-plus mr-3"></i>New Catgory</button>
+					</div>
+				</div>
+
+				<div class="col-lg-12">
+					<div class="table-responsive rounded mb-3">
+						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+							<div class="alert" id="response"></div>
+							<form id="cate_form" action="" method="post">
+								{{ form.hidden_tag() }}
+								<table class="data-table table mb-0 tbl-server-info dataTable no-footer"
+									id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+									<thead class="bg-white text-uppercase">
+										<tr class="ligth ligth-data" role="row">
+
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Price: activate to sort column ascending"
+												style="width:96.2812px;">S/N</th>
+
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1" style="width: 20%;"
+												aria-label="Product: activate to sort column ascending">Category Name</th>
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Code: activate to sort column ascending"
+												style="width: 106.125px;">Department</th>
+
+											<th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+												rowspan="1" colspan="1"
+												aria-label="Action: activate to sort column ascending"
+												style="width: 182.953px;">Action</th>
+										</tr>
+									</thead>
+
+									<tbody class="ligth-body">
+
+										{% for c in categories %}
+										<tr role="row" class="odd">
+											<td>{{loop.index}}</td>
+											<td>
+												<div class="d-flex align-items-center">
+													<img src="{{url_for('static', filename='images/table/product/cocktail.webp')}}"
+														class="img-fluid rounded avatar-50 mr-3" alt="image">
+													<div>
+														<p id="_name" class="mb-0">{{c.name}}</p>
+													</div>
+												</div>
+											</td>
+
+											<td id="_cate">{{c.dept|find_dept_by_name}}
+
+											</td>
+
+											<td>
+												<div class="d-flex align-items-center list-action">
+													<button onclick="editable(this)" data-id="{{c.id}}" data-dept="{{c.dept}}" data-cate="{{c.cate}}"
+														type="button" class="badge border-0 bg-success mr-2"
+														data-toggle="tooltip" data-placement="top" title="edit" data-original-title="edit">
+                                                        <i class="ri-pencil-line mr-0"></i>
+														</button>
+													<button type="button" id="del" onclick="remove(this, '{{c.id}}')"
+														class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+														data-placement="top" title="" data-original-title="Delete"><i
+															class="ri-delete-bin-line mr-0"></i></button>
+												</div>
+											</td>
+										</tr>
+										{% endfor %}
+
+									</tbody>
+								</table>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Page end  -->
+		</div>
+		<!-- Modal Edit -->
+		{% include 'incs/modal.html' %}
+	</div>
+</div>
+{% endblock content %}
+{% block page_js %}
+<script>
+$(document).ready(() => {
+
+//I'm extending jquery so I can make $.delete()/$.put()  request with this short-cut syntax ($.delete() )
+jQuery.each(["put", "delete"], function (i, method) {
+	jQuery[method] = function (url, data, callback, type) {
+		if (jQuery.isFunction(data)) {
+			type = type || callback;
+			callback = data;
+			data = undefined;
+		}
+
+		return jQuery.ajax({
+			url: url,
+			type: method,
+			dataType: type,
+			data: data,
+			success: callback
+		});
+	};
+});
+
+var newrow =
+		`
+    <tr role="row" class="even"> 
+        <td class="varieties">
+		{% if form.item_id.errors %}
+        ...
+		<div class="invalid-feedback"> {% for error in form.item_id.errors %}{{ error }} ! {% endfor %}</div>
+		{% else %}
+		{{ form.item_id(hidden=True, value=0,) }}
+         ...
+		{% endif %}
+
+        <td class="name">{% if form.name.errors %}
+		<div class="invalid-feedback"> {% for error in form.name.errors %}{{ error }} ! {% endfor %}</div>
+		{% else %}
+		{{ form.name(class='form-control', placeholder='Category Name') }}
+		{% endif %}</td>
+
+        <td class="cate">{% if form.dept.errors %}
+            <div class="invalid-feedback"> {% for error in form.dept.errors %}{{ error }} ! {% endfor %}</div>
+            {% else %}
+            {{ form.dept(class='form-control') }}
+            {% endif %}</td>
+
+
+        <td class="list_action">
+        <div class="d-flex align-items-center list-action">
+		<button type="submit" id="save" class="badge badge-info mr-2 border-0" data-toggle="tooltip"
+        data-placement="top" title="Save it" data-original-title="Save"><i class="las la-plus mr-0"></i>
+        </button> 
+        <button type="button" id="cancel" class="badge bg-warning mr-2 border-0" data-toggle="tooltip"
+        data-placement="top" title="Cancel" data-original-title="Delete"><i class="ri-delete-bin-line mr-0"></i></button>
+
+        </div>
+        </td>  
+
+    </tr>
+			` ;
+
+var edit_action_btn = `<button type="button" id="edit" class="border-0 badge bg-success mr-2" data-toggle="tooltip"
+                                data-placement="top" title="" data-original-title="Edit">
+                                <i class="ri-pencil-line mr-0"></i></button>
+        `
+
+$(".add-list").click( () => { $("tbody").prepend(newrow); }); // appending dynamic string to table tbody
+
+$('tbody').on('click', '#cancel', () => { $('tbody #cancel').parent().parent().parent().remove() });
+
+const url = "{{url_for('endpoint.cate_action')}}";
+
+$('#cate_form').submit((e) => {
+		e.preventDefault()
+
+		$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		save_btn = $('#save').html()
+		//alert($('td').find('#item_id').val())
+		var jqxhr = $.post(url, $('form').serialize());
+
+		jqxhr.done((r) => {
+			//alert("ajax success");
+			//
+			$('#save').html(save_btn); //reset spinning submit-btn
+			frondend_save(); //appends-new-row-added()
+			if ('undefined' != typeof (r.response)) {
+				$('#response').html((r.response)).addClass(r.flash);
+			} else ($('#response').text(r).addClass('alert-success'))
+
+
+			if ("undefined" != typeof r.link) {
+				$('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+				//$('form').hide();
+			}
+			if ("undefined" != typeof r.receipt) {
+				$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+				//$('form').hide();
+			}
+
+			console.log('response->(' + response.response + 'flash-message (' + response.flash);
+
+		});
+
+		jqxhr.fail((er) => { //JSON.stringify(err)
+			$('#response').text('oops!!!, Could Not Add This Food. Pls Try Again'+JSON.stringify(er), er).addClass('alert-danger')
+			//$('#response').text('oops!!!, Could Not Add This Food. Pls Try Again', er).addClass('alert-danger')
+			$('#save').html(save_btn); //reset spinning submit-btn
+		});
+
+		jqxhr.always(() => {
+			//alert("ajax complete");
+			$('#save').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		});
+
+	});
+
+frondend_save = () => {
+    //insted-of rerender, simply replace the input elements with corresponding val()
+    variety = $('td').find('input[name=varieties]').val()
+    $('td').find('input[name=varieties]').replaceWith(variety)
+    opening = $('td').find('input[name=opening]').val()
+    $('td').find('input[name=opening]').replaceWith(opening)
+    newstock = $('td').find('input[name=newstock]').val()
+    $('td').find('input[name=newstock]').replaceWith(newstock)
+    qty = $('td').find('input[name=qty]').val()
+    $('td').find('input[name=qty]').replaceWith(qty)
+    totalstock = $('td').find('input[name=totalstock]').val()
+    $('td').find('input[name=totalstock]').replaceWith(totalstock)
+    price = $('td').find('input[name=price]').val()
+    $('td').find('input[name=price]').replaceWith(price)
+    totalsold = $('td').find('input[name=totalsold]').val()
+    $('td').find('input[name=totalsold]').replaceWith(totalsold)
+    closingstock = $('td').find('input[name=closingstock]').val()
+    $('td').find('input[name=closingstock]').replaceWith(closingstock)
+    stockamount = $('td').find('input[name=stockamount]').val()
+    $('td').find('input[name=stockamount]').replaceWith(stockamount)
+
+    $('td').find('#save').replaceWith(edit_action_btn)
+}
+
+
+editable = (item_btn) => {
+
+	let tr = $(item_btn).closest('tr');
+	//let hmm = $(tr).find('td.varieties').html()
+	let item_id = $(item_btn).attr('data-id')
+	let item_dept = $(item_btn).attr('data-dept')
+	let item_cate = $(item_btn).attr('data-cate')
+	const name = $(tr).find("#_name").text();
+	//const cate = $(tr).find('#_cate').text();
+
+	//alert(item_dept)
+	$(tr).replaceWith(newrow);
+
+	$('td').find('#item_id').val(item_id)
+	$('td').find('#name').val(name)
+	$('td').find('#dept').val(item_cate)
+
+
+	//for-dept
+	$('td').find('#dept option').each( function() {
+		var optionValue = $(this).val();
+		if ( optionValue == item_dept ) {
+			//console.log($(this).val())
+			$('td').find('#dept').val(optionValue)
+		}
+	});
+
+}
+
+remove = (del_btn, item_id) => {
+
+_confirm = confirm('This Category Will Be Deleted, Go Ahead Anyway ?')
+
+if (!_confirm) { return } //true/false
+
+$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+//del_btn = $('#del').html()
+del_btnhtml = $(del_btn).html()
+
+let url = "{{url_for('endpoint.cate_action')}}?item_id=" + item_id + "&action=del";
+
+//var jqxhr = $.delete(url);
+
+ var jqxhr = $.ajax({
+        url: url,
+        type: "DELETE", // Assuming this is a DELETE request, adjust as needed
+        headers: { 
+            "X-CSRFToken": window.csrfToken, 
+            //alert(window.csrfToken);
+        },
+    });
+    
+
+jqxhr.done((r) => {
+
+	$(del_btn).closest('tr').remove()
+
+	$(del_btn).html(del_btnhtml); //reset spinning submit-btn
+
+	if ('undefined' != typeof (r.response)) {
+		$('#response').html((r.response)).addClass(r.flash);
+	} else ($('#response').text(r).addClass('alert-success'))
+
+	if ("undefined" != typeof r.link) {
+		$('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+	}
+	if ("undefined" != typeof r.receipt) {
+		$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+	}
+	//console.log('response->(' + r.response + 'flash-message (' + r.flash); 
+});
+
+jqxhr.fail((er) => { console.log(JSON.stringify(er));
+	$('#response').text('oops!!!, Could Not Delete This Item, Request failed. Pls Try Again'+JSON.stringify(er), er).addClass('alert-danger')
+	$(del_btn).html(del_btnhtml);
+});
+
+jqxhr.always(() => {
+	//alert("ajax complete");
+	$(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+});
+
+
+}
+
+}); 
+
+/*
+remove = (del_btn, item_id) => {
+    _confirm = confirm('This Category Will Be Deleted, Go Ahead Anyway ?');
+    if (!_confirm) { return; } // Cancel the operation if user does not confirm
+
+    $('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+    // Store the original content of del_btn
+    del_btnhtml = $(del_btn).html();
+
+    // Construct the URL with the CSRF token
+    let url = "{{url_for('endpoint.cate_action')}}?item_id=" + item_id + "&action=del";
+
+    // Create an AJAX request
+    var jqxhr = $.ajax({
+        url: url,
+        type: "DELETE", // Assuming this is a DELETE request, adjust as needed
+        headers: {
+            "X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+        },
+    });
+
+    jqxhr.done((r) => {
+        // Handle success
+        $(del_btn).closest('tr').remove();
+        $(del_btn).html(del_btnhtml); // Reset spinning submit-btn
+
+        if ('undefined' != typeof (r.response)) {
+            $('#response').html((r.response)).addClass(r.flash);
+        } else ($('#response').text(r).addClass('alert-success'));
+
+        if ("undefined" != typeof r.link) {
+            $('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+        }
+        if ("undefined" != typeof r.receipt) {
+            $('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+        }
+    });
+
+    jqxhr.fail((er) => {
+        console.log(JSON.stringify(er));
+        $('#response').text('Oops! Could Not Delete This Item. Request failed. Please Try Again: ' + JSON.stringify(er)).addClass('alert-danger');
+        $(del_btn).html(del_btnhtml);
+    });
+
+    jqxhr.always(() => {
+        //alert("ajax complete");
+        $(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+    });
+} */
+
+</script>
+{% endblock page_js %}

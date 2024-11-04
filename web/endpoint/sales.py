@@ -3,21 +3,21 @@ from flask_login import current_user, login_required
 
 from datetime import datetime
 from random import randint
-from sqlalchemy import and_, or_
-from sqlalchemy.sql import func, extract
+from sqlalchemy import and_
+from sqlalchemy.sql import func
 
-from sqlalchemy import update, and_, or_
-from sqlalchemy.sql import func, extract
+from sqlalchemy import and_
+from sqlalchemy.sql import func
 
 from web import db
 from web.models import (
-    Item, ApportionedItems, apportioned_items, StockHistory,
-    Cate, Expenses, Item, ApportionedItems, StockHistory, Notification, Sales
+    Items, Apportion, StockHistory,
+    Expenses, Items, Apportion, StockHistory, Sales
 )
 from web.utils.sequence_int import generator
 from web.utils.db_session_management import db_session_management
 from web.main.forms import ApportionForm
-from web.main.forms import CateForm, ExpensesForm, StockForm, SalesForm, RangeForm
+from web.main.forms import SalesForm, RangeForm
 
 from web.utils.ip_adrs import user_ip
 
@@ -34,7 +34,7 @@ def get_product_series():
     # Check if the selected department is valid
     if selected_department:
         # Query the database to get product series for the selected department
-        product_series = Item.query.filter_by(dept=selected_department).with_entities(Item.id, Item.name).all()
+        product_series = Items.query.filter_by(dept=selected_department).with_entities(Items.id, Items.name).all()
 
         # Convert the result to a list of dictionaries with id and name
         product_series_data = [{'id': item[0], 'name': item[1]} for item in product_series]
@@ -116,15 +116,15 @@ def s_range():
             'flash':'alert-warning',
             'link': f''})
 
-
-@bar.route('/new-sales', methods=['POST']) 
+@bar.route('/new-sales', methods=['POST'])
 @login_required
 @db_session_management
 def new_sales():
     salesform = SalesForm()
     rangeform = RangeForm()
-    referrer =  request.headers.get('Referer') 
-    item = db.session.query(Sales).join(Item, Sales.item_id==Item.id).filter( and_(Sales.id == sales_id, Sales.deleted == False) ).first()
+    referrer =  request.headers.get('Referer')
+
+    item = db.session.query(Sales).join(Items, Sales.item_id==Items.id).filter( and_(Sales.id == sales_id, Sales.deleted == False) ).first()
     if request.method == 'POST':
         #submit = form.year.data if 'year' in request.form  else None, #str
         if "pcs" in request.form:
@@ -146,11 +146,11 @@ def new_sales():
                         'flash':'alert-warning',
                         'link': f'{referrer}'})
                 
-                 # Check if there are associated ApportionedItems
+                 # Check if there are associated Apportion
                 
-                apportioned_items = instock.apportioned_quantities
-                if apportioned_items:
-                    for apportioned_item in apportioned_items:
+                apportion_items = instock.apportion_items
+                if apportion_items:
+                    for apportioned_item in apportion_items:
                         available_qty = apportioned_item.items_qty
                         print(f"Apportioned Item ID: {apportioned_item.id}, Items Quantity: {available_qty}")
                     else:
@@ -232,7 +232,7 @@ def update_apportioned(item_id):
     referrer =  request.headers.get('Referer') 
     apportionform = ApportionForm()
     if apportionform.validate_on_submit():
-        apportioned_item = ApportionedItems.query.get(item_id)
+        apportioned_item = Apportion.query.get(item_id)
 
         # ...
         if apportioned_item:
@@ -261,7 +261,7 @@ def update_apportioned(item_id):
                 apportioned_item.items.clear()
 
             for item_id in items_series:
-                item = Item.query.get(item_id)
+                item = Items.query.get(item_id)
                 if item:
                     apportioned_item.items.append(item)
 
@@ -306,7 +306,7 @@ def update_apportioned(item_id):
 @bar.route('/sales/<int:sales_id>/delete', methods=['DELETE'])
 def delete(sales_id):
     referrer =  request.headers.get('Referer') 
-    #item = db.session.query(Sales).join(Item, Sales.item_id==Item.id).filter( and_(Sales.id == sales_id, Sales.deleted == False) ).first()
+    #item = db.session.query(Sales).join(Items, Sales.item_id==Items.id).filter( and_(Sales.id == sales_id, Sales.deleted == False) ).first()
     sales = db.session.query(Sales).filter( and_(Sales.id == sales_id, Sales.deleted == False) ).first()
     if request.method == 'DELETE' and sales != None:
         sales.deleted = True

@@ -150,7 +150,7 @@
     });
     }
     //format-price/amount initially
-    applyFormattingToElements($("#format-amt, #total_xpp, #sub_total, #sub_total1, #cost_total, #profit, ._cost, #_price, #_sprice, #_total"));
+    applyFormattingToElements($("#format-amt, #total_xpp, #sub_total, #sub_total1, #cost_total, #profit, ._cost, #_price, #_cprice, #_profit, #_sprice, #_total"));
 
     //Assuming you're using a pagination library like DataTables, call the function again to apply
     //to the next part of the paginated items
@@ -161,11 +161,8 @@
     applyFormattingToElements(newElements);
     });
 
-
     });
     
-    
-
     // Set up a global AJAX configuration
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {

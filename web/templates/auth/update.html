@@ -13,7 +13,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">Account {{user.name}} {% for x in user.role %} {{x}} {% endfor %} </h4>
+                                <h4 class="card-title"> {{user.name}} </h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -122,7 +122,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="header-title">
-                                <h4 class="card-title">{{username}} Information</h4>
+                                <h4 class="card-title">{{username}} My permissions: {{ current_user.roles() }} </h4>
                             </div>
                         </div>
                         <div class="card-body">

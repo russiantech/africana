@@ -1,7 +1,7 @@
 <div class="iq-sidebar  sidebar-default ">
     <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
         <a href="/" class="header-logo">
-            <img src="{{url_for('static', filename='images/logo/afriq.png')}}" class="img-fluid rounded-normal light-logo" alt="logo">
+            <img src="{{url_for('static', filename='images/logo_0.png')}}" class="img-fluid rounded-normal light-logo" alt="logo">
             <h5 class="logo-title light-logo ml-3">Africana</h5>
         </a>
         <div class="iq-menu-bt-sidebar ml-0">
@@ -27,22 +27,45 @@
                         </a>
                     </li>
 
-                    
-                    <li class="{% if is_active('main.bar') %}active text-warning{% endif %}">
-                        <a href="{{url_for('main.bar')}}">
+                    <li class="{% if  is_active('main.bar') or is_active('main.kitchen') or is_active('main.cocktail') %} active text-warning {% endif %}">
+                        <a href="#items" class="collapsed" data-toggle="collapse" aria-expanded="false">
                             <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                            <span class="ml-4">Products</span>
+                            <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="10 15 15 20 20 15"></polyline>
+                                <path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
                             </svg>
-                            <span class="ml-4">Bar & Beer</span>
                         </a>
+                        <ul id="items" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
+                            
+                            <li class="{% if is_active('main.bar') %} active {% endif %}">
+                                <a href="{{url_for('main.bar')}}">
+                                    <i class="las la-minus"></i><span>Bar & Drinks</span>
+                                </a>
+                            </li>
+                            <li class="{% if is_active('main.kitchen') %}active text-warning{% endif %}">
+                                <a href="{{url_for('main.kitchen')}}">
+                                    <i class="las la-minus"></i><span>Kitchen & Foods</span>
+                                </a>
+                            </li>
+                            <li class="{% if is_active('main.cocktail') %}active text-warning{% endif %}">
+                                <a href="{{url_for('main.cocktail')}}">
+                                    <i class="las la-minus"></i><span>Cocktail</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
-                    <li class="{% if is_active('main.kitchen') %}active text-warning{% endif %}">
-                        <a href="{{url_for('main.kitchen')}}">
+                    <li class="{% if is_active('main.apportion') %}active text-warning{% endif %}">
+                        <a href="{{url_for('main.apportion')}}">
                             <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -50,32 +73,7 @@
                                 <circle cx="20" cy="21" r="1"></circle>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                            <span class="ml-4">Kitchen</span>
-                        </a>
-                    </li>
-                    <li class="{% if is_active('main.cocktail') %}active text-warning{% endif %}">
-                        <a href="{{url_for('main.cocktail')}}">
-                            <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            <span class="ml-4">Cocktail</span>
-                        </a>
-                    </li>
-
-                    <li class="{% if is_active('main.apportioned') %}active text-warning{% endif %}">
-                        <a href="{{url_for('main.apportioned')}}">
-                            <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            <span class="ml-4">Apportioning</span>
+                            <span class="ml-4">Apportion</span>
                         </a>
                     </li>
 
@@ -92,31 +90,19 @@
                         </a>
                     </li>
 
-                    <li class="{% if is_active('main.cate') %}active text-warning{% endif %}">
-                        <a href="#category" class="collapsed" data-toggle="collapse" aria-expanded="false">
-                            <svg class="svg-icon" id="p-dash3" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+                    <li class="{% if is_active('main.categories')  %}active text-warning{% endif %}">
+                        <a href="{{url_for('main.categories')}}">
+                            <svg class="svg-icon" id="p-dash4" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
                             </svg>
                             <span class="ml-4">Categories</span>
-                            <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20"
-                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="10 15 15 20 20 15"></polyline>
-                                <path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
-                            </svg>
                         </a>
-                        <ul id="category" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                            <li class="">
-                                <a href="{{url_for('main.cate')}}">
-                                    <i class="las la-minus"></i><span>Categories</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-                    <li class="{% if is_active('main.kitchen_sales') or is_active('main.cocktail_sales') %}active text-warning{% endif %}">
+
+                    <li class="{% if  is_active('main.bar_sales') or is_active('main.kitchen_sales') or is_active('main.cocktail_sales') %}active text-warning{% endif %}">
                         <a href="#sale" class="collapsed" data-toggle="collapse" aria-expanded="false">
                             <svg class="svg-icon" id="p-dash4" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -133,7 +119,12 @@
                             </svg>
                         </a>
                         <ul id="sale" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                            <li class="{% if is_active('main.kitchen_sales') %}active{% endif %}">
+                            <li class="{% if is_active('main.sales') %}active{% endif %}">
+                                <a href="{{url_for('main.sales')}}">
+                                    <i class="las la-minus"></i><span>General</span>
+                                </a>
+                            </li>
+                            <li class="{% if is_active('main.bar_sales') %}active{% endif %}">
                                 <a href="{{url_for('main.bar_sales')}}">
                                     <i class="las la-minus"></i><span>Bar Sales</span>
                                 </a>
@@ -150,42 +141,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="{% if is_active('main.kitchen_report') or is_active('main.cocktail_report')  %}active{% endif %}">
-                        <a href="#salereport" class="collapsed" data-toggle="collapse" aria-expanded="false">
-                            <svg class="svg-icon" id="p-dash6" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="4 14 10 14 10 20"></polyline>
-                                <polyline points="20 10 14 10 14 4"></polyline>
-                                <line x1="14" y1="10" x2="21" y2="3"></line>
-                                <line x1="3" y1="21" x2="10" y2="14"></line>
-                            </svg>
-                            <span class="ml-4">Sales Report</span>
-                            <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20"
-                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="10 15 15 20 20 15"></polyline>
-                                <path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
-                            </svg>
-                        </a>
-                        <ul id="salereport" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                            <li class="{% if is_active('main.kitchen_report')%}active text-warning{% endif %}">
-                                <a href="{{url_for('main.bar_report')}}">
-                                    <i class="las la-minus"></i><span>Bar Reports</span>
-                                </a>
-                            </li>
-                            <li class="{% if is_active('main.kitchen_report')%}active text-warning{% endif %}">
-                                <a href="{{url_for('main.kitchen_report')}}">
-                                    <i class="las la-minus"></i><span>Kitchen Reports</span>
-                                </a>
-                            </li>
-                            <li class="{% if is_active('main.cocktail_report')%}active text-warning{% endif %}">
-                                <a href="{{url_for('main.cocktail_report')}}">
-                                    <i class="las la-minus"></i><span>Cocktail Reports</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
 
                     <li class="{% if is_active('main.expenses')  %}active text-warning{% endif %}">
                         <a href="{{url_for('main.expenses')}}">
@@ -198,8 +153,8 @@
                             <span class="ml-4">Expenses</span>
                         </a>
                     </li>
-                    <li class=" ">
-                        <a href="{{url_for('main.people')}}">
+                    <li class="{% if is_active('main.users')  %} active text-warning{% endif %}">
+                        <a href="{{url_for('main.users')}}">
                             <svg class="svg-icon" id="p-dash8" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -208,13 +163,7 @@
                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             </svg>
-                            <span class="ml-4">People</span>
-                            <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20"
-                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="10 15 15 20 20 15"></polyline>
-                                <path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
-                            </svg>
+                            <span class="ml-4">Users</span>
                         </a>
 
                     </li>
@@ -225,9 +174,9 @@
                 <div class="card border-none">
                     <div class="card-body p-0">
                         <div class="sidebarbottom-content">
-                            <div class="image"><img src="{{url_for('static', filename='images/layouts/side-bkg.png')}}" class="img-fluid"
+                            <div class="image"><img src="{{url_for('static', filename='images/icons/wallet.png')}}" class="img-fluid"
                                     alt="side-bkg"></div>
-                            <h6 class="mt-4 px-4 body-title">More Features Awaiting</h6>
+                            <p class="mt-4 px-4">More Features Awaiting</p>
                             <button type="button" class="btn sidebar-bottom-btn mt-4">Contact Developer</button>
                         </div>
                     </div>

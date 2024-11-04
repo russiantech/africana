@@ -1,0 +1,727 @@
+{% extends 'base.html' %}
+<title> {% block title %} Product Apportioning{% endblock title %}</title>
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}
+	{% include 'incs/topnav.html' %}
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-lg-12">
+					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+						<div>
+							<h4 class="mb-3">{{pname}}</h4>
+							<p class="mb-0 text-warning">
+                                Apportioning
+                            </p>
+						</div>
+						<button class="btn btn-primary generate disabled text-warning"><i class="las la-plus mr-3"></i>(Disabled) Generate Stock History Report</button>
+					</div>
+				</div>
+				<div class="card col-12">
+					<div class="card-body">
+						<ul class="nav nav-pills" id="pills-tab" role="tablist">
+						  <li class="nav-item">
+							 <a class="nav-link active font-weight-bold" id="pills-main-tab" data-toggle="pill" href="#pills-bar" role="tab" aria-controls="pills-bar" 
+                             aria-selected="true">
+                             Main Product A
+                            </a>
+						  </li>
+						  <li class="nav-item">
+							 <a class="nav-link font-weight-bold" id="pills-apportioned-tab" data-toggle="pill" href="#pills-apportioned" role="tab" aria-controls="pills-apportioned" 
+                             aria-selected="false">
+                             Apportioned Stock (B)
+                            </a>
+						  </li>
+						  <li class="nav-item">
+							 <a class="nav-link font-weight-bold" id="pills-extracted-tab" data-toggle="pill" href="#pills-extracted" role="tab" aria-controls="pills-extracted" 
+                             aria-selected="false">
+                             Extracted Stock (C)   </a>
+						  </li>
+					   </ul>
+                       
+					   <div class="tab-content" id="pills-tabContent-2">
+						  <div class="tab-pane fade active show" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
+                             <div class="col-lg-12">
+                                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                                    <div>
+                                        <h4 class="mb-3"></h4>
+                                        
+							 <p class="text-warning">The original large bag will be recorded here, (e.g., a bag of rice).</p>
+                                    </div>
+                                    <button class="btn btn-primary new-product-row-btn"> <i class="las la-plus mr-3"></i>Add New Product </button>
+                                </div>
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                                        <table  class="data-tables table mb-0 tbl-server-info dataTable no-footer" id="DataTables_Table_0" role="grid"
+                                        aria-describedby="DataTables_Table_0_info">
+                                        <thead class="bg-white text-uppercase">
+                                            <tr class="ligth ligth-data" role="row">
+                                                
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">S/N</th>
+                                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">Dept</th>
+                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Product: activate to sort column ascending" style="width: 235.898px;">Product</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Quantity</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Price: activate to sort column ascending" style="width: 76.9219px;">Cost Price</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Brand Name: activate to sort column ascending" style="width: 118.68px;">Timestamp</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" 
+                                                colspan="1" aria-label="Action: activate to sort column ascending" style="width: 129.008px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mainTableBody" class="ligth-body">
+                                            <tr class="odd">
+                                                <td>1</td>
+                                                <td>kitech</td>
+                                                <td>Rice Bag</td>
+                                                <td>1</td>
+                                                <td>$50.00</td>
+                                                <td>2024-10-23 03:56:56</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center list-action">
+                                                        <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Edit" href="#"><i class="ri-pencil-line mr-0"></i></a>
+                                                        <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+									</div>
+
+								</div>
+							</div>
+						  </div>
+
+						  <div class="tab-pane fade" id="pills-apportioned" role="tabpanel" aria-labelledby="pills-apportioned-tab">
+							 <div class="col-lg-12">
+                                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                                    <div>
+                                        <h4 class="mb-3"></h4>
+                                        <p class="mb-0 text-warning">
+                                            Smaller bags created from the main product (e.g., a smaller bag containing rice).
+                                        </p>
+                                    </div>
+                                    <button onclick="switchtab()" class="btn btn-primary">
+                                        <i class="las la-plus mr-3"></i>Add New Apportioning </button>
+                                </div>
+
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+										
+                                        <table class="data-tables table mb-0 tbl-server-info dataTable no-footer" id="DataTables_Table_0" role="grid"
+                                        aria-describedby="DataTables_Table_0_info">
+                                        <thead class="bg-white text-uppercase">
+                                            <tr class="ligth ligth-data" role="row">
+                                                
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">S/N</th>
+                                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">Dept</th>
+                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Product: activate to sort column ascending" style="width: 235.898px;">Product</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Quantity</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Price: activate to sort column ascending" style="width: 76.9219px;">Cost Price</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Brand Name: activate to sort column ascending" style="width: 118.68px;">Timestamp</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Action: activate to sort column ascending" style="width: 129.008px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="apportionTableBody" class="ligth-body">
+                                    
+                                    
+                                            <tr class="odd">
+                                                <td>AJS01</td>
+                                                <td>Jewellery</td>
+                                                <td>$150.00</td>
+                                                <td>Jazzin</td>
+                                                <td>$50.00</td>
+                                                <td>200.0</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center list-action">
+                                                        <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Edit" href="#"><i class="ri-pencil-line mr-0"></i></a>
+                                                        <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+									</div>
+								</div>
+							</div>
+						  </div>
+
+						  <div class="tab-pane fade" id="pills-extracted" role="tabpanel" aria-labelledby="pills-extracted-tab">
+							 
+							 <div class="col-lg-12">
+                                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                                    <div>
+                                        <h4 class="mb-3"></h4>
+                                        <p class="text-warning"> Even smaller portions extracted from the apportioned stock, to be sold as different varieties (e.g., rice used to make jollof rice or fried rice).</p>
+
+                                    </div>
+                                    <button class="btn btn-primary">
+                                        <i class="las la-plus mr-3"></i>Add New Extracted </button>
+                                </div>
+
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+										
+                                        <table class="data-tables table mb-0 tbl-server-info dataTable no-footer" id="DataTables_Table_0" role="grid"
+                                        aria-describedby="DataTables_Table_0_info">
+                                        <thead class="bg-white text-uppercase">
+                                            <tr class="ligth ligth-data" role="row">
+                                                
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">S/N</th>
+                                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">Dept</th>
+                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Product: activate to sort column ascending" style="width: 235.898px;">Product</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Quantity</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Price: activate to sort column ascending" style="width: 76.9219px;">Cost Price</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Brand Name: activate to sort column ascending" style="width: 118.68px;">Timestamp</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Action: activate to sort column ascending" style="width: 129.008px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="extractedTableBody" class="ligth-body">
+                                    
+                                            <tr class="odd">
+                                                <td>1</td>
+                                                <td>kitech</td>
+                                                <td>Rice Bag</td>
+                                                <td>1</td>
+                                                <td>$50.00</td>
+                                                <td>2024-10-23 03:56:56</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center list-action">
+                                                        <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Edit" href="#"><i class="ri-pencil-line mr-0"></i></a>
+                                                        <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+									</div>
+								</div>
+							</div>
+						  </div> 
+                        
+                        </div>
+					   </div>
+					</div>
+				 </div>
+
+			</div>
+			<!-- Page end  -->
+		</div>
+		<!-- Modal Edit -->
+		{% include 'incs/modal.html' %}
+	</div>
+{% endblock content %}
+
+{% block page_js %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
+<script src="{{url_for('static', filename='js/html2pdf.bundle.min.js')}}"></script>
+
+
+<script> 
+    document.addEventListener('DOMContentLoaded', function () {
+        // Load main products on page load
+        fetchMainProducts();
+    
+        // Add event listeners for each tab to load data when clicked
+        document.querySelector('#pills-main-tab').addEventListener('click', fetchMainProducts);
+        document.querySelector('#pills-apportioned-tab').addEventListener('click', fetchApportionedProducts);
+        document.querySelector('#pills-extracted-tab').addEventListener('click', fetchExtractedProducts);
+    });
+    
+    function fetchMainProducts() {
+        fetch('api/apportioneditems-by-hierachy')
+            .then(response => response.json())
+            .then(data => {
+                populateTable(data.data, 'mainTableBody');
+            })
+            .catch(error => console.error('Error fetching main products:', error));
+    }
+    
+    function fetchApportionedProducts() {
+        const mainProductId = getSelectedMainProductId(); // Use logic to get selected main product ID
+        if (!mainProductId) {
+            console.error('Main product ID not selected');
+            return;
+        }
+    
+        fetch(`api/apportioneditems-by-hierachy?main_product_id=${mainProductId}`)
+            .then(response => response.json())
+            .then(data => {
+                populateTable(data.data, 'apportionTableBody');
+            })
+            .catch(error => console.error('Error fetching apportioned products:', error));
+    }
+    
+    function fetchExtractedProducts() {
+        const apportionedProductId = getSelectedApportionedProductId(); // Use logic to get selected apportioned product ID
+        if (!apportionedProductId) {
+            console.error('Apportioned product ID not selected');
+            return;
+        }
+    
+        fetch(`api/apportioneditems-by-hierachy?apportioned_id=${apportionedProductId}`)
+            .then(response => response.json())
+            .then(data => {
+                populateTable(data.data, 'extractedTableBody');
+            })
+            .catch(error => console.error('Error fetching extracted products:', error));
+    }
+    
+    function populateTable(items, tableId) {
+        let tableBody = document.querySelector(`#${tableId}`);
+        tableBody.innerHTML = ''; // Clear existing rows
+    
+        if (items.length > 0) {
+            items.forEach(item => {
+                let row = `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.items_dept === 'k' ? 'Kitchen' : item.items_dept === 'c' ? 'Cocktail' : 'Bar'}</td>
+                        <td>${item.items_title}</td>
+                        <td>${item.items_qty}</td>
+                        <td>N${item.items_cost}</td>
+                        <td>${item.created}</td>
+                        <td>
+                            <div class="d-flex align-items-center list-action">
+                                <a class="badge bg-success mr-2" href="#" onclick="editProduct(${item.id})"><i class="ri-pencil-line mr-0"></i></a>
+                                <a class="badge bg-warning mr-2" href="#" onclick="deleteProduct(${item.id})"><i class="ri-delete-bin-line mr-0"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        } else {
+            tableBody.innerHTML = '<tr><td colspan="6">No items found.</td></tr>';
+        }
+    }
+    
+    // Placeholder functions for fetching selected main and apportioned product IDs
+    function getSelectedMainProductId() {
+        // Implement logic to get selected main product ID (e.g., from a dropdown or table selection)
+        return document.querySelector('#mainProductSelect').value;
+    }
+    
+    function getSelectedApportionedProductId() {
+        // Implement logic to get selected apportioned product ID (e.g., from a dropdown or table selection)
+        return document.querySelector('#apportionedProductSelect').value;
+    }
+    
+</script>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        // Attach click listener to the "Add New Product" button
+        document.querySelector('.new-product-row-btn').addEventListener('click', create_editable_row);
+    });
+    
+    function create_editable_row() {
+        let tableBody = document.querySelector("#DataTables_Table_0 tbody");
+    
+        // Check if there's already an editable row and prevent adding multiple
+        if (document.querySelector("#DataTables_Table_0 tbody .editable-row") ) {
+            response_modal('You already have a row being edited.');
+            return;
+        }
+    
+        // Create a new row with input fields
+        let newRow = document.createElement("tr");
+        newRow.classList.add("editable-row");
+        newRow.innerHTML = `
+            <td></td>
+            <td>
+                <select class="form-control" id="items_dept">
+                    <option value="k">Kitchen</option>
+                    <option value="c">Cocktail</option>
+                    <option value="b">Bar</option>
+                </select>
+            </td>
+            <td><input type="text" class="form-control" id="items_title" placeholder="Product Title"></td>
+           <td><input type="number" class="form-control" id="items_qty" value="0" placeholder="Quantity"></td>
+            <td><input type="number" class="form-control" id="items_cost" value="0" placeholder="Cost Price Optional"></td>
+
+            <td></td>
+            <td>
+                <button class="btn btn-success" onclick="submitNewProduct()"><i class="las la-plus mr-0"></i></button>
+                <button class="btn btn-secondary" onclick="cancelNewProduct()"><i class="ri-close-line"></i></button>
+            </td>
+        `;
+    
+        // Insert the new row at the top of the table body
+        tableBody.insertBefore(newRow, tableBody.firstChild);
+    }
+    
+    function submitNewProduct() {
+        // Get the new product details from the inputs
+        let dept = document.getElementById("items_dept").value;
+        let title = document.getElementById("items_title").value;
+        let quantity = document.getElementById("items_qty").value;
+        let cost = document.getElementById("items_cost").value;
+    
+        // Validate inputs
+        if (!title || !quantity) {
+            response_modal('Please fill in all the fields.');
+            return;
+        }
+    
+        let data = {
+            items_dept: dept,
+            items_title: title,
+            items_qty: quantity,
+            items_cost: cost
+        };
+        //console.log("data", data)
+        // Call the backend API to save the new product
+        fetch('/api/apportioneditems', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json() )
+        .then(result => {
+            if (result.success) {
+                // Prepare the new row with saved data
+                console.log(result);
+                let tableBody = document.querySelector("#DataTables_Table_0 tbody");
+                let newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                <td>${result.data.id}</td>
+                <td>${result.data.items_dept === 'k' ? 'Kitchen' : result.data.dept === 'c' ? 'Cocktail' : 'Bar'}</td>
+                <td>${result.data.items_title || 'N/A'}</td>
+                <td>${result.data.items_qty || 0}</td>
+                <td>$${result.data.items_cost || 0}</td>
+                <td>${result.data.created || 'Not available'}</td>
+                <td>
+                    <div class="d-flex align-items-center list-action">
+                        <a class="badge bg-success mr-2" href="#" onclick="editProduct(${result.data.id})"><i class="ri-pencil-line mr-0"></i></a>
+                        <a class="badge bg-warning mr-2" href="#" onclick="deleteProduct(${result.data.id})"><i class="ri-delete-bin-line mr-0"></i></a>
+                    </div>
+                </td>
+            `;
+
+                tableBody.insertBefore(newRow, tableBody.firstChild);
+    
+                // Remove the editable row
+                document.querySelector("#DataTables_Table_0 tbody .editable-row").remove();
+    
+                // Show success message
+                response_modal(result.message);
+
+            } else {
+                response_modal(`Error adding product. - ${result.error}`);
+            }
+
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            response_modal("A network error occurred: " + error.message);
+        });
+
+    }
+    
+    function cancelNewProduct() {
+        // Remove the input row without saving
+        document.querySelector("#DataTables_Table_0 tbody .editable-row").remove();
+    }
+    
+    function response_modal(message) {
+        // Set the message in the modal and show the modal
+        document.getElementById('response_text').innerText = message;
+        document.getElementById('response_text').classList.add('text-warning');
+        $('#response_modal').modal('show');
+    }
+    
+    // Function to take out bags
+    async function takeOutBags(itemId, quantity) {
+        try {
+            const response = await fetch(`/apportioneditems/${itemId}/takeout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity: quantity }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(result.message); // Show success message
+            } else {
+                alert(`Error: ${result.error}`); // Show error message
+            }
+        } catch (error) {
+            console.error('Error taking out bags:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    }
+
+    // Function to return bags
+    async function returnBags(itemId, quantity) {
+        try {
+            const response = await fetch(`/apportioneditems/${itemId}/return`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity: quantity }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(result.message); // Show success message
+            } else {
+                alert(`Error: ${result.error}`); // Show error message
+            }
+        } catch (error) {
+            console.error('Error returning bags:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    }
+
+    // Example usage
+    document.getElementById('takeOutButton').addEventListener('click', () => {
+        const itemId = document.getElementById('itemId').value;
+        const quantity = parseInt(document.getElementById('quantity').value, 10);
+        takeOutBags(itemId, quantity);
+    });
+
+    document.getElementById('returnButton').addEventListener('click', () => {
+        const itemId = document.getElementById('itemId').value;
+        const quantity = parseInt(document.getElementById('quantity').value, 10);
+        returnBags(itemId, quantity);
+    });
+
+    
+</script>
+
+<script>
+
+$(document).ready( () => {
+
+const url = "{{url_for('endpoint.sales_action')}}";
+
+$('form').submit((e) => {
+        
+	e.preventDefault()
+
+	if( ( $('form #start').val() || $('form #end').val() ) == ""){
+		$('#response').html('Kindly Specify The Date Range You Want To Generate Bar/Beer Report For').addClass('alert-warning');
+		$('#start').focus()
+		$('#start, #end').addClass('border-warning');
+		return;
+		}
+
+	$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+	generate_btn = $('#submit').html()
+	//alert('submitted')
+	var jqxhr = $.post(url, $('form').serialize());
+
+	jqxhr.done((r, textStatus , xhr) => {
+		$('#submit').html(generate_btn); //reset spinning submit-btn
+		if ('object' == typeof (r) ) {
+
+			//console.log(JSON.stringify(r))
+            var contentType = xhr.getResponseHeader('Content-Type');
+                if (contentType.indexOf('application/json') !== -1) {
+                    console.log('Response is a JSON response:', r);
+                } else {
+                    console.log('Response is not a JSON response:', r);
+                }
+
+			r[1]?.map( (data, x) => {
+			$('#report_date_range').text(data.report_date_range)
+			$('#sub_total, #sub_total1').text(data.total_sales) 
+			$('#cost_total').text(data.total_expenses) 
+			$('#profit').text(data.profit)
+			$('#report_id').text(data.report_id)
+			$('#initial-tr').remove()
+			$('.make-blur').removeClass('make-blur')
+			});
+
+			r[0]?.map( (data, x) => {
+			$('#initial-tbody').append(
+			`
+				<tr>
+					<th class="text-center" scope="row">${x}</th>
+					<td><h6 class="mb-0">${data.created}</h6></td>
+					<td class="text-left">${data.name}</td>
+					<td id="format-amt" class="text-center">${data.s_price}</td>
+					<td class="text-center">${data.qty}</td>
+					<td id="format-amt" class="text-center"><b>${data.total}</b></td>
+				</tr>
+			` )
+
+			});
+			
+					//format-prices/amounts in 1 seconds
+		setTimeout(function() {
+        var newElements = $(this).find("._cost, #_price, #_sprice, #_total");
+        //format-price/amount when you switch to next paginated page
+		function formatAmount(amount, currencyCode){ return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: currencyCode }).format(amount).replace(currencyCode, '₦');
+        }
+        function applyFormattingToElements(elements) {
+        elements.each( function() {
+        //var originalAmount = parseFloat($(this).text());
+        // Example preprocessing to remove non-numeric characters
+        var originalAmountString = $(this).text().replace(/[^\d.-]/g, '');
+        var originalAmount = parseFloat(originalAmountString);
+        var formattedAmount = formatAmount(originalAmount, 'NGN');
+        $(this).text(formattedAmount);
+        });
+        }
+        //format-prices/amounts in 1 seconds
+        applyFormattingToElements($("#format-amt, #sub_total, #sub_total1, #cost_total, #profit, ._cost, #_price, #_sprice, #_total"));
+        }, 1000);
+
+		if(!r['flash']){
+		return $('#response').html('Your Report Is Ready, You can download if you want to').addClass('alert-success');}
+
+		}
+
+		if ('undefined' != typeof (r.response)){
+			$('#response').html((r.response)).addClass(r.flash);
+		}else ( $('#response').text(r).addClass('alert-warning') )
+
+		if ("undefined" != typeof r.link){
+			$('#response').append(' - - <br> <a href=' + r.link + '> Continue Here </a>');
+			//$('form').hide();
+		}
+		if("undefined" != typeof r.receipt){
+			$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+			//$('form').hide();
+		}
+		//$('#response').html(JSON.stringify(r))
+		console.log('response->(' + r.response + 'flash-message (' + r.flash );
+	});
+
+	jqxhr.fail((er) => { //JSON.stringify(err)
+		$('#response').text('oops!!!, Could Not Generate This Report At The Moment. Pls Try Again'+JSON.stringify(er), er ).addClass('alert-danger')
+		$('#submit').html(generate_btn); //reset spinning submit-btn
+	});
+
+	jqxhr.always(() => {
+		//alert("ajax complete");
+		$('#submit').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+	});
+
+	});
+
+
+remove = (del_btn, item_id, history_id) => {
+
+if (!confirm('Sure you wanna remove this back-up ?')) { return } //true/false
+
+$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting product history');
+
+del_btnhtml = $(del_btn).html()
+
+let url = "{{url_for('endpoint.history_action')}}?item_id="+ item_id +"&history_id="+history_id + "&action=del"
+
+console.log(url)
+
+//var jqxhr = $.delete(url);
+var jqxhr = $.ajax({
+	url: url,
+	type: "DELETE", // Assuming this is a DELETE request, adjust as needed
+	headers: {
+		"X-CSRFToken": window.csrfToken, // Include the CSRF token in the headers
+	},
+});
+
+$(del_btnhtml).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+jqxhr.done((r) => {
+
+	$(del_btn).closest('tr').remove()
+
+	$(del_btn).html(del_btnhtml); //reset spinning submit-btn
+	if ('undefined' != typeof (r.response)) {
+		$('#response').html((r.response)).addClass(r.flash);
+	} else ($('#response').text(r).addClass('alert-success'))
+
+	if ("undefined" != typeof r.link){
+		$('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+	}
+	if ("undefined" != typeof r.receipt) {
+		$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+	}
+
+});
+
+jqxhr.fail((er) => { 
+	console.log(JSON.stringify(er));
+	//$('#response').html($.trim( JSON.stringify(er)) );
+	$('#response').text('oops!!!, Deletion failed for this record', er).addClass('alert-danger')
+	$(del_btn).html(del_btnhtml);
+});
+
+jqxhr.always(() => {
+	//alert("ajax complete");
+	$(del_btn).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+});
+
+}
+
+});
+
+mkpdf = () => {
+	$('#download_pdf').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+	html2pdf()
+		.set({
+		//margin: 2,
+		filename: "kitchen.pdf",
+		image: { type: "jpeg", quality: 0.9 },
+		enableLinks : true,
+		jsPDF: { format: "A4", orientation: "landscape"},
+		//margin: [4, 30, 10, 10],
+		margin: [4, 10, 0, 10],
+			autoPaging: 'text',
+			/* x: 0,
+			y: 0, */
+		})
+		.from(document.getElementById("reportcard"))
+		.save();
+		//$(this).remove('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		$('#download_pdf').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		//alert('now')
+};
+
+</script>
+{% endblock page_js %}

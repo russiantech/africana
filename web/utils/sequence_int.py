@@ -9,7 +9,7 @@ class SequentialGenerator:
 
 # Create an instance of the SequentialGenerator
 generator = SequentialGenerator(start=10)
-
+# version=generator.next(),
 
 # Generate sequential numbers
 """ print(generator.next())  # Output: 1

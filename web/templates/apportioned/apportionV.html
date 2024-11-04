@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+<title> {% block title %} Product Apportioning{% endblock title %}</title>
+{% block content %}
+<div class="wrapper">
+	{% include 'incs/sidenav.html' %}
+	{% include 'incs/topnav.html' %}
+	<div class="content-page">
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-lg-12">
+					<div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+						<div>
+							<h4 class="mb-3">{{pname}}</h4>
+							<p class="mb-0 text-warning">
+                                Apportions & Extractions.
+                            </p>
+						</div>
+						<button class="btn btn-primary generate disabled text-white"><i class="las la-plus mr-3"></i>(Disabled) - Guide</button>
+					</div>
+				</div>
+				<div class="card col-12">
+					<div class="card-body">
+						<ul class="nav nav-pills" id="pills-tab" role="tablist">
+						  <li class="nav-item">
+							 <a class="nav-link active font-weight-bold" id="pills-main-tab" data-toggle="pill" href="#pills-main" role="tab" aria-controls="pills-main" 
+                             aria-selected="true">
+                             Product Apportioning  (Stock A)
+                            </a>
+						  </li>
+						  <li class="nav-item">
+							 <a class="nav-link font-weight-bold" id="pills-extraction-tab" data-toggle="pill" href="#pills-extraction" role="tab" aria-controls="pills-extraction" 
+                             aria-selected="false">
+                             Extractions (Stock B)
+                            </a>
+						  </li>
+					   </ul>
+                       
+					   <div class="tab-content" id="pills-tabContent-2">
+						  <div class="tab-pane fade active show" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
+                             <div class="col-lg-12">
+                                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                                    <div>
+                                        <h4 class="mb-3"></h4>
+                                        
+							 <p class="text-warning">The original large bag will be recorded here, (e.g., a bag of rice).</p>
+                                    </div>
+                                    <button class="btn btn-primary new-product-row-btn"> <i class="las la-plus mr-3"></i>Add New Product </button>
+                                </div>
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                                        <table  class="data-tables table mb-0 tbl-server-info dataTable no-footer" id="DataTables_Table_0" role="grid"
+                                        aria-describedby="DataTables_Table_0_info">
+                                        <thead class="bg-white text-uppercase">
+                                            <tr class="ligth ligth-data" role="row">
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">S/N</th>
+                                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">Dept</th>
+                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Product: activate to sort column ascending" style="width: 235.898px;">Product Title</th>
+                                                
+                                            
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Main Qty</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Initial Apportioning</th>
+                                                
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Apportioned Qty</th>
+                                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Extracted Qty</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Price: activate to sort column ascending" style="width: 76.9219px;">Cost Price</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Brand Name: activate to sort column ascending" style="width: 118.68px;">Timestamp</th>
+                                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" 
+                                                colspan="1" aria-label="Action: activate to sort column ascending" style="width: 129.008px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mainTableBody" class="ligth-body">
+                                            <tr class="odd">
+                                                <td>1</td>
+                                                <td>kitech</td>
+                                                <td>Rice Bag</td>
+                                                <td>1</td>
+                                                <td>$50.00</td>
+                                                <td>$50.00</td>
+                                                <td>$50.00</td>
+                                                <td>$50.00</td>
+                                                <td>2024-10-23 03:56:56</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center list-action">
+                                                        <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Edit" href="#"><i class="ri-pencil-line mr-0"></i></a>
+                                                        <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+									</div>
+
+								</div>
+							</div>
+						  </div>
+
+						  <div class="tab-pane fade" id="pills-extraction" role="tabpanel" aria-labelledby="pills-extraction-tab">
+							 <div class="col-lg-12">
+                                <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                                    <div>
+                                        <h4 class="mb-3"></h4>
+                                        <p class="mb-0 text-warning">
+                                            Smaller bags created from the main product (e.g., a smaller bag containing rice).
+                                        </p>
+                                    </div>
+                                    <button class="btn btn-primary new-product-row-btn2">
+                                        <i class="las la-plus mr-3"></i>Record New Extracted
+                                    </button>
+                                </div>
+
+								<div class="table-responsive rounded mb-3">
+									<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+										
+                                        <table class="data-tables table mb-0 tbl-server-info dataTable no-footer" id="DataTables_Table_0" role="grid"
+                                        aria-describedby="DataTables_Table_0_info">
+                                        <thead class="bg-white text-uppercase">
+                                            <tr class="ligth ligth-data" role="row">
+                                                
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">S/N</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                aria-label="Code: activate to sort column ascending" style="width: 82.5469px;">Title</th>
+                                    
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Product: activate to sort column ascending" style="width: 235.898px;">Main Stock</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Category: activate to sort column ascending" style="width: 90.3359px;">Quantity</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Brand Name: activate to sort column ascending" style="width: 118.68px;">Timestamp</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Action: activate to sort column ascending" style="width: 129.008px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="extractionTableBody" class="ligth-body">
+                                    
+                                            <tr class="odd">
+                                                <td>1</td>
+                                                <td>3 Bag</td>
+                                                <td>1 Bag Of Beans</td>
+                                                <td>30</td>
+                                                <td>Today</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center list-action">
+                                                        <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Edit" href="#"><i class="ri-pencil-line mr-0"></i></a>
+                                                        <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="Delete" href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+									</div>
+								</div>
+							</div>
+						  </div>
+                        
+                        </div>
+					   </div>
+					</div>
+				 </div>
+
+			</div>
+			<!-- Page end  -->
+		</div>
+		<!-- Modal Edit -->
+		{% include 'incs/modal.html' %}
+	</div>
+{% endblock content %}
+
+{% block page_js %}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> -->
+<script src="{{url_for('static', filename='js/html2pdf.bundle.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/pages/apportion.js')}}"></script>
+<script src="{{url_for('static', filename='js/pages/extraction.js')}}"></script>
+
+<script>
+// $(del_btnhtml).html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i> deleting');
+
+mkpdf = () => {
+	$('#download_pdf').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+	html2pdf()
+		.set({
+		//margin: 2,
+		filename: "kitchen.pdf",
+		image: { type: "jpeg", quality: 0.9 },
+		enableLinks : true,
+		jsPDF: { format: "A4", orientation: "landscape"},
+		//margin: [4, 30, 10, 10],
+		margin: [4, 10, 0, 10],
+			autoPaging: 'text',
+			/* x: 0,
+			y: 0, */
+		})
+		.from(document.getElementById("reportcard"))
+		.save();
+		//$(this).remove('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		$('#download_pdf').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		//alert('now')
+};
+
+</script>
+{% endblock page_js %}

@@ -4,7 +4,7 @@
             <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
                 <i class="ri-menu-line wrapper-menu"></i>
                 <a href="/" class="header-logo">
-                    <img src="{{url_for('static', filename='images/logo/afriq.png')}}" class="img-fluid rounded-normal" alt="logo">
+                    <img src="{{url_for('static', filename='images/logo_0.png')}}" class="img-fluid rounded-normal" alt="logo">
                     <h5 class="logo-title ml-3">Africana</h5>
                 </a>
             </div>
@@ -104,12 +104,6 @@
                             <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <div class="card shadow-none m-0">
                                     <div class="card-body p-0 text-center">
-                                        <div class="media-body profile-detail text-center">
-                                            <img src="{{url_for('static', filename='images/page-img/profile-bg.jpg')}}" alt="profile-bg"
-                                                class="rounded-top img-fluid mb-4">
-                                            <img src="{{url_for('static', filename='images/user/1.png')}}" alt="profile-img"
-                                                class="rounded profile-img img-fluid avatar-70">
-                                        </div>
                                         <div class="p-3">
                                             <h5 class="mb-1"> {{current_user.email or current_user.phone or current_user.username}} </h5>
                                             <!-- <p class="mb-0">Since 10 march, 2020</p> -->

@@ -2,9 +2,18 @@
 <html lang="en">
 <head>
 <title>Africana</title>
- {% include 'incs/metas.html' %}
- 
+{% include 'incs/metas.html' %}
 {{ moment.include_moment() }}
+
+<style>
+    .table{
+    border: 1px solid #dcdfe8;
+    border-radius: 10px;
+    overflow: auto;
+    color: #110a57;
+    }
+</style>
+
 </head>
 <body class="">
     <!-- loader Start -->
@@ -16,11 +25,28 @@
 
     {% endblock content %}
     <!-- Wrapper End-->
+    {% include "incs/response_modal.html" %}
 
     {% include 'incs/footer.html' %}
-
     <!-- Backend Bundle JavaScript -->
     {% include 'incs/bottom_js.html' %}
+
     {% block page_js %} {% endblock page_js %}
+    <script>
+
+        $('.table-responsive').on('show.bs.dropdown', function () {
+           $('.table-responsive').css( "overflow", "inherit" );
+      });
+      
+      $('.table-responsive').on('hide.bs.dropdown', function () {
+           $('.table-responsive').css( "overflow", "auto" );
+      })
+
+      function response_modal(message) {
+        document.getElementById('response_text').innerText = message;
+        $('#response_modal').modal('show');
+    }
+    
+      </script>
 </body>
 </html>

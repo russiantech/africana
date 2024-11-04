@@ -7,6 +7,7 @@ from flask_login import current_user
 from werkzeug.utils import secure_filename
 from PIL import Image, UnidentifiedImageError
 from flask import current_app, flash
+from wtforms import ValidationError
 
 regex = "([^\\s]+(\\.(?i)(jpe?g|png|gif|bmp))$)"
 

@@ -7,7 +7,7 @@ from wtforms import StringField, FileField, SubmitField, SelectField, \
 from wtforms.validators import DataRequired, Optional, Length, Email
 from flask_wtf.file import FileField, FileAllowed
 
-from web.models import Item
+from web.models import Items
 
 state_choice = [('','choose'), ('ls','Lagos'), ('abj','Abuja'), ('ph','Portharcourt'),  ('abia','Abia '), ('cr','Cross River') ]
 country_choice = [('','Choose'), ('ng','Nigeria'), ('gh','Ghana'), ('cam','Cameroun'),  ('tg','Togo '), ('us','United States') ]
@@ -81,10 +81,10 @@ class StockForm(FlaskForm):
     name = StringField('Name(s)', validators=[DataRequired(), Length(min=2, max=20)])
     cate = SelectField('Category', coerce=int, choices=[], validate_choice = False)
     dept = SelectField('Department', choices=dept_choice, validators=[DataRequired()])
-    in_stock = IntegerField('Quantity', default=0)
+    in_stock = StringField('Quantity', default=0)
     new_stock = IntegerField('New Stock', default=0, render_kw={"placeholder": "New Stock"})
     c_price = IntegerField('Cost Price', default=0)
-    s_price = IntegerField('Selling Price')
+    s_price = IntegerField('Selling Price', default=0)
     item_id = IntegerField('Item Id')
     submit = SubmitField('Save')
 
@@ -103,8 +103,8 @@ class ApportionForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(ApportionForm, self).__init__(*args, **kwargs)
         # Fetch and set the choices dynamically from your database
-        self.items_series.choices = [(str(item.id), str(item.name) ) for item in Item.query.all()]
-        #self.item_series.choices = [(item.id, str(item.name) ) for item in Item.query.all()]
+        self.items_series.choices = [(str(item.id), str(item.name) ) for item in Items.query.all()]
+        #self.item_series.choices = [(item.id, str(item.name) ) for item in Items.query.all()]
     submit = SubmitField('Save')
 
 class SalesForm(FlaskForm):

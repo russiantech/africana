@@ -1,56 +1,26 @@
-import jwt, json, random, time
-from flask_login import LoginManager, UserMixin
+import jwt, random, time
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import CheckConstraint
 from sqlalchemy.sql import func
-from flask import current_app, g, jsonify, request
-
+from flask import current_app
+from datetime import datetime
 db = SQLAlchemy()
 #s_manager = LoginManager()
 
-
-#this-will-allow-support-for-multiple-category-for-a-product
-item_tag = db.Table(
-    'item_tag', db.Model.metadata,
-    db.Column('iid', db.Integer, db.ForeignKey('item.id')),
-    db.Column('tid', db.Integer, db.ForeignKey('tag.id'))
-)
-
-class Brand(db.Model):
-    id = db.Column(db.Integer, unique=True, primary_key=True)
-    type = db.Column(db.String(100), unique=True, nullable=False, default='Sales')
-    name = db.Column(db.String(100), unique=True, nullable=False, default='ecommerce')
-    email = db.Column(db.String(100), unique=True, index=True, nullable=False, default='softwares@russian.com')
-    phone = db.Column(db.String(20), unique=True)
-    photo = db.Column(db.String(1000))
-    title = db.Column(db.String(50))
-    logo = db.Column(db.Text())  # ['male','female','other']
-    city = db.Column(db.String(50))
-    lang = db.Column(db.String(100))
-    us = db.Column(db.String(1000))
-    owner = db.Column(db.String(500))
-    hype = db.Column(db.String(10000))  #slogan
-    ratings = db.Column(db.Integer)
-    reviews = db.Column(db.Integer)
-    bank = db.Column(db.String(100), default='fcmb')
-    acct = db.Column(db.Integer, default=5913408010)
-    status = db.Column(db.Boolean(), default=True)
-    verified = db.Column(db.Boolean(), default=False)
-
-usr_role = db.Table(
-    'usr_role',
-    db.Column('uid', db.Integer, db.ForeignKey('user.id')),
-    db.Column('rid', db.Integer, db.ForeignKey('role.id')),
+user_role_association = db.Table(
+    'user_role_association',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
     keep_existing=True
 )
 
-apportioned_items = db.Table(
-    'apportioned_items',
-    db.Column('apportioned_id', db.Integer, db.ForeignKey('apportioneditems.id')),
-    db.Column('item_id', db.Integer, db.ForeignKey('item.id')),
+apportion_items_association = db.Table(
+    'apportion_items_association',
+    db.Column('apportion_id', db.Integer, db.ForeignKey('apportion.id')),
+    db.Column('items_id', db.Integer, db.ForeignKey('items.id')),
     db.Column('deleted', db.Boolean, default=False)  # Add a 'deleted' column
 )
-
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, unique=True, primary_key=True, nullable=False)
@@ -75,14 +45,14 @@ class User(db.Model, UserMixin):
     status = db.Column(db.Boolean(), default=False)  # [ active(1), not active(0)]
     verified = db.Column(db.Boolean(), default=False)  # verified or not
     ip = db.Column(db.String(50))
-    role = db.relationship('Role', secondary=usr_role, back_populates='user', lazy='dynamic')
-    #role = db.relationship('Role', secondary=usr_role, lazy='dynamic')
 
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
-    deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
+    deleted = db.Column(db.Boolean(), default=False) 
     
-    notified = db.relationship("Notification", backref="notified", lazy=True) 
+    role = db.relationship('Role', secondary=user_role_association, back_populates='user', lazy='dynamic')
+
+    notification = db.relationship("Notification", backref="user", lazy=True) 
 
     ord = db.relationship("Order", backref="usar", lazy=True) 
     
@@ -92,7 +62,7 @@ class User(db.Model, UserMixin):
     def is_admin(self):
         return any(role.type == 'admin' for role in self.role)
     
-    def permit(self):
+    def roles(self):
         return [ r.type for r in self.role ]
 
     def generate_token(self, exp=600, type='reset'):
@@ -132,20 +102,19 @@ class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key = True)
     type = db.Column(db.String(100), unique=True)
-    user = db.relationship('User', secondary=usr_role, back_populates='role', lazy='dynamic')
+    user = db.relationship('User', secondary=user_role_association, back_populates='role', lazy='dynamic')
 
-class Item(db.Model):
-    __tablename__ = 'item'
+class Items(db.Model):
+    __tablename__ = 'items'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, default='0', nullable=True)
-    cate = db.Column(db.Integer, db.ForeignKey('cate.id'), nullable=False)
     name = db.Column(db.String(80), nullable=False) 
     dept = db.Column(db.String(80), nullable=False, default='k') 
     in_stock = db.Column(db.Integer, nullable=True, default=0)
     c_price = db.Column(db.Integer, nullable=True) #cost-price
     s_price = db.Column(db.Integer, nullable=False) #selling-price, not-a
     new_stock = db.Column(db.Integer, nullable=True)
-    photos = db.Column(db.JSON, nullable=False, default='photo.png')
+    photos = db.Column(db.JSON)
     
     disc = db.Column(db.Integer, default=0) #discount
     desc = db.Column(db.Text)
@@ -153,63 +122,159 @@ class Item(db.Model):
     attributes = db.Column(db.JSON) #[ weight, size, condition, model, type, subtype, processor etc] 
     color = db.Column(db.JSON) #color:- ['red','wine', 'etc'],
     size = db.Column(db.JSON) #size:- ['s','m', 'l', 'xl', 'xxl'],
-
+    sku = db.Column(db.String(1000))  #just refference (stock keeping unit)
     ip = db.Column(db.String(50))
     status = db.Column(db.Boolean(), default= 1) #[sold, active,]
     deleted = db.Column(db.Boolean(), default= 0)
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
 
-    apportioned_quantities = db.relationship('ApportionedItems', secondary=apportioned_items, backref='items')
-    #tag = db.relationship('Tag', secondary=item_tag, back_populates='item', overlaps="tag")
-    tag = db.relationship('Tag', secondary=item_tag, back_populates='item', lazy='dynamic')
-    salez = db.relationship("Sales", backref="salez", lazy=True)  # Monie->course
-    sku = db.Column(db.String(1000))  #just refference (stock keeping unit)
-     # Define the one-to-many relationship with StockHistory
-    s_history = db.relationship('StockHistory', back_populates='item')
-
-    def item_exists(item):
-        return Item.query.filter(Item.id==item).first() is not None
-
-    __table_args__ = (
-        db.UniqueConstraint('name', 'cate', 'dept', 'deleted'),
-    )
-
-class ApportionedItems(db.Model):
-    __tablename__ = 'apportioneditems'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, default='0', nullable=True)
-    #item_series = db.Column(db.JSON) #[11,3,44,5,6] #//list of item ids
-    items_dept = db.Column(db.String(80), nullable=False, default='k') 
-    #item_type = db.Column(db.String(80), nullable=False, default='k') 
-    items_title = db.Column(db.String(80), nullable=False) 
-    items_qty = db.Column(db.Integer, nullable=False)
-
-    deleted = db.Column(db.Boolean(), default= 0)
-    created = db.Column(db.DateTime(timezone=True), default=func.now())
-    updated = db.Column(db.DateTime(timezone=True), default=func.now())
-
-    """ Also has many-many relationship with Item model """
-    # Define the one-to-many relationship with StockHistory & Sales
-    #salez = db.relationship("Sales", back_populates="salez", lazy=True) 
-    s_history = db.relationship('StockHistory', back_populates='apportioned_item', viewonly=True, lazy=True)
-
-    # Custom method to mark the apportioned item as deleted
-    def mark_deleted(self):
-        self.deleted = True
-        # Remove the association with items
-        for item in self.items:
-            self.items.remove(item)  # This disassociates the item
-
-    def item_exists(item_id):
-        return ApportionedItems.query.filter(ApportionedItems.id==item_id).first() is not None
-
-    __table_args__ = (
-        #db.UniqueConstraint('item_series', 'item_dept', 'item_type', 'item_qty', 'deleted'),
-        db.UniqueConstraint('items_title', 'items_qty', 'user_id', 'deleted'),
-    )
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    # apportioned_quantities = db.relationship('Apportion', secondary=apportion_items_association, backref='items')
+    apportion_items = db.relationship('Apportion', secondary=apportion_items_association, backref='items')
     
+    #tag = db.relationship('Tag', secondary=item_tag, back_populates='item', overlaps="tag")
+    sales = db.relationship("Sales", backref="item", lazy=True)
+    
+    # Define the one-to-many relationship with StockHistory
+    # s_history = db.relationship('StockHistory', back_populates='item')
+    s_history = db.relationship('StockHistory', back_populates='item', cascade="all, delete")
+    
+    def item_exists(item):
+        return Items.query.filter(Items.id==item).first() is not None
 
+    __table_args__ = (
+        db.UniqueConstraint('name', 'category_id', 'dept', 'deleted'),
+    )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'category_id': self.category_id,
+            'name': self.name,
+            'dept': self.dept,
+            'in_stock': self.in_stock,
+            'c_price': self.c_price,
+            's_price': self.s_price,
+            'new_stock': self.new_stock,
+            'photos': self.photos,
+            'disc': self.disc,
+            'desc': self.desc,
+            'attributes': self.attributes,
+            'color': self.color,
+            'size': self.size,
+            'ip': self.ip,
+            'status': self.status,
+            'deleted': self.deleted,
+            'created': self.created.isoformat() if self.created else None,
+            'updated': self.updated.isoformat() if self.updated else None,
+            'sku': self.sku,
+            
+            # Relationships (avoid recursion)
+            'apportion_items': [item.id for item in self.apportion_items] if self.apportion_items else [],
+            # 'tags': [tag.id for tag in self.tag.all()] if self.tag else [],
+            'stock_history': [history.to_dict() for history in self.s_history] if self.s_history else [],
+            
+            # 'sales': [sale.to_dict() for sale in self.sales] if self.sales else [],
+            # 'sales': [{'id': sale.id, 'title': sale.title} for sale in self.sales] if self.sales else [],
+            # NOTE: Below is prefered instead of  to_dict() to avoid infinite loop that result to maximum recursion error due to 
+            # multiple use of to_dict on both Items and other models like Sales
+            
+            'sales': [
+                {
+                    'id': sale.id,
+                    'title': sale.title,
+                    'qty': sale.qty,
+                    'qty_left': sale.qty_left,
+                    'price': sale.price,
+                    'created': sale.created.isoformat() if isinstance(sale.created, datetime) else sale.created,
+                    # Add other relevant fields for Sales as needed
+                }
+                for sale in self.sales
+            ] if self.sales else [],
+        }
+
+class Apportion(db.Model):
+    __tablename__ = 'apportion'
+    id = db.Column(db.Integer, primary_key=True)
+    dept = db.Column(db.String(80), nullable=False, default='k') 
+    product_title = db.Column(db.String(255), nullable=False)
+    main_qty = db.Column(db.Integer, nullable=False)
+    initial_apportioning = db.Column(db.Integer, nullable=False)
+    apportioned_qty = db.Column(db.Integer, nullable=False)
+    extracted_qty = db.Column(db.Integer, default=0)
+    cost_price = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=func.now())
+    updated_at = db.Column(db.DateTime, default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    extractions = db.relationship('Extraction', backref='apportion', lazy=True)
+    s_history = db.relationship('StockHistory', backref='apportion')
+    
+    def to_dict(self):
+        """Convert the Apportion instance to a dictionary."""
+        return {
+            "id": self.id,
+            "product_title": self.product_title,
+            "dept": self.dept,
+            "main_qty": self.main_qty,
+            "initial_apportioning": self.initial_apportioning,
+            "apportioned_qty": self.apportioned_qty,
+            "extracted_qty": self.extracted_qty or self.initial_apportioning - self.apportioned_qty,
+            "cost_price": self.cost_price,
+            "created_at": self.created_at.isoformat() if isinstance(self.created_at, datetime) else self.created_at,
+            "updated_at": self.updated_at.isoformat() if isinstance(self.updated_at, datetime) else self.updated_at,
+            # Additional details if needed
+            "extractions": [ extraction.to_dict() for extraction in self.extractions] if self.extractions else [],
+            "s_history": [ history.to_dict() for history in self.s_history ] if self.s_history else []
+        }
+
+class Extraction(db.Model):
+    __tablename__ = 'extracted'
+    id = db.Column(db.Integer, primary_key=True)
+    extracted_title  = db.Column(db.String(255), nullable=False)
+    # Foreign key to Apportion table
+    extracted_qty = db.Column(db.Integer, nullable=False)
+    remaining_stock = db.Column(db.Integer)
+    descr = db.Column(db.String(255))
+    # sales_qty = db.Column(db.Integer, default=0)
+    
+    # One-to-many relationship with Sale
+    sales = db.relationship('Sales', backref='extraction', lazy=True)
+    apportion_id = db.Column(db.Integer, db.ForeignKey('apportion.id'), nullable=False)  # Fixing the FK reference
+
+    created_at = db.Column(db.DateTime, default=func.now())
+    updated_at = db.Column(db.DateTime, default=func.now(), onupdate=func.now())
+
+    def to_dict(self):
+        """Convert the Apportion instance to a dictionary."""
+        return {
+            "id": self.id,
+            "extracted_title": self.extracted_title,
+            "product_title": self.apportion.product_title,
+            "apportion_id": self.apportion_id,
+            "extracted_qty": self.extracted_qty,
+            "remaining_stock": self.remaining_stock,
+            "descr": self.descr,
+            "created_at": self.created_at.isoformat() if isinstance(self.created_at, datetime) else self.created_at,
+            "created_at": self.updated_at.isoformat() if isinstance(self.updated_at, datetime) else self.updated_at,
+            
+            # "sales": [sale.to_dict() for sale in self.sales] if self.sales else [],
+            'sales': [
+                {
+                    'id': sale.id,
+                    'title': sale.title,
+                    'qty': sale.qty,
+                    'qty_left': sale.qty_left,
+                    'price': sale.price,
+                    'created': sale.created.isoformat() if isinstance(sale.created, datetime) else sale.created,
+                    # Add other relevant fields for Sales as needed
+                }
+                for sale in self.sales
+            ] if self.sales else [],
+        }
+    
 class StockHistory(db.Model):
     __tablename__ = 'stock_history'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -222,42 +287,118 @@ class StockHistory(db.Model):
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
-    apportioned_item_id = db.Column(db.Integer, db.ForeignKey('apportioneditems.id')) #can be null bcos, only item can be inserted atimes without apportioning.
-    apportioned_item = db.relationship('ApportionedItems', back_populates='s_history', viewonly=True)
+    # New Apportion Model
+    apportion_id = db.Column(db.Integer, db.ForeignKey('apportion.id')) #can be null bcos, only item can be inserted atimes without apportioning.
+    apportion_item = db.relationship('Apportion', back_populates='s_history', viewonly=True)
+    
+    extracted_id = db.Column(db.Integer, db.ForeignKey('extracted.id')) #can be null bcos, only item can be inserted atimes without apportioning.
+    extracted_item = db.relationship('Apportion', back_populates='s_history', viewonly=True)
     
     #item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
-    item = db.relationship('Item', back_populates='s_history') #define the relationship back to Item
+    item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+    item = db.relationship('Items', back_populates='s_history') #define the relationship back to Item
 
     # Check Constraint to ensure at least one of the columns is not null
     __table_args__ = (
-        CheckConstraint("item_id IS NOT NULL OR apportioned_item_id IS NOT NULL"),
+        CheckConstraint("item_id IS NOT NULL OR apportion_id IS NOT NULL"),
     )
-    
+    # print(c for c in StockHistory.__table__.columns)
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+
+    def to_dict(self):
+        """Convert StockHistory instance to dictionary, including related models."""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "in_stock": self.in_stock,
+            "desc": self.desc,
+            "version": self.version,
+            "difference": self.difference,
+            "deleted": self.deleted,
+            "created": self.created.isoformat() if isinstance(self.created, datetime) else self.created,
+            "updated": self.updated.isoformat() if isinstance(self.updated, datetime) else self.updated,
+            
+            "item": {
+                "id": self.item.id,
+                "name": self.item.name,
+                # Include other necessary item fields
+            } if self.item else None,
+            
+            "apportion": {
+                "id": self.apportion_item.id,
+                "product_title": self.apportion_item.product_title,
+                # Include other necessary apportion fields
+            } if self.apportion_item else None,
+            
+            "extracted": {
+                "id": self.extracted_item.id,
+                "extracted_title": self.extracted_item.extracted_title,
+                # Include other necessary extraction fields
+            } if self.extracted_item else None,
+            
+        }
 
 class Sales(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    qty_left = db.Column(db.Integer) #pcs-left
+    title = db.Column(db.String(100))  # e.g., 'Chicken & Chips'
+    qty_left = db.Column(db.Integer, default=0) #pcs-left
     qty = db.Column(db.Integer) #pcs-sold
-    price = db.Column(db.Integer)
+    price = db.Column(db.Integer) # Combined price
     total = db.Column(db.Integer)
     dept = db.Column(db.String(80), nullable=False, default='k') #[k=kitchen, c=cocktail, b=bar]
     comment = db.Column(db.String(100))
-    #//relationships
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    #apportioned_item_id = db.Column(db.Integer, db.ForeignKey('apportioneditems.id'), nullable=False)
+    
+    #!relationships
+    item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+    extracted_id = db.Column(db.Integer, db.ForeignKey('extracted.id'))
 
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
 
     # Check Constraint to ensure at least one of the columns is not null
+    # __table_args__ = (
+    # CheckConstraint(
+    #     "(item_id IS NOT NULL OR extracted_id IS NOT NULL) AND "
+    #     "(title IS NOT NULL AND price IS NOT NULL) AND "
+    #     "(qty_left IS NOT NULL OR qty IS NOT NULL)",
+    #     name="sales_item_extracted_qty_check"
+    # ),
+    # )
+    
     __table_args__ = (
-        CheckConstraint("item_id IS NOT NULL AND (qty_left IS NOT NULL OR qty IS NOT NULL)"),
+        CheckConstraint(
+            "(item_id IS NOT NULL AND (qty IS NOT NULL OR qty_left IS NOT NULL)) "
+            "OR (item_id IS NULL AND extracted_id IS NULL AND title IS NOT NULL AND price IS NOT NULL)",
+            name="item_apportion_extraction_sales_constraints"
+        ),
     )
-   
+    
+    def to_dict(self):
+        """Converts the Sales instance to a dictionary for JSON serialization."""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "qty_left": self.qty_left,
+            "qty": self.qty,
+            "price": self.price,
+            # "c_price": self.item.c_price,
+            # "s_price": self.item.s_price,
+            "total": self.total,
+            "dept": self.dept,
+            "comment": self.comment,
+            "item_id": self.item_id,
+            "extracted_id": self.extracted_id,
+            "deleted": self.deleted,
+            "created": self.created.isoformat() if isinstance(self.created, datetime) else self.created,
+            "updated": self.updated.isoformat() if isinstance(self.updated, datetime) else self.updated,
+            # Related item and extraction information
+            "items": self.item.to_dict() if self.item else None,
+            "extraction": self.extraction.to_dict() if self.extraction else None,
+        }
+        
     def calctot(self, qty, price):
         self.total = qty * price
 
@@ -275,31 +416,20 @@ class Expenses(db.Model):
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
    
-class Cate(db.Model):  #levels-> (super1->main2->sub3->mini4)
-    __tablename__ = 'cate'
+class Category(db.Model):  #levels-> (super1->main2->sub3->mini4)
+    __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True)
-    parent = db.Column(db.Integer, db.ForeignKey('cate.id')) #or root
+    parent = db.Column(db.Integer, db.ForeignKey('category.id')) #or root
     lev = db.Column(db.Integer, default=0)
     name = db.Column(db.String(50), nullable=False)
     desc = db.Column(db.String(100))
     photo = db.Column(db.String(50))
     dept = db.Column(db.String(50), nullable=False, default='k')
-    children = db.relationship("Cate")
-    #item = db.relationship('Item', secondary=item_cate, back_populates='cate')
-    item = db.relationship('Item', backref='cates', lazy=True)
+    children = db.relationship("Category")
+    items = db.relationship('Items', backref='categories', lazy=True)
     created = db.Column(db.DateTime(timezone=True), default=func.now())
     updated = db.Column(db.DateTime(timezone=True), default=func.now())
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
-
-class Tag(db.Model):
-    __tablename__ = 'tag'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    item = db.relationship('Item', secondary=item_tag, back_populates='tag', lazy='dynamic')
-    #item = db.relationship('Item', secondary=item_tag, backref='itag')
-
-    def __repr__(self):
-        return f'<Tag "{self.name}">' 
 
 #can be comments/likes/dislikes/reviews/views
 class Feedback(db.Model):
@@ -311,9 +441,7 @@ class Feedback(db.Model):
     deleted = db.Column(db.Boolean(), default=False)  # 0-deleted, 1-not-deleted
 
     user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # user->feedback
-    prod = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)  # user->course
-
-randm = random.randint(0, 999999)
+    items = db.Column(db.Integer, db.ForeignKey('items.id'), nullable=False)  # user->course
 
 class Payment(db.Model):
     __tablename__ = 'payment'
