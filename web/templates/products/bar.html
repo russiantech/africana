@@ -140,14 +140,6 @@
 {% endblock content %}
 {% block page_js %}
 <script>
-
-document.addEventListener('DOMContentLoaded', () => {
-	// Fetch and populate dropdowns when the modal opens
-	$('#record-complimentary-sales').on('show.bs.modal', function () {
-		fetchItems(dept='b');
-		fetchExtractions(dept='b');
-	});
-		
 $(document).ready(() => {
 
 //I'm extending jquery so I can make $.delete()/$.put()  request with this short-cut syntax ($.delete() )
@@ -252,6 +244,77 @@ $(".add-list").click(() => { $("tbody").prepend(newrow); }); // appending dynami
 
 $('tbody').on('click', '#cancel', () => { $('tbody #cancel').parent().parent().parent().remove() });
 
+/*
+const url = "{{url_for('endpoint.stock_action')}}";
+$('#new_stock_form').submit((e) => {
+		e.preventDefault()
+
+		$('#response').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		save_btn = $('#save').html()
+		//alert($('td').find('#item_id').val())
+		var jqxhr = $.post(url, $('form').serialize());
+
+		jqxhr.done((r) => {
+			//alert("ajax success");
+			//
+			$('#save').html(save_btn); //reset spinning submit-btn
+			frondend_save(); //appends-new-row-added()
+			if ('undefined' != typeof (r.response)) {
+				$('#response').html((r.response)).addClass(r.flash);
+			} else ($('#response').text(r).addClass('alert-success'))
+
+
+			if ("undefined" != typeof r.link) {
+				$('#response').append(' -> <br> <a href=' + r.link + '> Continue Here </a>');
+				//$('form').hide();
+			}
+			if ("undefined" != typeof r.receipt) {
+				$('#response').append('<br> <a href= ' + r.receipt + '> Receipt Here</a>');
+				//$('form').hide();
+			}
+
+			console.log('response->(' + response.response + 'flash-message (' + response.flash);
+
+		});
+
+		jqxhr.fail((er) => { //JSON.stringify(err)
+			//$('#response').text('oops!!!, Could Not Add This Food. Pls Try Again'+JSON.stringify(er), er).addClass('alert-danger')
+			$('#response').text('oops!!!, Could Not Add This Product To Africana List Of Products. Pls Try Again', er).addClass('alert-danger')
+			$('#save').html(save_btn); //reset spinning submit-btn
+		});
+
+		jqxhr.always(() => {
+			//alert("ajax complete");
+			$('#save').html('<i class="fa fa-circle-notch fa-spin fa-1x fa-fw"></i>');
+		});
+
+
+	});
+
+
+	frondend_save = () => {
+	//insted-of rerender, simply replace the input elements with corresponding val()
+    variety = $('td').find('input[name=varieties]').val()
+    $('td').find('input[name=varieties]').replaceWith(variety)
+    opening = $('td').find('input[name=opening]').val()
+    $('td').find('input[name=opening]').replaceWith(opening)
+    newstock = $('td').find('input[name=newstock]').val()
+    $('td').find('input[name=newstock]').replaceWith(newstock)
+    qty = $('td').find('input[name=qty]').val()
+    $('td').find('input[name=qty]').replaceWith(qty)
+    totalstock = $('td').find('input[name=totalstock]').val()
+    $('td').find('input[name=totalstock]').replaceWith(totalstock)
+    price = $('td').find('input[name=price]').val()
+    $('td').find('input[name=price]').replaceWith(price)
+    totalsold = $('td').find('input[name=totalsold]').val()
+    $('td').find('input[name=totalsold]').replaceWith(totalsold)
+    closingstock = $('td').find('input[name=closingstock]').val()
+    $('td').find('input[name=closingstock]').replaceWith(closingstock)
+    stockamount = $('td').find('input[name=stockamount]').val()
+    $('td').find('input[name=stockamount]').replaceWith(stockamount)
+
+    $('td').find('#save').replaceWith(edit_action_btn)
+}*/
 const stockUrl = "{{url_for('endpoint.stock_action')}}";
 $('#new_stock_form').submit((e) => {
     e.preventDefault();
@@ -309,14 +372,14 @@ function frontendSave() {
     };
 
     const fields = [
-        'varieties', 'opening', 'newstock', 'qty', 'totalstock', 
+        'varieties', 'opening', 'newstock','s_price', 'qty', 'totalstock', 
         'price', 'totalsold', 'closingstock', 'stockamount'
     ];
     
     fields.forEach(updateField);
 
     const editActionButton = $('#edit_action_btn').html(); // Assuming edit action button HTML
-    $('#save').replaceWith(editActionButton);
+    //$('#save').replaceWith(editActionButton);
 }
 
 
@@ -351,7 +414,10 @@ editable = (item_btn) => {
 	//const cate = $(tr).find('#_cate').text();
 	const in_stock = $(tr).find("#_instock").text();
 	const c_price = $(tr).find("#_cprice").data("amt");
+
+	//const s_price = $(tr).find("#_sprice").text();
 	const s_price  = $(tr).find('#_sprice').data("amt"); 
+	//alert(c_price)
 	//find-by-id(#_cost), and get the (data-cost) attribute value for better manipulations/calculations 
 
 	
