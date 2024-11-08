@@ -653,7 +653,7 @@ def insert_extraction():
             ).first()
         
         if apportion is None:
-            return error_response("Apportion not found for the provided ID.")
+            return error_response(f"Apportion not found for the provided ID.{apportion_id}")
 
         # Ensure extracted_qty is provided and valid
         if extracted_qty is None or extracted_qty <= 0:

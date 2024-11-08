@@ -205,6 +205,7 @@ class Apportion(db.Model):
     apportioned_qty = db.Column(db.Integer, nullable=False)
     extracted_qty = db.Column(db.Integer, default=0)
     cost_price = db.Column(db.Integer, default=0)
+    deleted = db.Column(db.Boolean(), nullable=False, default= 0)
     created_at = db.Column(db.DateTime, default=func.now())
     updated_at = db.Column(db.DateTime, default=func.now(), onupdate=func.now())
     
@@ -244,6 +245,7 @@ class Extraction(db.Model):
     sales = db.relationship('Sales', backref='extraction', lazy=True)
     apportion_id = db.Column(db.Integer, db.ForeignKey('apportion.id'), nullable=False)  # Fixing the FK reference
 
+    deleted = db.Column(db.Boolean(), nullable=False, default= 0)
     created_at = db.Column(db.DateTime, default=func.now())
     updated_at = db.Column(db.DateTime, default=func.now(), onupdate=func.now())
 

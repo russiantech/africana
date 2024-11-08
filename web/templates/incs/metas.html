@@ -1,6 +1,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="canonical" href="https://techa.tech" />
+
+<!-- Manifest and theme color for PWA -->
+<!--<link rel="manifest" href="./static/manifest.json">-->
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<meta name="theme-color" content="#317EFB">
+
 <!-- Favicon -->
 <link rel="shortcut icon" href="{{url_for('static', filename='images/logo/logo.png')}}" />
 <link rel="stylesheet" href="{{url_for('static', filename='css/backend-plugin.min.css')}}">
@@ -9,6 +15,7 @@
 <link rel="stylesheet" href="{{url_for('static', filename='vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='vendor/remixicon/fonts/remixicon.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='css/dropdownCheckboxes.css')}}">
+
 <style>
 
   .make-blur {
@@ -673,6 +680,5 @@
 .table-responsive .btn-group-vertical {
     position: static;
 } */
-
 
   </style>

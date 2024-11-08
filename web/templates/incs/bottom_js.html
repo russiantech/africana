@@ -11,15 +11,45 @@
 <script src="{{url_for('static', filename='js/app.js')}}"></script>
 
 <script src="{{url_for('static', filename='js/dropdownCheckboxes.min.js')}}"></script>
-
-<script>
-    // Set the CSRF token as a global JavaScript variable
-    window.csrfToken = "{{ csrf_token() | safe }}";
-</script>
+<script src="./static/register-service-worker.js"></script>
 
 <script>
 
-    $(document).ready(function() {
+/* install prompt */
+let deferredPrompt;
+const installButton = document.getElementById('installButton');
+const installModal = new bootstrap.Modal(document.getElementById('installModal'));
+
+// Listen for the 'beforeinstallprompt' event
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();  // Prevent the automatic prompt
+  deferredPrompt = e;
+
+  // Show the modal
+  installModal.show();
+});
+
+// Trigger installation when the user clicks the install button in the modal
+installButton.addEventListener('click', () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();  // Show the install prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null;  // Reset the deferred prompt
+      installModal.hide();    // Close the modal after installation or dismissal
+    });
+  }
+});
+
+
+// Set the CSRF token as a global JavaScript variable
+window.csrfToken = "{{ csrf_token() | safe }}";
+
+$(document).ready(function() {
 //**************for switching tabs ***************************//
     switchtab = () => { $('#pills-generate-tab').trigger('click'); }
     switchtab1 = () => { $('#pills-expenses-tab').trigger('click'); }
