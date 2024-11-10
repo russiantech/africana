@@ -14,7 +14,7 @@
 							<h4 class="mb-3">{{pname}}</h4>
 							<p class="mb-0 text-danger">Hey, Africana, this reports is organized to aid your business decision making.</p>
 						</div>
-						<button onclick="switchtab()" class="btn btn-primary generate"><i class="las la-plus mr-3"></i>Generate Sales Report</button>
+						<button onclick="switchtab()" class="btn btn-primary generate"><i class="las la-plus mr-3"></i>Report Section</button>
 					</div>
 				</div>
 				<div class="card col-12">
@@ -31,7 +31,7 @@
 						  </li>
 						  <li class="nav-item">
 							 <a class="nav-link font-weight-bold" id="pills-generate-tab" data-toggle="pill" href="#pills-generate" role="tab" aria-controls="pills-generate" 
-                             aria-selected="false">Generate Report(s)</a>
+                             aria-selected="false">Report Section</a>
 						  </li>
 					   </ul>
 
@@ -463,6 +463,10 @@
 																			<tr>
 																				<th>Total Profit</th>
 																				<td><b>${formatAmount(summary.total_profit)}</b></td>
+																			</tr>
+																			<tr>
+																				<th>Profit Minus Expense</th>
+																				<td><b>${formatAmount(summary.profit_minus_expense)}</b></td>
 																			</tr>
 																			<tr>
 																				<th>Total Sales</th>

@@ -326,7 +326,7 @@
 {% block page_js %}
 <script>
 	let hours = (new Date).getHours();
-	let greeting = (hours < 12) ? "Good-Morning" : ((hours <= 18 && hours >= 12) ? "Good afternoon" : "Good gvening");
+	let greeting = (hours < 12) ? "Good morning" : ((hours <= 18 && hours >= 12) ? "Good afternoon" : "Good evening");
 	$('#greet').append(' ' + greeting)
 
 	const headers = { headers: { 'Content-Type': 'application/json' } }
