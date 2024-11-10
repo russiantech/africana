@@ -226,7 +226,8 @@ def fetch_sales():
         
         summary = {
             "total_sales": total_sales,
-            "total_profit": total_profit - total_expense,
+            "profit_minus_expense": total_profit - total_expense,
+            "total_profit": total_profit,
             "total_expense": total_expense
         }
         report_data["summary"] = summary
