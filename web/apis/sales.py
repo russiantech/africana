@@ -187,8 +187,9 @@ def fetch_sales():
                 total_sales += sale.total
 
             item_cost_price = sale.item.c_price if sale.item else 0
-            if sale.price and item_cost_price and sale.qty:
-                profit = (sale.price - item_cost_price) * sale.qty
+            item_selling_price = sale.item.s_price if sale.item else sale.price or 0
+            if item_selling_price and item_cost_price and sale.qty:
+                profit = (item_selling_price - item_cost_price) * sale.qty
                 total_profit += profit
 
             # Organize sale entries by department and type
