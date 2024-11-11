@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 flask_session/
+tmp/
 migrations/
 .Python
 build/
