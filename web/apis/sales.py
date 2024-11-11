@@ -188,17 +188,23 @@ def fetch_sales():
 
             item_cost_price = sale.item.c_price if sale.item else 0
             item_selling_price = sale.item.s_price if sale.item else sale.price or 0
+            item_profit = 0
+            
             if item_selling_price and item_cost_price and sale.qty:
-                profit = (item_selling_price - item_cost_price) * sale.qty
-                total_profit += profit
+                item_profit = (item_selling_price - item_cost_price) * sale.qty
+                # item_profit = (item_selling_price - item_cost_price)
+                total_profit += item_profit
 
+            # Add individual item profit to the sale data
+            sale_data["item_profit"] = item_profit
+            
             # Organize sale entries by department and type
             if sale.item_id:
                 report_data["main_stock"].append(sale_data)
             elif sale.extracted_id:
                 extraction_id = sale.extracted_id
                 extraction = Extraction.query.get(extraction_id)
-                extracted_title = extraction.extracted_title if extraction else 'Unknown'
+                extracted_title = extraction.extracted_title if extraction else 'not known'
 
                 if extraction_id not in report_data["extraction"]:
                     report_data["extraction"][extraction_id] = {
@@ -313,7 +319,6 @@ def update_sale_0(sale_id):
         traceback.print_exc()
         return error_response(f"Unexpected error: {str(e)}")
 
-# 
 # UPDATE: Modify an existing sale record
 @sales_bp.route('/sales/<int:sale_id>', methods=['PUT'])
 def update_sale(sale_id):
@@ -383,7 +388,6 @@ def update_sale(sale_id):
         traceback.print_exc()
         return error_response(f"Unexpected error: {str(e)}")
 
-# 
 from sqlalchemy.orm import joinedload
 # DELETE: Remove a sale record
 @sales_bp.route('/sales/<int:sale_id>', methods=['DELETE'])
